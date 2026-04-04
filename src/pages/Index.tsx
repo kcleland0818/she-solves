@@ -1,16 +1,43 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import WelcomeScreen from "@/components/WelcomeScreen";
+import Scene1Ratios from "@/components/Scene1Ratios";
+import Scene2Percentages from "@/components/Scene2Percentages";
+import Scene3Discounts from "@/components/Scene3Discounts";
+import CompletionScreen from "@/components/CompletionScreen";
+import ProgressBar from "@/components/ProgressBar";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+type Screen = "welcome" | "scene1" | "scene2" | "scene3" | "complete";
+
+const sceneIndex: Record<Screen, number> = {
+  welcome: -1,
+  scene1: 0,
+  scene2: 1,
+  scene3: 2,
+  complete: 3,
+};
+
+const Index = () => {
+  const [screen, setScreen] = useState<Screen>("welcome");
+
+  const showProgress = screen !== "welcome" && screen !== "complete";
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background px-4 py-6 md:py-10">
+      <div className="max-w-2xl mx-auto">
+        {showProgress && (
+          <div className="mb-8">
+            <ProgressBar currentScene={sceneIndex[screen]} totalScenes={3} />
+          </div>
+        )}
+
+        {screen === "welcome" && <WelcomeScreen onStart={() => setScreen("scene1")} />}
+        {screen === "scene1" && <Scene1Ratios onComplete={() => setScreen("scene2")} />}
+        {screen === "scene2" && <Scene2Percentages onComplete={() => setScreen("scene3")} />}
+        {screen === "scene3" && <Scene3Discounts onComplete={() => setScreen("complete")} />}
+        {screen === "complete" && <CompletionScreen onRestart={() => setScreen("welcome")} />}
+      </div>
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
