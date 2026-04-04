@@ -57,6 +57,12 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        smoothie: {
+          strawberry: "hsl(var(--smoothie-strawberry))",
+          banana: "hsl(var(--smoothie-banana))",
+          blueberry: "hsl(var(--smoothie-blueberry))",
+          mango: "hsl(var(--smoothie-mango))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
