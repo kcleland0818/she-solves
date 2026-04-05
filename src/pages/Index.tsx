@@ -20,9 +20,16 @@ const Index = () => {
   const [screen, setScreen] = useState<Screen>("welcome");
 
   const showProgress = screen !== "welcome" && screen !== "complete";
+  const isWelcome = screen === "welcome";
 
   return (
-    <div className="min-h-screen bg-background px-4 py-6 md:py-10">
+    <div
+      className={`min-h-screen px-4 py-6 md:py-10 ${
+        isWelcome
+          ? "bg-gradient-to-br from-[hsl(280,60%,92%)] via-[hsl(320,50%,93%)] to-[hsl(340,60%,92%)]"
+          : "bg-background"
+      }`}
+    >
       <div className="max-w-2xl mx-auto">
         {showProgress && (
           <div className="mb-8">
