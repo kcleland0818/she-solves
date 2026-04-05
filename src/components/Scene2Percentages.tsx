@@ -105,7 +105,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
                 <span className="font-medium">{d.emoji} {d.name}</span>
                 {isActive && (
                   <p className="text-xs text-muted-foreground animate-fade-in">
-                    {d.value} of {total} = <span className="font-bold text-foreground">{pct}%</span>
+                    {d.value} of {total} cups
                   </p>
                 )}
               </div>
