@@ -5,6 +5,7 @@ import Scene2Percentages from "@/components/Scene2Percentages";
 import Scene3Discounts from "@/components/Scene3Discounts";
 import CompletionScreen from "@/components/CompletionScreen";
 import ProgressBar from "@/components/ProgressBar";
+import MiniCalculator from "@/components/MiniCalculator";
 
 type Screen = "welcome" | "scene1" | "scene2" | "scene3" | "complete";
 
@@ -43,6 +44,7 @@ const Index = () => {
         {screen === "scene3" && <Scene3Discounts onComplete={() => setScreen("complete")} />}
         {screen === "complete" && <CompletionScreen onRestart={() => setScreen("welcome")} />}
       </div>
+      {showProgress && <MiniCalculator />}
     </div>
   );
 };
