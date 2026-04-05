@@ -44,6 +44,7 @@ const Index = () => {
         {screen === "scene3" && <Scene3Discounts onComplete={() => setScreen("complete")} />}
         {screen === "complete" && <CompletionScreen onRestart={() => setScreen("welcome")} />}
       </div>
+      {showProgress && <MiniCalculator />}
     </div>
   );
 };
