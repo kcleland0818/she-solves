@@ -24,7 +24,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
 
   const handleCheck = () => {
     if (total >= 6 && isCorrectRatio) {
-      setFeedback("🎉 Perfect! Same ratio, bigger cup! You totally get it!");
+      setFeedback(`🎉 Perfect! ${strawberry}:${banana} is the same as 2:1 because ${strawberry} ÷ ${banana} = ${(strawberry/banana).toFixed(0)}, just like 2 ÷ 1 = 2. Same ratio, bigger cup!`);
       setPhase("done");
     } else if (total < 6) {
       setFeedback("Almost! Make the cup bigger — try higher numbers 🥤");

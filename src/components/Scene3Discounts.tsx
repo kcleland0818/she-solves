@@ -50,7 +50,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
           phase === "explore"
             ? `It's sale day! Use the slider to set a discount and watch the prices change. ${mentalMathTip()}`
             : phase === "challenge"
-            ? "Challenge: What discount makes the $8 Berry Royale cost exactly $6?"
+            ? "Challenge: What discount makes the $8 Blueberry Chill cost exactly $6?"
             : "Amazing! 25% of $8 is $2, so $8 - $2 = $6. You've mastered discounts! 🎓"
         }
       />
