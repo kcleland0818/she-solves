@@ -35,7 +35,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
   const checkAnswer = () => {
     const parsed = parseInt(answer);
     if (Math.abs(parsed - mangoPercent) <= 1) {
-      setFeedback("🎉 Yes! Mango was about " + mangoPercent + "% of sales! You're a natural!");
+      setFeedback(`🎉 Yes! ${salesData[1].value} ÷ ${total} = ${(salesData[1].value / total).toFixed(2)}, and ${(salesData[1].value / total).toFixed(2)} × 100 = ${mangoPercent}%. Mango was about ${mangoPercent}% of sales!`);
       setPhase("done");
     } else {
       setFeedback("Not quite — try dividing mango sales by total sales, then multiply by 100! 🤔");
@@ -105,7 +105,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
                 <span className="font-medium">{d.emoji} {d.name}</span>
                 {isActive && (
                   <p className="text-xs text-muted-foreground animate-fade-in">
-                    {d.value} of {total} = <span className="font-bold text-foreground">{pct}%</span>
+                    {d.value} of {total} cups
                   </p>
                 )}
               </div>

@@ -10,7 +10,7 @@ interface Scene3Props {
 const smoothies = [
   { name: "Strawberry Blast", emoji: "🍓", price: 6 },
   { name: "Mango Sunrise", emoji: "🥭", price: 7 },
-  { name: "Berry Royale", emoji: "🫐", price: 8 },
+  { name: "Blueberry Chill", emoji: "💜", price: 8 },
 ];
 
 const Scene3Discounts = ({ onComplete }: Scene3Props) => {
@@ -26,7 +26,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
 
   const handleCheck = () => {
     if (discount === targetDiscount) {
-      setFeedback("🎉 YES! 25% off $8 = $6! You're a discount pro!");
+      setFeedback("🎉 YES! 25% of $8 = $8 × 25/100 = $2. So $8 − $2 = $6! You're a discount pro!");
       setPhase("done");
     } else {
       const result = discountedPrice(8).toFixed(2);
@@ -50,7 +50,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
           phase === "explore"
             ? `It's sale day! Use the slider to set a discount and watch the prices change. ${mentalMathTip()}`
             : phase === "challenge"
-            ? "Challenge: What discount makes the $8 Berry Royale cost exactly $6?"
+            ? "Challenge: What discount makes the $8 Blueberry Chill cost exactly $6?"
             : "Amazing! 25% of $8 is $2, so $8 - $2 = $6. You've mastered discounts! 🎓"
         }
       />
