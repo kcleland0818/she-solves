@@ -122,7 +122,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
       )}
 
       {phase === "done" && (
-        <Button onClick={onComplete} className="mx-auto">
+        <Button onClick={onComplete} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
           See My Results! 🎉
         </Button>
       )}

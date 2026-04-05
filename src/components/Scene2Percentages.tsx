@@ -10,7 +10,7 @@ interface Scene2Props {
 const salesData = [
   { name: "Strawberry", value: 12, emoji: "🍓" },
   { name: "Mango", value: 8, emoji: "🥭" },
-  { name: "Blueberry", value: 5, emoji: "🫐" },
+  { name: "Blueberry", value: 5, emoji: "💜" },
   { name: "Banana", value: 5, emoji: "🍌" },
 ];
 
@@ -49,7 +49,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
       <MayaSpeech
         text={
           phase === "explore"
-            ? "Here's what we sold today! Tap on each flavor to see what percentage of sales it was. Percentage = (part ÷ whole) × 100"
+            ? "Here's what we sold today! Tap on each flavor to see what percentage of sales it was. Percentage = (part ÷ whole) × 100 ✨"
             : phase === "challenge"
             ? "Pop quiz! What percentage of today's sales were Mango? 🥭"
             : `That's right! ${salesData[1].value} out of ${total} = ${mangoPercent}%. You're crushing it! 💪`
@@ -115,13 +115,13 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
       </div>
 
       {phase === "explore" && (
-        <Button onClick={() => setPhase("challenge")} className="mx-auto">
+        <Button onClick={() => setPhase("challenge")} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
           Try the Challenge! 💪
         </Button>
       )}
 
       {phase === "challenge" && (
-        <div className="bg-card border rounded-xl p-4 space-y-3">
+        <div className="bg-card border border-primary/20 rounded-xl p-4 space-y-3">
           <p className="text-sm font-medium text-center">What % of sales were Mango? 🥭</p>
           <div className="flex gap-2 justify-center">
             <input
@@ -151,7 +151,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
       )}
 
       {phase === "done" && (
-        <Button onClick={onComplete} className="mx-auto">
+        <Button onClick={onComplete} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
           Next Scene →
         </Button>
       )}

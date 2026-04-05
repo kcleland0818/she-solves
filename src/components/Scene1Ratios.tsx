@@ -139,7 +139,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
       )}
 
       {phase === "done" && (
-        <Button onClick={onComplete} className="mx-auto">
+        <Button onClick={onComplete} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
           Next Scene →
         </Button>
       )}
