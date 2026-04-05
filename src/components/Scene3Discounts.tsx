@@ -10,7 +10,7 @@ interface Scene3Props {
 const smoothies = [
   { name: "Strawberry Blast", emoji: "🍓", price: 6 },
   { name: "Mango Sunrise", emoji: "🥭", price: 7 },
-  { name: "Berry Royale", emoji: "🫐", price: 8 },
+  { name: "Blueberry Chill", emoji: "💜", price: 8 },
 ];
 
 const Scene3Discounts = ({ onComplete }: Scene3Props) => {
