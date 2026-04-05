@@ -26,7 +26,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
 
   const handleCheck = () => {
     if (discount === targetDiscount) {
-      setFeedback("🎉 YES! 25% off $8 = $6! You're a discount pro!");
+      setFeedback("🎉 YES! 25% of $8 = $8 × 25/100 = $2. So $8 − $2 = $6! You're a discount pro!");
       setPhase("done");
     } else {
       const result = discountedPrice(8).toFixed(2);
