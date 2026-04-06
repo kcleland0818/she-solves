@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
@@ -27,6 +27,14 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [phase === "challenge"]
   );
+
+  // Sync sliders to challenge ratio when entering challenge phase
+  useEffect(() => {
+    if (phase === "challenge") {
+      setStrawberry(challenge.ratio);
+      setBanana(1);
+    }
+  }, [phase, challenge]);
 
   const total = strawberry + banana;
   const strawberryPct = total > 0 ? (strawberry / total) * 100 : 0;
@@ -135,7 +143,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
       )}
 
       {phase === "explore" && (
-        <Button onClick={() => { setPhase("challenge"); setStrawberry(challenge.ratio); setBanana(1); }} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
+        <Button onClick={() => { setPhase("challenge"); }} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
           Try the Challenge! 💪
         </Button>
       )}
