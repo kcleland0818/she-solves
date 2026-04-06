@@ -28,6 +28,14 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
     [phase === "challenge"]
   );
 
+  // Sync sliders to challenge ratio when entering challenge phase
+  useEffect(() => {
+    if (phase === "challenge") {
+      setStrawberry(challenge.ratio);
+      setBanana(1);
+    }
+  }, [phase, challenge]);
+
   const total = strawberry + banana;
   const strawberryPct = total > 0 ? (strawberry / total) * 100 : 0;
   const bananaPct = total > 0 ? (banana / total) * 100 : 0;
