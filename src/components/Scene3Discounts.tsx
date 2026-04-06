@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
@@ -13,32 +13,46 @@ const smoothies = [
   { name: "Blueberry Chill", emoji: "💜", price: 8 },
 ];
 
+const challengeOptions = [
+  { smoothieIdx: 2, targetPrice: 6, targetDiscount: 25, hint: "You need to take $2 off an $8 smoothie. What percentage is $2 of $8? Think: 2 ÷ 8 = ? 🤔" },
+  { smoothieIdx: 0, targetPrice: 3, targetDiscount: 50, hint: "You need to cut a $6 smoothie in half. What percentage takes away half? 🤔" },
+  { smoothieIdx: 1, targetPrice: 3.5, targetDiscount: 50, hint: "Half of $7 is $3.50. What discount gives you half off? 🤔" },
+  { smoothieIdx: 2, targetPrice: 4, targetDiscount: 50, hint: "Half of $8 is $4. What's the discount for half price? 🤔" },
+  { smoothieIdx: 0, targetPrice: 4.5, targetDiscount: 25, hint: "You need $1.50 off a $6 smoothie. $1.50 is what fraction of $6? 🤔" },
+];
+
 const Scene3Discounts = ({ onComplete }: Scene3Props) => {
   const [discount, setDiscount] = useState(0);
   const [phase, setPhase] = useState<"explore" | "challenge" | "done">("explore");
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState("");
 
+  const challenge = useMemo(
+    () => challengeOptions[Math.floor(Math.random() * challengeOptions.length)],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [phase === "challenge"]
+  );
+
+  const targetSmoothie = smoothies[challenge.smoothieIdx];
+
   const discountedPrice = (price: number) => price - (price * discount) / 100;
-
-  // Challenge: set discount so $8 smoothie costs $6 → 25%
-  const targetDiscount = 25;
-
-  const handleCheck = () => {
-    if (discount === targetDiscount) {
-      setFeedback("🎉 YES! 25% of $8 = $8 × 25/100 = $2. So $8 − $2 = $6! You're a discount pro!");
-      setPhase("done");
-    } else {
-      const result = discountedPrice(8).toFixed(2);
-      setFeedback(`At ${discount}% off, the $8 smoothie costs $${result}. We need it to be $6! 🤔`);
-    }
-  };
 
   const mentalMathTip = () => {
     if (discount === 50) return '"50% is just half — easy!"';
     if (discount === 25) return '"25% is a quarter — divide by 4!"';
     if (discount === 10) return '"10% = move the decimal one spot left!"';
     return `"${discount}% of a price = price × ${discount}/100"`;
+  };
+
+  const handleCheck = () => {
+    if (discount === challenge.targetDiscount) {
+      const saved = (targetSmoothie.price * challenge.targetDiscount / 100);
+      setFeedback(`🎉 YES! ${challenge.targetDiscount}% of $${targetSmoothie.price} = $${targetSmoothie.price} × ${challenge.targetDiscount}/100 = $${saved.toFixed(2)}. So $${targetSmoothie.price} − $${saved.toFixed(2)} = $${challenge.targetPrice.toFixed(2)}! You're a discount pro!`);
+      setPhase("done");
+    } else {
+      const result = discountedPrice(targetSmoothie.price).toFixed(2);
+      setFeedback(`At ${discount}% off, the $${targetSmoothie.price} ${targetSmoothie.name} costs $${result}. We need it to be $${challenge.targetPrice.toFixed(2)}! 🤔`);
+    }
   };
 
   return (
@@ -50,8 +64,8 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
           phase === "explore"
             ? `It's sale day! Use the slider to set a discount and watch the prices change. ${mentalMathTip()}`
             : phase === "challenge"
-            ? "Challenge: What discount makes the $8 Blueberry Chill cost exactly $6?"
-            : "Amazing! 25% of $8 is $2, so $8 - $2 = $6. You've mastered discounts! 🎓"
+            ? `Challenge: What discount makes the $${targetSmoothie.price} ${targetSmoothie.name} cost exactly $${challenge.targetPrice.toFixed(2)}?`
+            : `Amazing! You've mastered discounts! 🎓`
         }
       />
 
@@ -117,7 +131,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
 
       {showHint && phase === "challenge" && (
         <p className="text-center text-sm text-muted-foreground bg-secondary/50 rounded-lg p-3 animate-fade-in">
-          You need to take $2 off an $8 smoothie. What percentage is $2 of $8? Think: 2 ÷ 8 = ? 🤔
+          {challenge.hint}
         </p>
       )}
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
@@ -7,6 +7,13 @@ interface Scene1Props {
   onComplete: () => void;
 }
 
+const challenges = [
+  { ratio: 2, label: "2:1", minTotal: 6, desc: "Keep the 2:1 ratio but make at least 6 parts total!" },
+  { ratio: 3, label: "3:1", minTotal: 8, desc: "Keep a 3:1 ratio with at least 8 parts total!" },
+  { ratio: 1, label: "1:1", minTotal: 6, desc: "Make an equal mix (1:1) with at least 6 parts total!" },
+  { ratio: 2, label: "2:1", minTotal: 9, desc: "Same 2:1 taste but in a HUGE cup — at least 9 parts!" },
+];
+
 const Scene1Ratios = ({ onComplete }: Scene1Props) => {
   const [strawberry, setStrawberry] = useState(2);
   const [banana, setBanana] = useState(1);
@@ -14,22 +21,32 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState("");
 
+  const challenge = useMemo(
+    () => challenges[Math.floor(Math.random() * challenges.length)],
+    // re-pick when entering challenge phase
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [phase === "challenge"]
+  );
+
   const total = strawberry + banana;
   const strawberryPct = total > 0 ? (strawberry / total) * 100 : 0;
   const bananaPct = total > 0 ? (banana / total) * 100 : 0;
 
-  // The original ratio is 2:1. Challenge: make a bigger cup (total >= 6) with same ratio
-  const originalRatio = 2; // strawberry/banana
-  const isCorrectRatio = banana > 0 && Math.abs(strawberry / banana - originalRatio) < 0.1;
+  const isCorrectRatio =
+    banana > 0 && Math.abs(strawberry / banana - challenge.ratio) < 0.1;
 
   const handleCheck = () => {
-    if (total >= 6 && isCorrectRatio) {
-      setFeedback(`🎉 Perfect! ${strawberry}:${banana} is the same as 2:1 because ${strawberry} ÷ ${banana} = ${(strawberry/banana).toFixed(0)}, just like 2 ÷ 1 = 2. Same ratio, bigger cup!`);
+    if (total >= challenge.minTotal && isCorrectRatio) {
+      const ratioExplain =
+        challenge.ratio === 1
+          ? `${strawberry}:${banana} is equal parts — 1:1!`
+          : `${strawberry}:${banana} is the same as ${challenge.label} because ${strawberry} ÷ ${banana} = ${(strawberry / banana).toFixed(0)}.`;
+      setFeedback(`🎉 Perfect! ${ratioExplain} Same ratio, bigger cup!`);
       setPhase("done");
-    } else if (total < 6) {
-      setFeedback("Almost! Make the cup bigger — try higher numbers 🥤");
+    } else if (total < challenge.minTotal) {
+      setFeedback(`Almost! Make the cup bigger — you need at least ${challenge.minTotal} parts total 🥤`);
     } else {
-      setFeedback("Hmm, the taste changed! Keep the same 2:1 ratio 🍓🍌");
+      setFeedback(`Hmm, the taste changed! Keep the same ${challenge.label} ratio 🍓🍌`);
     }
   };
 
@@ -42,7 +59,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
           phase === "explore"
             ? "Drag the sliders to mix your smoothie! A ratio tells us how much of each ingredient to use compared to the others."
             : phase === "challenge"
-            ? "A customer wants the SAME taste but in a BIGGER cup (at least 6 parts total). Can you keep the 2:1 ratio?"
+            ? `A customer wants the SAME taste but in a BIGGER cup. ${challenge.desc}`
             : "You nailed it! When you multiply both parts of a ratio by the same number, the taste stays the same! 🧠"
         }
       />
@@ -134,7 +151,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
 
       {showHint && phase === "challenge" && (
         <p className="text-center text-sm text-muted-foreground bg-secondary/50 rounded-lg p-3 animate-fade-in">
-          Try multiplying both numbers by the same amount! Like 2×2 = 4 and 1×2 = 2 → that's 4:2, same taste! 🍓🍌
+          Try multiplying both numbers by the same amount! Like {challenge.ratio}×2 = {challenge.ratio * 2} and 1×2 = 2 → that's {challenge.ratio * 2}:2, same taste! 🍓🍌
         </p>
       )}
 
