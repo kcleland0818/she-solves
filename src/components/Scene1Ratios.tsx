@@ -135,7 +135,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
       )}
 
       {phase === "explore" && (
-        <Button onClick={() => { setPhase("challenge"); setStrawberry(2); setBanana(1); }} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
+        <Button onClick={() => { setPhase("challenge"); setStrawberry(challenge.ratio); setBanana(1); }} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
           Try the Challenge! 💪
         </Button>
       )}
