@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
@@ -23,6 +23,13 @@ const COLORS = [
 
 const total = salesData.reduce((s, d) => s + d.value, 0);
 
+const questions = [
+  { index: 0, label: "Strawberry", emoji: "🍓" },
+  { index: 1, label: "Mango", emoji: "🥭" },
+  { index: 2, label: "Blueberry", emoji: "💜" },
+  { index: 3, label: "Banana", emoji: "🍌" },
+];
+
 const Scene2Percentages = ({ onComplete }: Scene2Props) => {
   const [selected, setSelected] = useState<number | null>(null);
   const [phase, setPhase] = useState<"explore" | "challenge" | "done">("explore");
@@ -30,15 +37,22 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
   const [feedback, setFeedback] = useState("");
   const [showHint, setShowHint] = useState(false);
 
-  const mangoPercent = Math.round((8 / total) * 100);
+  const question = useMemo(
+    () => questions[Math.floor(Math.random() * questions.length)],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [phase === "challenge"]
+  );
+
+  const targetData = salesData[question.index];
+  const targetPercent = Math.round((targetData.value / total) * 100);
 
   const checkAnswer = () => {
     const parsed = parseInt(answer);
-    if (Math.abs(parsed - mangoPercent) <= 1) {
-      setFeedback(`🎉 Yes! ${salesData[1].value} ÷ ${total} = ${(salesData[1].value / total).toFixed(2)}, and ${(salesData[1].value / total).toFixed(2)} × 100 = ${mangoPercent}%. Mango was about ${mangoPercent}% of sales!`);
+    if (Math.abs(parsed - targetPercent) <= 1) {
+      setFeedback(`🎉 Yes! ${targetData.value} ÷ ${total} = ${(targetData.value / total).toFixed(2)}, and ${(targetData.value / total).toFixed(2)} × 100 = ${targetPercent}%. ${question.label} was about ${targetPercent}% of sales!`);
       setPhase("done");
     } else {
-      setFeedback("Not quite — try dividing mango sales by total sales, then multiply by 100! 🤔");
+      setFeedback(`Not quite — try dividing ${question.label} sales by total sales, then multiply by 100! 🤔`);
     }
   };
 
@@ -49,10 +63,10 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
       <MayaSpeech
         text={
           phase === "explore"
-            ? "Here's what we sold today! Tap on each flavor to see what percentage of sales it was. Percentage = (part ÷ whole) × 100 ✨"
+            ? "Here's what we sold today! Tap on each flavor to see how many we sold. Percentage = (part ÷ whole) × 100 ✨"
             : phase === "challenge"
-            ? "Pop quiz! What percentage of today's sales were Mango? 🥭"
-            : `That's right! ${salesData[1].value} out of ${total} = ${mangoPercent}%. You're crushing it! 💪`
+            ? `Pop quiz! What percentage of today's sales were ${question.label}? ${question.emoji}`
+            : `That's right! ${targetData.value} out of ${total} = ${targetPercent}%. You're crushing it! 💪`
         }
       />
 
@@ -90,7 +104,6 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
       {/* Legend / Details */}
       <div className="grid grid-cols-2 gap-2">
         {salesData.map((d, i) => {
-          const pct = Math.round((d.value / total) * 100);
           const isActive = selected === i;
           return (
             <button
@@ -122,7 +135,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
 
       {phase === "challenge" && (
         <div className="bg-card border border-primary/20 rounded-xl p-4 space-y-3">
-          <p className="text-sm font-medium text-center">What % of sales were Mango? 🥭</p>
+          <p className="text-sm font-medium text-center">What % of sales were {question.label}? {question.emoji}</p>
           <div className="flex gap-2 justify-center">
             <input
               type="number"
@@ -140,7 +153,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
           </div>
           {showHint && (
             <p className="text-xs text-muted-foreground text-center animate-fade-in">
-              Mango sold {salesData[1].value} cups. Total cups = {total}. Try: ({salesData[1].value} ÷ {total}) × 100
+              {question.label} sold {targetData.value} cups. Total cups = {total}. Try: ({targetData.value} ÷ {total}) × 100
             </p>
           )}
         </div>
