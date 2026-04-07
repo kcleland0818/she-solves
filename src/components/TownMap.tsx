@@ -73,7 +73,7 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-b from-sky-100 to-sky-50 relative overflow-hidden">
+    <div className="min-h-screen md:h-screen flex flex-col bg-gradient-to-b from-sky-100 to-sky-50 relative overflow-auto md:overflow-hidden">
       {/* Header */}
       <div className="text-center pt-4 pb-2 z-10 relative shrink-0">
         <h1 className="text-2xl md:text-4xl font-extrabold text-foreground drop-shadow-sm">
