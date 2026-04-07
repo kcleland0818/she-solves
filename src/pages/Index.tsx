@@ -1,4 +1,5 @@
 import { useState } from "react";
+import TownMap from "@/components/TownMap";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import Scene1Ratios from "@/components/Scene1Ratios";
 import Scene2Percentages from "@/components/Scene2Percentages";
@@ -7,9 +8,10 @@ import CompletionScreen from "@/components/CompletionScreen";
 import ProgressBar from "@/components/ProgressBar";
 import MiniCalculator from "@/components/MiniCalculator";
 
-type Screen = "welcome" | "scene1" | "scene2" | "scene3" | "complete";
+type Screen = "town" | "welcome" | "scene1" | "scene2" | "scene3" | "complete";
 
 const sceneIndex: Record<Screen, number> = {
+  town: -2,
   welcome: -1,
   scene1: 0,
   scene2: 1,
@@ -18,10 +20,23 @@ const sceneIndex: Record<Screen, number> = {
 };
 
 const Index = () => {
-  const [screen, setScreen] = useState<Screen>("welcome");
+  const [screen, setScreen] = useState<Screen>("town");
 
-  const showProgress = screen !== "welcome" && screen !== "complete";
+  const showProgress = !["town", "welcome", "complete"].includes(screen);
   const isWelcome = screen === "welcome";
+  const isTown = screen === "town";
+
+  if (isTown) {
+    return (
+      <TownMap
+        onEnterShop={(shopId) => {
+          if (shopId === "smoothie-shop") {
+            setScreen("welcome");
+          }
+        }}
+      />
+    );
+  }
 
   return (
     <div
@@ -42,7 +57,7 @@ const Index = () => {
         {screen === "scene1" && <Scene1Ratios onComplete={() => setScreen("scene2")} />}
         {screen === "scene2" && <Scene2Percentages onComplete={() => setScreen("scene3")} />}
         {screen === "scene3" && <Scene3Discounts onComplete={() => setScreen("complete")} />}
-        {screen === "complete" && <CompletionScreen onRestart={() => setScreen("welcome")} />}
+        {screen === "complete" && <CompletionScreen onRestart={() => setScreen("town")} />}
       </div>
       {showProgress && <MiniCalculator />}
     </div>
