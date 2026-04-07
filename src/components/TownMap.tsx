@@ -73,24 +73,24 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-sky-100 to-sky-50 relative overflow-hidden">
+    <div className="h-screen flex flex-col bg-gradient-to-b from-sky-100 to-sky-50 relative overflow-hidden">
       {/* Header */}
-      <div className="text-center pt-6 pb-3 z-10 relative">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground drop-shadow-sm">
+      <div className="text-center pt-4 pb-2 z-10 relative shrink-0">
+        <h1 className="text-2xl md:text-4xl font-extrabold text-foreground drop-shadow-sm">
           📍 Mathville
         </h1>
-        <p className="text-muted-foreground text-sm md:text-base mt-1">
-          Explore the town and visit shops to learn math! ✨
+        <p className="text-muted-foreground text-xs md:text-base mt-0.5">
+          Tap a shop to start learning! ✨
         </p>
       </div>
 
-      {/* Map Container */}
-      <div className="relative w-full max-w-4xl mx-auto flex-1 flex items-center justify-center px-4 pb-6">
-        <div className="relative w-full">
+      {/* Map Container - fills remaining space */}
+      <div className="relative flex-1 w-full overflow-hidden flex items-center justify-center p-2 md:p-4">
+        <div className="relative w-full h-full max-w-5xl flex items-center justify-center">
           <img
             src={townMapBg}
             alt="Mathville town map"
-            className="w-full h-auto rounded-2xl shadow-xl border-4 border-white/60"
+            className="max-w-full max-h-full w-auto h-auto object-contain rounded-2xl shadow-xl border-4 border-white/60"
             width={1920}
             height={1080}
           />
