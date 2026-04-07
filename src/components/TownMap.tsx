@@ -18,7 +18,6 @@ interface Shop {
   learningTopics: string[];
   unlocked: boolean;
   position: { top: string; left: string };
-  color: string;
 }
 
 const shops: Shop[] = [
@@ -31,7 +30,6 @@ const shops: Shop[] = [
     learningTopics: ["Ratios & Proportions", "Percentages", "Discounts & Mental Math"],
     unlocked: true,
     position: { top: "48%", left: "42%" },
-    color: "hsl(280, 55%, 48%)",
   },
   {
     id: "bakery",
@@ -41,7 +39,6 @@ const shops: Shop[] = [
     learningTopics: ["Fractions", "Measurement", "Unit Conversion"],
     unlocked: false,
     position: { top: "52%", left: "55%" },
-    color: "hsl(30, 70%, 55%)",
   },
   {
     id: "bookstore",
@@ -51,7 +48,6 @@ const shops: Shop[] = [
     learningTopics: ["Data & Statistics", "Graphs", "Mean, Median, Mode"],
     unlocked: false,
     position: { top: "35%", left: "35%" },
-    color: "hsl(200, 60%, 45%)",
   },
   {
     id: "pet-shop",
@@ -61,7 +57,6 @@ const shops: Shop[] = [
     learningTopics: ["Multiplication", "Division", "Word Problems"],
     unlocked: false,
     position: { top: "58%", left: "68%" },
-    color: "hsl(140, 50%, 45%)",
   },
 ];
 
@@ -73,24 +68,30 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-sky-100 to-sky-50 relative overflow-hidden">
+    <div
+      className="h-[100dvh] flex flex-col relative overflow-hidden"
+      style={{
+        background: "linear-gradient(to bottom, hsl(200, 60%, 92%), hsl(200, 40%, 96%))",
+      }}
+    >
       {/* Header */}
-      <div className="text-center pt-6 pb-3 z-10 relative">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground drop-shadow-sm">
+      <div className="text-center pt-3 pb-1 md:pt-4 md:pb-2 z-10 relative shrink-0">
+        <h1 className="text-2xl md:text-4xl font-extrabold text-foreground drop-shadow-sm">
           📍 Mathville
         </h1>
-        <p className="text-muted-foreground text-sm md:text-base mt-1">
-          Explore the town and visit shops to learn math! ✨
+        <p className="text-muted-foreground text-xs md:text-base mt-0.5">
+          Tap a shop to start learning! ✨
         </p>
       </div>
 
-      {/* Map Container */}
-      <div className="relative w-full max-w-4xl mx-auto flex-1 flex items-center justify-center px-4 pb-6">
-        <div className="relative w-full">
+      {/* Map fills remaining space */}
+      <div className="relative flex-1 min-h-0 w-full flex items-center justify-center p-2 md:p-4">
+        {/* Inner wrapper: image is positioned absolutely to fill, object-cover on mobile for bigger map */}
+        <div className="relative w-full h-full max-w-5xl">
           <img
             src={townMapBg}
             alt="Mathville town map"
-            className="w-full h-auto rounded-2xl shadow-xl border-4 border-white/60"
+            className="absolute inset-0 w-full h-full object-cover md:object-contain object-center rounded-xl md:rounded-2xl shadow-xl border-2 md:border-4 border-white/60"
             width={1920}
             height={1080}
           />
@@ -100,7 +101,7 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
             <button
               key={shop.id}
               onClick={() => setSelectedShop(shop)}
-              className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-200 group ${
+              className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 ${
                 shop.unlocked
                   ? "hover:scale-110 cursor-pointer"
                   : "cursor-pointer opacity-70"
@@ -108,7 +109,6 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
               style={{ top: shop.position.top, left: shop.position.left }}
               aria-label={`${shop.name}${shop.unlocked ? "" : " (locked)"}`}
             >
-              {/* Pin / Marker */}
               <div
                 className={`relative flex flex-col items-center ${
                   shop.unlocked ? "animate-[bounce_3s_ease-in-out_infinite]" : ""
@@ -127,7 +127,6 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
                     <Lock className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
                   )}
                 </div>
-                {/* Label */}
                 <span
                   className={`mt-1 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm ${
                     shop.unlocked
