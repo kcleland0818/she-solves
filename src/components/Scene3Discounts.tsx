@@ -136,9 +136,14 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
       )}
 
       {phase === "done" && (
-        <Button onClick={onComplete} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
-          See My Results! 🎉
-        </Button>
+        <div className="flex gap-3 justify-center">
+          <Button variant="outline" onClick={() => { setPhase("challenge"); setDiscount(0); setFeedback(""); setShowHint(false); }}>
+            Try a Different Challenge 🔄
+          </Button>
+          <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
+            See My Results! 🎉
+          </Button>
+        </div>
       )}
     </div>
   );
