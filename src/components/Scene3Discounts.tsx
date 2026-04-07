@@ -26,12 +26,16 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
   const [phase, setPhase] = useState<"explore" | "challenge" | "done">("explore");
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState("");
+  const [lastChallengeIdx, setLastChallengeIdx] = useState<number | null>(null);
 
-  const challenge = useMemo(
-    () => challengeOptions[Math.floor(Math.random() * challengeOptions.length)],
+  const challenge = useMemo(() => {
+    const available = challengeOptions.filter((_, i) => i !== lastChallengeIdx);
+    const pick = available[Math.floor(Math.random() * available.length)];
+    const idx = challengeOptions.indexOf(pick);
+    setLastChallengeIdx(idx);
+    return pick;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [phase === "challenge"]
-  );
+  }, [phase === "challenge"]);
 
   const targetSmoothie = smoothies[challenge.smoothieIdx];
 
