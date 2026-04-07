@@ -85,12 +85,13 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
       </div>
 
       {/* Map Container - fills remaining space */}
-      <div className="relative flex-1 w-full overflow-hidden flex items-center justify-center p-2 md:p-4">
-        <div className="relative w-full h-full max-w-5xl flex items-center justify-center">
+      {/* Map Container - use width-based sizing so the map fills the screen */}
+      <div className="relative flex-1 w-full overflow-auto flex items-start md:items-center justify-center">
+        <div className="relative w-[160vw] md:w-full max-w-5xl mx-auto md:mx-4 shrink-0">
           <img
             src={townMapBg}
             alt="Mathville town map"
-            className="max-w-full max-h-full w-auto h-auto object-contain rounded-2xl shadow-xl border-4 border-white/60"
+            className="w-full h-auto rounded-2xl shadow-xl border-4 border-white/60"
             width={1920}
             height={1080}
           />
