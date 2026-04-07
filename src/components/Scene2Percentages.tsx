@@ -36,12 +36,16 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
   const [showHint, setShowHint] = useState(false);
+  const [lastQuestionIdx, setLastQuestionIdx] = useState<number | null>(null);
 
-  const question = useMemo(
-    () => questions[Math.floor(Math.random() * questions.length)],
+  const question = useMemo(() => {
+    const available = questions.filter((_, i) => i !== lastQuestionIdx);
+    const pick = available[Math.floor(Math.random() * available.length)];
+    const idx = questions.indexOf(pick);
+    setLastQuestionIdx(idx);
+    return pick;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [phase === "challenge"]
-  );
+  }, [phase === "challenge"]);
 
   const targetData = salesData[question.index];
   const targetPercent = Math.round((targetData.value / total) * 100);

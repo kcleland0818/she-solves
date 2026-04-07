@@ -20,13 +20,16 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
   const [phase, setPhase] = useState<"explore" | "challenge" | "done">("explore");
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState("");
+  const [lastChallengeIdx, setLastChallengeIdx] = useState<number | null>(null);
 
-  const challenge = useMemo(
-    () => challenges[Math.floor(Math.random() * challenges.length)],
-    // re-pick when entering challenge phase
+  const challenge = useMemo(() => {
+    const available = challenges.filter((_, i) => i !== lastChallengeIdx);
+    const pick = available[Math.floor(Math.random() * available.length)];
+    const idx = challenges.indexOf(pick);
+    setLastChallengeIdx(idx);
+    return pick;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [phase === "challenge"]
-  );
+  }, [phase === "challenge"]);
 
   // Sync sliders to challenge ratio when entering challenge phase
   useEffect(() => {
