@@ -38,25 +38,7 @@ const shops: Shop[] = [
     description: "Coming soon!",
     learningTopics: ["Fractions", "Measurement", "Unit Conversion"],
     unlocked: false,
-    position: { top: "58%", left: "78%" },
-  },
-  {
-    id: "bookstore",
-    name: "Page Turner Books",
-    emoji: "📚",
-    description: "Coming soon!",
-    learningTopics: ["Data & Statistics", "Graphs", "Mean, Median, Mode"],
-    unlocked: false,
-    position: { top: "52%", left: "18%" },
-  },
-  {
-    id: "pet-shop",
-    name: "Paws & Claws Pet Shop",
-    emoji: "🐾",
-    description: "Coming soon!",
-    learningTopics: ["Multiplication", "Division", "Word Problems"],
-    unlocked: false,
-    position: { top: "68%", left: "65%" },
+    position: { top: "65%", left: "68%" },
   },
 ];
 
