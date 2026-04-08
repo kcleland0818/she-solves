@@ -86,12 +86,11 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
 
       {/* Map fills remaining space */}
       <div className="relative flex-1 min-h-0 w-full flex items-center justify-center p-2 md:p-4">
-        {/* Inner wrapper: image is positioned absolutely to fill, object-cover on mobile for bigger map */}
-        <div className="relative w-full h-full max-w-5xl">
+        <div className="relative w-full h-full max-w-5xl overflow-hidden rounded-xl md:rounded-2xl shadow-xl border-2 md:border-4 border-white/60">
           <img
             src={townMapBg}
             alt="Mathville town map"
-            className="absolute inset-0 w-full h-full object-cover md:object-contain object-center rounded-xl md:rounded-2xl shadow-xl border-2 md:border-4 border-white/60"
+            className="absolute inset-0 w-full h-full object-cover object-center"
             width={1920}
             height={1080}
           />
