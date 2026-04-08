@@ -29,7 +29,7 @@ const shops: Shop[] = [
       "You just became the owner of the coolest smoothie shop in town! Learn the math behind mixing drinks, tracking sales, and running discounts.",
     learningTopics: ["Ratios & Proportions", "Percentages", "Discounts & Mental Math"],
     unlocked: true,
-    position: { top: "55%", left: "45%" },
+    position: { top: "58%", left: "42%" },
   },
   {
     id: "bakery",
@@ -38,7 +38,7 @@ const shops: Shop[] = [
     description: "Coming soon!",
     learningTopics: ["Fractions", "Measurement", "Unit Conversion"],
     unlocked: false,
-    position: { top: "60%", left: "62%" },
+    position: { top: "58%", left: "78%" },
   },
   {
     id: "bookstore",
@@ -47,7 +47,7 @@ const shops: Shop[] = [
     description: "Coming soon!",
     learningTopics: ["Data & Statistics", "Graphs", "Mean, Median, Mode"],
     unlocked: false,
-    position: { top: "42%", left: "30%" },
+    position: { top: "52%", left: "18%" },
   },
   {
     id: "pet-shop",
@@ -56,7 +56,7 @@ const shops: Shop[] = [
     description: "Coming soon!",
     learningTopics: ["Multiplication", "Division", "Word Problems"],
     unlocked: false,
-    position: { top: "65%", left: "75%" },
+    position: { top: "68%", left: "65%" },
   },
 ];
 
