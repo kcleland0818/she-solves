@@ -38,7 +38,7 @@ const shops: Shop[] = [
     description: "Coming soon!",
     learningTopics: ["Fractions", "Measurement", "Unit Conversion"],
     unlocked: false,
-    position: { top: "62%", left: "65%" },
+    position: { top: "62%", left: "72%" },
   },
 ];
 
