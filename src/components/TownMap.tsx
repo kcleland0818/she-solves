@@ -18,6 +18,7 @@ interface Shop {
   learningTopics: string[];
   unlocked: boolean;
   position: { top: string; left: string };
+  positionMd?: { top: string; left: string };
 }
 
 const shops: Shop[] = [
@@ -39,6 +40,7 @@ const shops: Shop[] = [
     learningTopics: ["Fractions", "Measurement", "Unit Conversion"],
     unlocked: false,
     position: { top: "62%", left: "72%" },
+    positionMd: { top: "62%", left: "65%" },
   },
 ];
 
