@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Lock } from "lucide-react";
 import townMapBg from "@/assets/town-map-bg.jpg";
 import {
@@ -18,6 +19,7 @@ interface Shop {
   learningTopics: string[];
   unlocked: boolean;
   position: { top: string; left: string };
+  positionMd?: { top: string; left: string };
 }
 
 const shops: Shop[] = [
@@ -39,6 +41,7 @@ const shops: Shop[] = [
     learningTopics: ["Fractions", "Measurement", "Unit Conversion"],
     unlocked: false,
     position: { top: "62%", left: "72%" },
+    positionMd: { top: "62%", left: "65%" },
   },
 ];
 
@@ -48,6 +51,12 @@ interface TownMapProps {
 
 const TownMap = ({ onEnterShop }: TownMapProps) => {
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
+  const isMobile = useIsMobile();
+
+  const getPosition = (shop: Shop) => {
+    if (!isMobile && shop.positionMd) return shop.positionMd;
+    return shop.position;
+  };
 
   return (
     <div
@@ -87,7 +96,7 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
                   ? "hover:scale-110 cursor-pointer"
                   : "cursor-pointer opacity-70"
               }`}
-              style={{ top: shop.position.top, left: shop.position.left }}
+              style={{ top: getPosition(shop).top, left: getPosition(shop).left }}
               aria-label={`${shop.name}${shop.unlocked ? "" : " (locked)"}`}
             >
               <div
