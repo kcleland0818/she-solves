@@ -96,7 +96,7 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
                   ? "hover:scale-110 cursor-pointer"
                   : "cursor-pointer opacity-70"
               }`}
-              style={{ top: shop.position.top, left: shop.position.left }}
+              style={{ top: getPosition(shop).top, left: getPosition(shop).left }}
               aria-label={`${shop.name}${shop.unlocked ? "" : " (locked)"}`}
             >
               <div
