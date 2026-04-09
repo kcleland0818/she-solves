@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Lock } from "lucide-react";
 import townMapBg from "@/assets/town-map-bg.jpg";
 import {
