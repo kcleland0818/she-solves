@@ -51,6 +51,12 @@ interface TownMapProps {
 
 const TownMap = ({ onEnterShop }: TownMapProps) => {
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
+  const isMobile = useIsMobile();
+
+  const getPosition = (shop: Shop) => {
+    if (!isMobile && shop.positionMd) return shop.positionMd;
+    return shop.position;
+  };
 
   return (
     <div
