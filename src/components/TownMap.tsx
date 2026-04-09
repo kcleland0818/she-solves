@@ -29,7 +29,7 @@ const shops: Shop[] = [
       "You just became the owner of the coolest smoothie shop in town! Learn the math behind mixing drinks, tracking sales, and running discounts.",
     learningTopics: ["Ratios & Proportions", "Percentages", "Discounts & Mental Math"],
     unlocked: true,
-    position: { top: "70%", left: "42%" },
+    position: { top: "63%", left: "50%" },
   },
   {
     id: "bakery",
