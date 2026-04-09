@@ -77,11 +77,11 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
 
       {/* Map fills remaining space */}
       <div className="relative flex-1 min-h-0 w-full flex items-center justify-center p-2 md:p-4">
-        <div className="relative w-full max-w-5xl overflow-hidden rounded-xl md:rounded-2xl shadow-xl border-2 md:border-4 border-white/60 aspect-video">
+        <div className="relative w-full max-w-5xl overflow-hidden rounded-xl md:rounded-2xl shadow-xl border-2 md:border-4 border-white/60 aspect-[4/3] md:aspect-video">
           <img
             src={townMapBg}
             alt="Mathville town map"
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover object-[50%_85%]"
             width={1920}
             height={1080}
           />
