@@ -81,7 +81,7 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
           <img
             src={townMapBg}
             alt="Mathville town map"
-            className="absolute inset-0 w-full h-full object-cover object-bottom"
+            className="absolute inset-0 w-full h-full object-cover md:object-contain object-bottom"
             width={1920}
             height={1080}
           />
