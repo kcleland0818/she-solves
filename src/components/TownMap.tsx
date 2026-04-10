@@ -68,10 +68,10 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
       {/* Header */}
       <div className="text-center pt-3 pb-1 md:pt-4 md:pb-2 z-10 relative shrink-0">
         <h1 className="text-2xl md:text-4xl font-extrabold text-foreground drop-shadow-sm">
-          📍 Mathville
+          📍 SheSolves City
         </h1>
         <p className="text-muted-foreground text-xs md:text-base mt-0.5">
-          Tap a shop to start learning! ✨
+          Tap a shop to start solving! ✨
         </p>
       </div>
 
