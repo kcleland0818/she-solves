@@ -40,7 +40,7 @@ const Index = () => {
 
   return (
     <div
-      className={`min-h-screen px-4 py-3 md:py-6 ${
+      className={`min-h-screen px-4 py-5 md:py-6 ${
         isWelcome
           ? "bg-gradient-to-br from-[hsl(280,60%,92%)] via-[hsl(320,50%,93%)] to-[hsl(340,60%,92%)]"
           : "bg-background"
