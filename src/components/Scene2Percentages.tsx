@@ -61,7 +61,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
   };
 
   return (
-    <section className="flex flex-col gap-6 animate-fade-in max-w-lg mx-auto" aria-labelledby="scene2-heading">
+    <section className="flex flex-col gap-3 animate-fade-in max-w-lg mx-auto" aria-labelledby="scene2-heading">
       <h2 id="scene2-heading" className="text-2xl font-bold text-center">
         <span aria-hidden="true">📊 </span>Today's Sales
       </h2>
@@ -78,7 +78,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
 
       {/* Pie Chart */}
       <div className="flex justify-center" role="img" aria-label={`Pie chart showing sales: ${salesData.map(d => `${d.name}: ${d.value} cups`).join(', ')}. Total: ${total} cups.`}>
-        <div className="w-56 h-56">
+        <div className="w-44 h-44">
           <ResponsiveContainer>
             <PieChart>
               <Pie

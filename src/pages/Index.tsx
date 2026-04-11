@@ -40,7 +40,7 @@ const Index = () => {
 
   return (
     <div
-      className={`min-h-screen px-4 py-6 md:py-10 ${
+      className={`min-h-screen px-4 py-3 md:py-6 ${
         isWelcome
           ? "bg-gradient-to-br from-[hsl(280,60%,92%)] via-[hsl(320,50%,93%)] to-[hsl(340,60%,92%)]"
           : "bg-background"
@@ -48,7 +48,7 @@ const Index = () => {
     >
       <div className="max-w-2xl mx-auto">
         {showProgress && (
-          <div className="mb-8">
+          <div className="mb-4">
             <ProgressBar currentScene={sceneIndex[screen]} totalScenes={3} />
           </div>
         )}

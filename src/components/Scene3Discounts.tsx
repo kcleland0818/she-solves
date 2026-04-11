@@ -60,7 +60,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
   };
 
   return (
-    <section className="flex flex-col gap-6 animate-fade-in max-w-lg mx-auto" aria-labelledby="scene3-heading">
+    <section className="flex flex-col gap-3 animate-fade-in max-w-lg mx-auto" aria-labelledby="scene3-heading">
       <h2 id="scene3-heading" className="text-2xl font-bold text-center">
         <span aria-hidden="true">🏷️ </span>Discount Day!
       </h2>
@@ -76,7 +76,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
       />
 
       {/* Discount Slider */}
-      <fieldset className="bg-card border rounded-xl p-4">
+      <fieldset className="bg-card border rounded-xl p-3">
         <legend className="sr-only">Set discount percentage</legend>
         <div className="flex justify-between text-sm mb-2">
           <label htmlFor="discount-slider" id="discount-label">Discount</label>
@@ -98,7 +98,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
       </fieldset>
 
       {/* Price Tags */}
-      <div className="space-y-3" role="list" aria-label="Smoothie prices">
+      <div className="space-y-2" role="list" aria-label="Smoothie prices">
         {smoothies.map((s) => {
           const newPrice = discountedPrice(s.price);
           const hasDiscount = discount > 0;

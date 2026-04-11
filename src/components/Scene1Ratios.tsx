@@ -61,7 +61,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
   };
 
   return (
-    <section className="flex flex-col gap-6 animate-fade-in max-w-lg mx-auto" aria-labelledby="scene1-heading">
+    <section className="flex flex-col gap-3 animate-fade-in max-w-lg mx-auto" aria-labelledby="scene1-heading">
       <h2 id="scene1-heading" className="text-2xl font-bold text-center">
         <span aria-hidden="true">🍹 </span>Mix the Perfect Smoothie
       </h2>
@@ -78,7 +78,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
 
       {/* Smoothie Glass Visual */}
       <div className="flex justify-center" aria-hidden="true">
-        <div className="w-24 h-40 rounded-b-3xl border-2 border-border bg-muted/30 relative overflow-hidden">
+        <div className="w-20 h-28 rounded-b-3xl border-2 border-border bg-muted/30 relative overflow-hidden">
           {total > 0 && (
             <>
               <div
@@ -112,7 +112,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
       </div>
 
       {/* Sliders */}
-      <fieldset className="space-y-4 bg-card border rounded-xl p-4">
+      <fieldset className="space-y-3 bg-card border rounded-xl p-3">
         <legend className="sr-only">Smoothie ingredient sliders</legend>
         <div>
           <div className="flex justify-between text-sm mb-2">
