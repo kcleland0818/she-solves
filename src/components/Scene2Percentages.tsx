@@ -53,29 +53,31 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
   const checkAnswer = () => {
     const parsed = parseInt(answer);
     if (Math.abs(parsed - targetPercent) <= 1) {
-      setFeedback(`🎉 Yes! ${targetData.value} ÷ ${total} = ${(targetData.value / total).toFixed(2)}, and ${(targetData.value / total).toFixed(2)} × 100 = ${targetPercent}%. ${question.label} was about ${targetPercent}% of sales!`);
+      setFeedback(`Yes! ${targetData.value} ÷ ${total} = ${(targetData.value / total).toFixed(2)}, and ${(targetData.value / total).toFixed(2)} × 100 = ${targetPercent}%. ${question.label} was about ${targetPercent}% of sales!`);
       setPhase("done");
     } else {
-      setFeedback(`Not quite — try dividing ${question.label} sales by total sales, then multiply by 100! 🤔`);
+      setFeedback(`Not quite — try dividing ${question.label} sales by total sales, then multiply by 100!`);
     }
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-fade-in max-w-lg mx-auto">
-      <h2 className="text-2xl font-bold text-center">📊 Today's Sales</h2>
+    <section className="flex flex-col gap-6 animate-fade-in max-w-lg mx-auto" aria-labelledby="scene2-heading">
+      <h2 id="scene2-heading" className="text-2xl font-bold text-center">
+        <span aria-hidden="true">📊 </span>Today's Sales
+      </h2>
 
       <MayaSpeech
         text={
           phase === "explore"
-            ? "Here's what we sold today! Tap on each flavor to see how many we sold. Percentage = (part ÷ whole) × 100 ✨"
+            ? "Here's what we sold today! Tap on each flavor to see how many we sold. Percentage = (part ÷ whole) × 100"
             : phase === "challenge"
-            ? `Pop quiz! What percentage of today's sales were ${question.label}? ${question.emoji}`
-            : `That's right! ${targetData.value} out of ${total} = ${targetPercent}%. You're crushing it! 💪`
+            ? `Pop quiz! What percentage of today's sales were ${question.label}?`
+            : `That's right! ${targetData.value} out of ${total} = ${targetPercent}%. You're crushing it!`
         }
       />
 
       {/* Pie Chart */}
-      <div className="flex justify-center">
+      <div className="flex justify-center" role="img" aria-label={`Pie chart showing sales: ${salesData.map(d => `${d.name}: ${d.value} cups`).join(', ')}. Total: ${total} cups.`}>
         <div className="w-56 h-56">
           <ResponsiveContainer>
             <PieChart>
@@ -106,20 +108,22 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
       </div>
 
       {/* Legend / Details */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-2" role="group" aria-label="Sales data by flavor">
         {salesData.map((d, i) => {
           const isActive = selected === i;
           return (
             <button
               key={d.name}
               onClick={() => setSelected(i)}
-              className={`flex items-center gap-2 p-3 rounded-xl border text-left text-sm transition-all duration-200 ${
+              aria-pressed={isActive}
+              aria-label={`${d.name}: ${d.value} of ${total} cups${isActive ? " (selected)" : ""}`}
+              className={`flex items-center gap-2 p-3 rounded-xl border text-left text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                 isActive ? "border-primary bg-primary/10 shadow-sm scale-[1.02]" : "border-border bg-card hover:bg-muted/50"
               }`}
             >
-              <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: COLORS[i] }} />
+              <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: COLORS[i] }} aria-hidden="true" />
               <div>
-                <span className="font-medium">{d.emoji} {d.name}</span>
+                <span className="font-medium"><span aria-hidden="true">{d.emoji} </span>{d.name}</span>
                 {isActive && (
                   <p className="text-xs text-muted-foreground animate-fade-in">
                     {d.value} of {total} cups
@@ -133,30 +137,35 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
 
       {phase === "explore" && (
         <Button onClick={() => setPhase("challenge")} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
-          Try the Challenge! 💪
+          Try the Challenge! <span aria-hidden="true">💪</span>
         </Button>
       )}
 
       {phase === "challenge" && (
         <div className="bg-card border border-primary/20 rounded-xl p-4 space-y-3">
-          <p className="text-sm font-medium text-center">What % of sales were {question.label}? {question.emoji}</p>
+          <p className="text-sm font-medium text-center" id="percentage-question">
+            What % of sales were {question.label}?
+          </p>
           <div className="flex gap-2 justify-center">
+            <label htmlFor="percentage-answer" className="sr-only">Your answer in percent</label>
             <input
+              id="percentage-answer"
               type="number"
               value={answer}
               onChange={(e) => { setAnswer(e.target.value); setFeedback(""); }}
               placeholder="%"
-              className="w-20 text-center rounded-lg border bg-background px-3 py-2 text-sm"
+              aria-describedby="percentage-question"
+              className="w-20 text-center rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
             <Button onClick={checkAnswer} size="sm">Check</Button>
           </div>
           <div className="flex justify-center">
-            <Button variant="outline" size="sm" onClick={() => setShowHint(!showHint)}>
-              {showHint ? "Hide Hint" : "💡 Hint"}
+            <Button variant="outline" size="sm" onClick={() => setShowHint(!showHint)} aria-expanded={showHint}>
+              {showHint ? "Hide Hint" : "Hint"}
             </Button>
           </div>
           {showHint && (
-            <p className="text-xs text-muted-foreground text-center animate-fade-in">
+            <p className="text-xs text-muted-foreground text-center animate-fade-in" role="status">
               {question.label} sold {targetData.value} cups. Total cups = {total}. Try: ({targetData.value} ÷ {total}) × 100
             </p>
           )}
@@ -164,20 +173,20 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
       )}
 
       {feedback && (
-        <p className="text-center font-medium text-sm animate-fade-in">{feedback}</p>
+        <p className="text-center font-medium text-sm animate-fade-in" role="status" aria-live="polite">{feedback}</p>
       )}
 
       {phase === "done" && (
         <div className="flex gap-3 justify-center">
           <Button variant="outline" onClick={() => { setPhase("challenge"); setAnswer(""); setFeedback(""); setShowHint(false); setSelected(null); }}>
-            Try a Different Challenge 🔄
+            Try a Different Challenge
           </Button>
           <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
-            Next Scene →
+            Next Scene <span aria-hidden="true">→</span>
           </Button>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

@@ -31,7 +31,6 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase === "challenge"]);
 
-  // Sync sliders to challenge ratio when entering challenge phase
   useEffect(() => {
     if (phase === "challenge") {
       setStrawberry(challenge.ratio);
@@ -52,18 +51,20 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
         challenge.ratio === 1
           ? `${strawberry}:${banana} is equal parts — 1:1!`
           : `${strawberry}:${banana} is the same as ${challenge.label} because ${strawberry} ÷ ${banana} = ${(strawberry / banana).toFixed(0)}.`;
-      setFeedback(`🎉 Perfect! ${ratioExplain} Same ratio, bigger cup!`);
+      setFeedback(`Perfect! ${ratioExplain} Same ratio, bigger cup!`);
       setPhase("done");
     } else if (total < challenge.minTotal) {
-      setFeedback(`Almost! Make the cup bigger — you need at least ${challenge.minTotal} parts total 🥤`);
+      setFeedback(`Almost! Make the cup bigger — you need at least ${challenge.minTotal} parts total.`);
     } else {
-      setFeedback(`Hmm, the taste changed! Keep the same ${challenge.label} ratio 🍓🍌`);
+      setFeedback(`Hmm, the taste changed! Keep the same ${challenge.label} ratio.`);
     }
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-fade-in max-w-lg mx-auto">
-      <h2 className="text-2xl font-bold text-center">🍹 Mix the Perfect Smoothie</h2>
+    <section className="flex flex-col gap-6 animate-fade-in max-w-lg mx-auto" aria-labelledby="scene1-heading">
+      <h2 id="scene1-heading" className="text-2xl font-bold text-center">
+        <span aria-hidden="true">🍹 </span>Mix the Perfect Smoothie
+      </h2>
 
       <MayaSpeech
         text={
@@ -71,12 +72,12 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
             ? "Drag the sliders to mix your smoothie! A ratio tells us how much of each ingredient to use compared to the others."
             : phase === "challenge"
             ? `A customer wants the SAME taste but in a BIGGER cup. ${challenge.desc}`
-            : "You nailed it! When you multiply both parts of a ratio by the same number, the taste stays the same! 🧠"
+            : "You nailed it! When you multiply both parts of a ratio by the same number, the taste stays the same!"
         }
       />
 
       {/* Smoothie Glass Visual */}
-      <div className="flex justify-center">
+      <div className="flex justify-center" aria-hidden="true">
         <div className="w-24 h-40 rounded-b-3xl border-2 border-border bg-muted/30 relative overflow-hidden">
           {total > 0 && (
             <>
@@ -105,14 +106,28 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
         </div>
       </div>
 
+      {/* Live region for ratio announcement */}
+      <div className="sr-only" aria-live="polite">
+        Ratio: {strawberry} to {banana}. {Math.round(strawberryPct)}% strawberry.
+      </div>
+
       {/* Sliders */}
-      <div className="space-y-4 bg-card border rounded-xl p-4">
+      <fieldset className="space-y-4 bg-card border rounded-xl p-4">
+        <legend className="sr-only">Smoothie ingredient sliders</legend>
         <div>
           <div className="flex justify-between text-sm mb-2">
-            <span>🍓 Strawberry</span>
-            <span className="font-bold">{strawberry} parts</span>
+            <label htmlFor="strawberry-slider" id="strawberry-label">
+              <span aria-hidden="true">🍓 </span>Strawberry
+            </label>
+            <span className="font-bold" aria-live="polite">{strawberry} parts</span>
           </div>
           <Slider
+            id="strawberry-slider"
+            aria-labelledby="strawberry-label"
+            aria-valuemin={0}
+            aria-valuemax={10}
+            aria-valuenow={strawberry}
+            aria-valuetext={`${strawberry} parts`}
             value={[strawberry]}
             onValueChange={([v]) => { setStrawberry(v); setFeedback(""); }}
             min={0}
@@ -122,10 +137,18 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
         </div>
         <div>
           <div className="flex justify-between text-sm mb-2">
-            <span>🍌 Banana</span>
-            <span className="font-bold">{banana} parts</span>
+            <label htmlFor="banana-slider" id="banana-label">
+              <span aria-hidden="true">🍌 </span>Banana
+            </label>
+            <span className="font-bold" aria-live="polite">{banana} parts</span>
           </div>
           <Slider
+            id="banana-slider"
+            aria-labelledby="banana-label"
+            aria-valuemin={0}
+            aria-valuemax={10}
+            aria-valuenow={banana}
+            aria-valuetext={`${banana} parts`}
             value={[banana]}
             onValueChange={([v]) => { setBanana(v); setFeedback(""); }}
             min={0}
@@ -139,44 +162,44 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
             <> — that's <span className="font-semibold text-foreground">{Math.round(strawberryPct)}%</span> strawberry</>
           )}
         </p>
-      </div>
+      </fieldset>
 
       {feedback && (
-        <p className="text-center font-medium text-sm animate-fade-in">{feedback}</p>
+        <p className="text-center font-medium text-sm animate-fade-in" role="status" aria-live="polite">{feedback}</p>
       )}
 
       {phase === "explore" && (
         <Button onClick={() => { setPhase("challenge"); }} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
-          Try the Challenge! 💪
+          Try the Challenge! <span aria-hidden="true">💪</span>
         </Button>
       )}
 
       {phase === "challenge" && (
         <div className="flex gap-2 justify-center">
-          <Button variant="outline" size="sm" onClick={() => setShowHint(!showHint)}>
-            {showHint ? "Hide Hint" : "💡 Hint"}
+          <Button variant="outline" size="sm" onClick={() => setShowHint(!showHint)} aria-expanded={showHint}>
+            {showHint ? "Hide Hint" : "Hint"}
           </Button>
           <Button onClick={handleCheck}>Check My Answer</Button>
         </div>
       )}
 
       {showHint && phase === "challenge" && (
-        <p className="text-center text-sm text-muted-foreground bg-secondary/50 rounded-lg p-3 animate-fade-in">
-          Try multiplying both numbers by the same amount! Like {challenge.ratio}×2 = {challenge.ratio * 2} and 1×2 = 2 → that's {challenge.ratio * 2}:2, same taste! 🍓🍌
+        <p className="text-center text-sm text-muted-foreground bg-secondary/50 rounded-lg p-3 animate-fade-in" role="status">
+          Try multiplying both numbers by the same amount! Like {challenge.ratio}×2 = {challenge.ratio * 2} and 1×2 = 2 — that's {challenge.ratio * 2}:2, same taste!
         </p>
       )}
 
       {phase === "done" && (
         <div className="flex gap-3 justify-center">
           <Button variant="outline" onClick={() => { setPhase("challenge"); setFeedback(""); setShowHint(false); }}>
-            Try a Different Challenge 🔄
+            Try a Different Challenge
           </Button>
           <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
-            Next Scene →
+            Next Scene <span aria-hidden="true">→</span>
           </Button>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
