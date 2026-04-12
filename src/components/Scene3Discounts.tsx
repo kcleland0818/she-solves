@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useCallback } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
@@ -21,21 +21,27 @@ const challengeOptions = [
   { smoothieIdx: 0, targetPrice: 4.5, targetDiscount: 25, hint: "You need $1.50 off a $6 smoothie. $1.50 is what fraction of $6?" },
 ];
 
+const pickRandom = <T,>(arr: T[], excludeIdx: number | null): { item: T; idx: number } => {
+  const available = arr.map((item, i) => ({ item, i })).filter(({ i }) => i !== excludeIdx);
+  const pick = available[Math.floor(Math.random() * available.length)];
+  return { item: pick.item, idx: pick.i };
+};
+
 const Scene3Discounts = ({ onComplete }: Scene3Props) => {
   const [discount, setDiscount] = useState(0);
   const [phase, setPhase] = useState<"explore" | "challenge" | "done">("explore");
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [lastChallengeIdx, setLastChallengeIdx] = useState<number | null>(null);
+  const [challengeIdx, setChallengeIdx] = useState(0);
 
-  const challenge = useMemo(() => {
-    const available = challengeOptions.filter((_, i) => i !== lastChallengeIdx);
-    const pick = available[Math.floor(Math.random() * available.length)];
-    const idx = challengeOptions.indexOf(pick);
+  const challenge = challengeOptions[challengeIdx];
+
+  const newChallenge = useCallback(() => {
+    const { idx } = pickRandom(challengeOptions, lastChallengeIdx);
+    setChallengeIdx(idx);
     setLastChallengeIdx(idx);
-    return pick;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase === "challenge"]);
+  }, [lastChallengeIdx]);
 
   const targetSmoothie = smoothies[challenge.smoothieIdx];
 
@@ -134,7 +140,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
       )}
 
       {phase === "explore" && (
-        <Button onClick={() => { setPhase("challenge"); setDiscount(0); }} className="mx-auto">
+        <Button onClick={() => { newChallenge(); setPhase("challenge"); setDiscount(0); }} className="mx-auto">
           Try the Challenge! <span aria-hidden="true">💪</span>
         </Button>
       )}
@@ -156,7 +162,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
 
       {phase === "done" && (
         <div className="flex gap-3 justify-center">
-          <Button variant="outline" onClick={() => { setPhase("challenge"); setDiscount(0); setFeedback(""); setShowHint(false); }}>
+          <Button variant="outline" onClick={() => { newChallenge(); setPhase("challenge"); setDiscount(0); setFeedback(""); setShowHint(false); }}>
             Try a Different Challenge
           </Button>
           <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
