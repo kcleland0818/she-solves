@@ -142,7 +142,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
       </div>
 
       {phase === "explore" && (
-        <Button onClick={() => setPhase("challenge")} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
+        <Button onClick={() => { newQuestion(); setPhase("challenge"); }} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
           Try the Challenge! <span aria-hidden="true">💪</span>
         </Button>
       )}
@@ -184,7 +184,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
 
       {phase === "done" && (
         <div className="flex gap-3 justify-center">
-          <Button variant="outline" onClick={() => { setPhase("challenge"); setAnswer(""); setFeedback(""); setShowHint(false); setSelected(null); }}>
+          <Button variant="outline" onClick={() => { newQuestion(); setPhase("challenge"); setAnswer(""); setFeedback(""); setShowHint(false); setSelected(null); }}>
             Try a Different Challenge
           </Button>
           <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">

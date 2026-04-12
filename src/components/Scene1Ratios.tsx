@@ -175,7 +175,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
       )}
 
       {phase === "explore" && (
-        <Button onClick={() => { setPhase("challenge"); }} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
+        <Button onClick={() => { newChallenge(); setPhase("challenge"); }} className="mx-auto bg-gradient-to-r from-primary to-accent text-accent-foreground">
           Try the Challenge! <span aria-hidden="true">💪</span>
         </Button>
       )}
@@ -197,7 +197,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
 
       {phase === "done" && (
         <div className="flex gap-3 justify-center">
-          <Button variant="outline" onClick={() => { setPhase("challenge"); setFeedback(""); setShowHint(false); }}>
+          <Button variant="outline" onClick={() => { newChallenge(); setPhase("challenge"); setFeedback(""); setShowHint(false); }}>
             Try a Different Challenge
           </Button>
           <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">

@@ -140,7 +140,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
       )}
 
       {phase === "explore" && (
-        <Button onClick={() => { setPhase("challenge"); setDiscount(0); }} className="mx-auto">
+        <Button onClick={() => { newChallenge(); setPhase("challenge"); setDiscount(0); }} className="mx-auto">
           Try the Challenge! <span aria-hidden="true">💪</span>
         </Button>
       )}
@@ -162,7 +162,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
 
       {phase === "done" && (
         <div className="flex gap-3 justify-center">
-          <Button variant="outline" onClick={() => { setPhase("challenge"); setDiscount(0); setFeedback(""); setShowHint(false); }}>
+          <Button variant="outline" onClick={() => { newChallenge(); setPhase("challenge"); setDiscount(0); setFeedback(""); setShowHint(false); }}>
             Try a Different Challenge
           </Button>
           <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
