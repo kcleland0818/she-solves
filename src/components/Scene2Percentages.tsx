@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
@@ -30,6 +30,12 @@ const questions = [
   { index: 3, label: "Banana", emoji: "🍌" },
 ];
 
+const pickRandom = <T,>(arr: T[], excludeIdx: number | null): { item: T; idx: number } => {
+  const available = arr.map((item, i) => ({ item, i })).filter(({ i }) => i !== excludeIdx);
+  const pick = available[Math.floor(Math.random() * available.length)];
+  return { item: pick.item, idx: pick.i };
+};
+
 const Scene2Percentages = ({ onComplete }: Scene2Props) => {
   const [selected, setSelected] = useState<number | null>(null);
   const [phase, setPhase] = useState<"explore" | "challenge" | "done">("explore");
@@ -37,15 +43,15 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
   const [feedback, setFeedback] = useState("");
   const [showHint, setShowHint] = useState(false);
   const [lastQuestionIdx, setLastQuestionIdx] = useState<number | null>(null);
+  const [questionIdx, setQuestionIdx] = useState(0);
 
-  const question = useMemo(() => {
-    const available = questions.filter((_, i) => i !== lastQuestionIdx);
-    const pick = available[Math.floor(Math.random() * available.length)];
-    const idx = questions.indexOf(pick);
+  const question = questions[questionIdx];
+
+  const newQuestion = useCallback(() => {
+    const { idx } = pickRandom(questions, lastQuestionIdx);
+    setQuestionIdx(idx);
     setLastQuestionIdx(idx);
-    return pick;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase === "challenge"]);
+  }, [lastQuestionIdx]);
 
   const targetData = salesData[question.index];
   const targetPercent = Math.round((targetData.value / total) * 100);

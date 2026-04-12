@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
@@ -14,6 +14,12 @@ const challenges = [
   { ratio: 2, label: "2:1", minTotal: 9, desc: "Same 2:1 taste but in a HUGE cup — at least 9 parts!" },
 ];
 
+const pickRandom = <T,>(arr: T[], excludeIdx: number | null): { item: T; idx: number } => {
+  const available = arr.map((item, i) => ({ item, i })).filter(({ i }) => i !== excludeIdx);
+  const pick = available[Math.floor(Math.random() * available.length)];
+  return { item: pick.item, idx: pick.i };
+};
+
 const Scene1Ratios = ({ onComplete }: Scene1Props) => {
   const [strawberry, setStrawberry] = useState(2);
   const [banana, setBanana] = useState(1);
@@ -21,15 +27,15 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [lastChallengeIdx, setLastChallengeIdx] = useState<number | null>(null);
+  const [challengeIdx, setChallengeIdx] = useState(0);
 
-  const challenge = useMemo(() => {
-    const available = challenges.filter((_, i) => i !== lastChallengeIdx);
-    const pick = available[Math.floor(Math.random() * available.length)];
-    const idx = challenges.indexOf(pick);
+  const challenge = challenges[challengeIdx];
+
+  const newChallenge = useCallback(() => {
+    const { idx } = pickRandom(challenges, lastChallengeIdx);
+    setChallengeIdx(idx);
     setLastChallengeIdx(idx);
-    return pick;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase === "challenge"]);
+  }, [lastChallengeIdx]);
 
   useEffect(() => {
     if (phase === "challenge") {
