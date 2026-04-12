@@ -83,7 +83,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
       />
 
       {/* Pie Chart */}
-      <div className="flex justify-center" role="img" aria-label={`Pie chart showing sales: ${salesData.map(d => `${d.name}: ${d.value} cups`).join(', ')}. Total: ${total} cups.`}>
+      <div className="flex justify-center" role="img" aria-label={`Pie chart showing sales: ${salesData.map(d => `${d.name}: ${d.value} smoothies`).join(', ')}. Total: ${total} smoothies.`}>
         <div className="w-44 h-44">
           <ResponsiveContainer>
             <PieChart>
@@ -122,7 +122,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
               key={d.name}
               onClick={() => setSelected(i)}
               aria-pressed={isActive}
-              aria-label={`${d.name}: ${d.value} of ${total} cups${isActive ? " (selected)" : ""}`}
+              aria-label={`${d.name}: ${d.value} of ${total} smoothies${isActive ? " (selected)" : ""}`}
               className={`flex items-center gap-2 p-3 rounded-xl border text-left text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                 isActive ? "border-primary bg-primary/10 shadow-sm scale-[1.02]" : "border-border bg-card hover:bg-muted/50"
               }`}
@@ -132,7 +132,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
                 <span className="font-medium"><span aria-hidden="true">{d.emoji} </span>{d.name}</span>
                 {isActive && (
                   <p className="text-xs text-muted-foreground animate-fade-in">
-                    {d.value} of {total} cups
+                    {d.value} of {total} smoothies
                   </p>
                 )}
               </div>
@@ -172,7 +172,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
           </div>
           {showHint && (
             <p className="text-xs text-muted-foreground text-center animate-fade-in" role="status">
-              {question.label} sold {targetData.value} cups. Total cups = {total}. Try: ({targetData.value} ÷ {total}) × 100
+              {question.label} sold {targetData.value} smoothies. Total smoothies = {total}. Try: ({targetData.value} ÷ {total}) × 100
             </p>
           )}
         </div>
