@@ -59,12 +59,11 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
   };
 
   return (
-    <div
+    <main
       className="h-[100dvh] flex flex-col relative overflow-hidden"
       style={{
         background: "linear-gradient(to bottom, hsl(200, 60%, 92%), hsl(200, 40%, 96%))",
       }}
-      role="main"
     >
       {/* Skip link for keyboard users */}
       <a
@@ -75,23 +74,23 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
       </a>
 
       {/* Header */}
-      <header className="text-center pt-3 pb-1 md:pt-4 md:pb-2 z-10 relative shrink-0">
+      <div className="text-center pt-3 pb-1 md:pt-4 md:pb-2 z-10 relative shrink-0">
         <h1 className="text-2xl md:text-4xl font-extrabold text-foreground drop-shadow-sm">
           <span aria-hidden="true">📍 </span>SheSolves City
         </h1>
         <p className="text-muted-foreground text-xs md:text-base mt-0.5">
           Tap a shop to start solving!
         </p>
-      </header>
+      </div>
 
       {/* Map fills remaining space */}
       <div className="relative flex-1 min-h-0 w-full flex items-center justify-center p-1 md:p-2">
         <div
           className="relative w-full h-full overflow-hidden rounded-xl md:rounded-2xl shadow-xl border-2 md:border-4 border-white/60 bg-center bg-no-repeat bg-cover"
           style={{ backgroundImage: `url(${townMapBg})` }}
-          role="img"
-          aria-label="Town map of SheSolves City with shops to explore"
         >
+          {/* Decorative background description for screen readers (sibling, not ancestor of buttons) */}
+          <span className="sr-only">Town map of SheSolves City with shops to explore.</span>
           {/* Clickable shop markers */}
           <nav id="shop-markers" aria-label="Shop locations">
             {shops.map((shop) => (
