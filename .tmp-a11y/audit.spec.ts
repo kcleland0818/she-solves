@@ -43,7 +43,7 @@ test("a11y audit across every scene", async ({ page }) => {
   await runAxe(page, "1-town-map");
 
   // ---- 2. Smoothie shop dialog (still on town map) ----
-  await page.locator('button:has-text("Berry Bliss"), button[aria-label*="Berry Bliss" i], button:has-text("🍓")').first().click();
+  await page.locator('button[aria-label*="Berry Bliss" i]').first().click();
   await page.waitForTimeout(400);
   await runAxe(page, "2-shop-dialog");
 
