@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import mayaAvatar from "@/assets/maya-avatar.png";
+import mayaAvatar from "@/assets/maya-avatar.webp";
 
 interface WelcomeScreenProps {
   onStart: () => void;
@@ -17,7 +17,7 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => (
     <div className="bg-card border border-primary/20 rounded-2xl p-4 mb-5 max-w-sm shadow-md">
       <div className="flex items-center gap-3 mb-3">
         <div className="w-14 h-14 rounded-full bg-primary/20 border-2 border-primary/40 overflow-hidden animate-[bounce_3s_ease-in-out_infinite]">
-          <img src={mayaAvatar} alt="Maya, your mentor" width={56} height={56} className="w-full h-full object-cover" />
+          <img src={mayaAvatar} alt="Maya, your mentor" width={56} height={56} loading="eager" decoding="async" fetchPriority="high" className="w-full h-full object-cover" />
         </div>
         <span className="font-semibold text-card-foreground">Maya, your mentor</span>
       </div>
