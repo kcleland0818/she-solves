@@ -83,7 +83,10 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
 
       {/* Discount Slider */}
       <fieldset className="bg-card border rounded-xl p-3">
-        <legend className="sr-only">Set discount percentage</legend>
+        <legend className="sr-only">Set discount percentage. Use arrow keys to adjust by 5 percent.</legend>
+        <p id="discount-hint" className="sr-only">
+          Use left and right arrow keys to change by 5 percent. Home for 0 percent, End for 75 percent.
+        </p>
         <div className="flex justify-between text-sm mb-2">
           <label htmlFor="discount-slider" id="discount-label">Discount</label>
           <span className="font-bold text-lg" aria-live="polite">{discount}% OFF</span>
@@ -91,9 +94,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
         <Slider
           id="discount-slider"
           aria-labelledby="discount-label"
-          aria-valuemin={0}
-          aria-valuemax={75}
-          aria-valuenow={discount}
+          aria-describedby="discount-hint"
           aria-valuetext={`${discount} percent off`}
           value={[discount]}
           onValueChange={([v]) => { setDiscount(v); setFeedback(""); }}
