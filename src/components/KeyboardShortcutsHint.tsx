@@ -63,7 +63,7 @@ const KeyboardShortcutsHint = () => {
       </div>
       <button
         onClick={dismiss}
-        className="mt-3 w-full text-xs font-medium text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
+        className="mt-3 w-full text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md py-1.5"
       >
         Got it
       </button>
