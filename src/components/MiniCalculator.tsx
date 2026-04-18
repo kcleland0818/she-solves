@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { Calculator } from "lucide-react";
 
 const MiniCalculator = () => {
   const [open, setOpen] = useState(false);
@@ -102,10 +103,10 @@ const MiniCalculator = () => {
       <button
         ref={openBtnRef}
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 right-4 z-50 bg-primary text-primary-foreground rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:scale-110 transition-transform text-lg font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="fixed bottom-4 right-4 z-50 bg-primary text-primary-foreground rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         aria-label="Open calculator. Supports keyboard input when open."
       >
-        <span aria-hidden="true">🧮</span>
+        <Calculator className="w-6 h-6" aria-hidden="true" />
       </button>
     );
   }
@@ -122,8 +123,9 @@ const MiniCalculator = () => {
       aria-label="Calculator. Use number keys, operators, Enter to equals, Backspace to delete, Escape to close."
     >
       <div className="flex justify-between items-center mb-2">
-        <span className="text-xs font-semibold text-muted-foreground">
-          <span aria-hidden="true">🧮 </span>Calculator
+        <span className="text-xs font-semibold text-muted-foreground inline-flex items-center gap-1.5">
+          <Calculator className="w-3.5 h-3.5" aria-hidden="true" />
+          Calculator
         </span>
         <button
           onClick={() => { setOpen(false); openBtnRef.current?.focus(); }}
