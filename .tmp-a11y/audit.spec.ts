@@ -39,7 +39,7 @@ test("a11y audit across every scene", async ({ page }) => {
 
   // ---- 1. Town Map ----
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("domcontentloaded");
   await runAxe(page, "1-town-map");
 
   // ---- 2. Smoothie shop dialog (still on town map) ----
@@ -139,7 +139,7 @@ test("a11y audit across every scene", async ({ page }) => {
     try { localStorage.removeItem("berry-bliss:kbd-hint-dismissed"); } catch {}
   });
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("domcontentloaded");
   // Need to be on a scene for the hint to render — navigate back into scene 1 quickly
   await page.locator('button:has-text("Berry Bliss"), button:has-text("🍓")').first().click().catch(() => {});
   await page.waitForTimeout(300);
