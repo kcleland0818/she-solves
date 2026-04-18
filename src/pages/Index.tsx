@@ -46,7 +46,8 @@ const Index = () => {
           : "bg-background"
       }`}
     >
-      <div className="max-w-2xl mx-auto">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <div id="main-content" className="max-w-2xl mx-auto">
         {showProgress && (
           <div className="mb-4">
             <ProgressBar currentScene={sceneIndex[screen]} totalScenes={3} />

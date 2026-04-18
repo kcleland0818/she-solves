@@ -83,4 +83,29 @@
     @apply bg-background text-foreground;
     font-family: 'Nunito', 'Quicksand', sans-serif;
   }
+
+  /* Skip link — visible only when focused */
+  .skip-link {
+    @apply absolute left-2 top-2 z-[100] -translate-y-20 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg transition-transform focus:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+
+  /* Respect reduced motion preferences (WCAG 2.3.3) */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Improve muted-foreground contrast for WCAG AA (4.5:1) */
+:root {
+  --muted-foreground: 280 25% 32%;
+}
+.dark {
+  --muted-foreground: 280 15% 72%;
 }
