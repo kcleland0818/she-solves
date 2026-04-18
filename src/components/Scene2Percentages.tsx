@@ -82,8 +82,8 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
         }
       />
 
-      {/* Pie Chart */}
-      <div className="flex justify-center" role="img" aria-label={`Pie chart showing sales: ${salesData.map(d => `${d.name}: ${d.value} smoothies`).join(', ')}. Total: ${total} smoothies.`}>
+      {/* Pie Chart — decorative; data is conveyed via the legend buttons below */}
+      <div className="flex justify-center" aria-hidden="true">
         <div className="w-44 h-44">
           <ResponsiveContainer>
             <PieChart>
@@ -98,6 +98,8 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
                 cursor="pointer"
                 stroke="hsl(var(--background))"
                 strokeWidth={2}
+                isAnimationActive={false}
+                tabIndex={-1}
               >
                 {salesData.map((_, i) => (
                   <Cell
@@ -105,6 +107,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
                     fill={COLORS[i]}
                     opacity={selected === null || selected === i ? 1 : 0.4}
                     className="transition-opacity duration-300"
+                    tabIndex={-1}
                   />
                 ))}
               </Pie>
@@ -113,8 +116,13 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
         </div>
       </div>
 
-      {/* Legend / Details */}
-      <div className="grid grid-cols-2 gap-2" role="group" aria-label="Sales data by flavor">
+      {/* Accessible data table — visible to screen readers, available via keyboard via the buttons below */}
+      <p className="sr-only">
+        Today's sales totals: {salesData.map(d => `${d.name} ${d.value} smoothies`).join(', ')}. Total {total} smoothies. Use the buttons below to explore each flavor.
+      </p>
+
+      {/* Legend / Details — primary keyboard-accessible control */}
+      <div className="grid grid-cols-2 gap-2" role="group" aria-label="Sales data by flavor. Tab through to select.">
         {salesData.map((d, i) => {
           const isActive = selected === i;
           return (

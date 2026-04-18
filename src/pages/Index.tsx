@@ -7,6 +7,7 @@ import Scene3Discounts from "@/components/Scene3Discounts";
 import CompletionScreen from "@/components/CompletionScreen";
 import ProgressBar from "@/components/ProgressBar";
 import MiniCalculator from "@/components/MiniCalculator";
+import KeyboardShortcutsHint from "@/components/KeyboardShortcutsHint";
 
 type Screen = "town" | "welcome" | "scene1" | "scene2" | "scene3" | "complete";
 
@@ -61,6 +62,7 @@ const Index = () => {
         {screen === "complete" && <CompletionScreen onRestart={() => setScreen("town")} />}
       </div>
       {showProgress && <MiniCalculator />}
+      {showProgress && <KeyboardShortcutsHint />}
     </div>
   );
 };

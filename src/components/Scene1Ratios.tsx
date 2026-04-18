@@ -119,7 +119,10 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
 
       {/* Sliders */}
       <fieldset className="space-y-3 bg-card border rounded-xl p-3">
-        <legend className="sr-only">Smoothie ingredient sliders</legend>
+        <legend className="sr-only">Smoothie ingredient sliders. Use left and right arrow keys to adjust.</legend>
+        <p id="slider-hint" className="sr-only">
+          Use left and right arrow keys to change by 1 part. Page Up and Page Down for larger jumps. Home and End for minimum and maximum.
+        </p>
         <div>
           <div className="flex justify-between text-sm mb-2">
             <label htmlFor="strawberry-slider" id="strawberry-label">
@@ -130,10 +133,8 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
           <Slider
             id="strawberry-slider"
             aria-labelledby="strawberry-label"
-            aria-valuemin={0}
-            aria-valuemax={10}
-            aria-valuenow={strawberry}
-            aria-valuetext={`${strawberry} parts`}
+            aria-describedby="slider-hint"
+            aria-valuetext={`${strawberry} parts of strawberry`}
             value={[strawberry]}
             onValueChange={([v]) => { setStrawberry(v); setFeedback(""); }}
             min={0}
@@ -151,10 +152,8 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
           <Slider
             id="banana-slider"
             aria-labelledby="banana-label"
-            aria-valuemin={0}
-            aria-valuemax={10}
-            aria-valuenow={banana}
-            aria-valuetext={`${banana} parts`}
+            aria-describedby="slider-hint"
+            aria-valuetext={`${banana} parts of banana`}
             value={[banana]}
             onValueChange={([v]) => { setBanana(v); setFeedback(""); }}
             min={0}
