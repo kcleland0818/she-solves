@@ -202,7 +202,7 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </main>
   );
 };
 
