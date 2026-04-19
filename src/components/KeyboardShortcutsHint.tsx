@@ -1,13 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import { Keyboard, X } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const STORAGE_KEY = "berry-bliss:kbd-hint-dismissed";
 
 const KeyboardShortcutsHint = () => {
+  const isMobile = useIsMobile();
   const [visible, setVisible] = useState(false);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    if (isMobile) return;
     try {
       if (!localStorage.getItem(STORAGE_KEY)) {
         // Slight delay so it doesn't steal focus from the scene heading
@@ -17,7 +20,7 @@ const KeyboardShortcutsHint = () => {
     } catch {
       setVisible(true);
     }
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (visible) closeBtnRef.current?.focus();
@@ -28,7 +31,7 @@ const KeyboardShortcutsHint = () => {
     setVisible(false);
   };
 
-  if (!visible) return null;
+  if (isMobile || !visible) return null;
 
   return (
     <div
