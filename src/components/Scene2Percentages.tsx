@@ -131,15 +131,19 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
               onClick={() => setSelected(i)}
               aria-pressed={isActive}
               aria-label={`${d.name}: ${d.value} of ${total} smoothies${isActive ? " (selected)" : ""}`}
-              className={`flex items-center gap-2 p-2 rounded-lg text-left text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-                isActive
-                  ? "bg-primary/20 shadow-md scale-110"
-                  : "bg-transparent"
-              }`}
+              className="flex items-center gap-2 p-2 rounded-lg text-left text-sm bg-transparent transition-transform duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
-              <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: COLORS[i] }} aria-hidden="true" />
+              <div
+                className={`rounded-full flex-shrink-0 transition-all duration-200 ${
+                  isActive ? "w-4 h-4 animate-pulse ring-2 ring-offset-1 ring-offset-background" : "w-3 h-3"
+                }`}
+                style={{ backgroundColor: COLORS[i], boxShadow: isActive ? `0 0 0 2px ${COLORS[i]}` : undefined }}
+                aria-hidden="true"
+              />
               <div>
-                <span className="font-medium"><span aria-hidden="true">{d.emoji} </span>{d.name}</span>
+                <span className={`transition-all duration-200 ${isActive ? "font-bold" : "font-medium"}`}>
+                  <span aria-hidden="true">{d.emoji} </span>{d.name}
+                </span>
                 {isActive && (
                   <p className="text-xs text-muted-foreground animate-fade-in">
                     {d.value} of {total} smoothies
