@@ -31,7 +31,7 @@ const KeyboardShortcutsHint = () => {
     setVisible(false);
   };
 
-  if (!visible) return null;
+  if (isMobile || !visible) return null;
 
   return (
     <div
