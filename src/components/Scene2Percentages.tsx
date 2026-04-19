@@ -131,8 +131,10 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
               onClick={() => setSelected(i)}
               aria-pressed={isActive}
               aria-label={`${d.name}: ${d.value} of ${total} smoothies${isActive ? " (selected)" : ""}`}
-              className={`flex items-center gap-2 p-3 rounded-xl border text-left text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-                isActive ? "border-primary bg-primary/10 shadow-sm scale-[1.02]" : "border-border bg-card hover:bg-muted/50"
+              className={`flex items-center gap-2 p-2 rounded-lg text-left text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                isActive
+                  ? "border border-primary bg-primary/10 shadow-sm scale-[1.02]"
+                  : "border border-transparent bg-transparent hover:bg-muted/40"
               }`}
             >
               <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: COLORS[i] }} aria-hidden="true" />
