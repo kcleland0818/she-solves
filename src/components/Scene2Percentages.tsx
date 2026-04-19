@@ -133,7 +133,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
               aria-label={`${d.name}: ${d.value} of ${total} smoothies${isActive ? " (selected)" : ""}`}
               className={`flex items-center gap-2 p-2 rounded-lg text-left text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                 isActive
-                  ? "bg-primary/15 ring-2 ring-primary/40 shadow-md scale-[1.04]"
+                  ? "bg-primary/20 shadow-md scale-110"
                   : "bg-transparent"
               }`}
             >
