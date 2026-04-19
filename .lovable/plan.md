@@ -1,20 +1,37 @@
 
-The user is right — `KeyboardShortcutsHint` is irrelevant on mobile (no physical keyboard, no Tab/arrows). Looking at `src/pages/Index.tsx`, it's rendered unconditionally whenever `showProgress` is true, so it currently does pop up on phones.
+Looking at `Scene2Percentages.tsx`, the four flavor buttons under the pie chart are styled as full bordered cards in a 2-column grid. They serve two purposes:
 
-We already have `useIsMobile()` (`src/hooks/use-mobile.tsx`) which returns true under 768px — perfect fit.
+1. **Keyboard/screen-reader users** — they're the accessible way to explore the data (the pie itself is `aria-hidden`).
+2. **Mouse/touch users** — they act as a clickable legend.
 
-### Plan
+The user finds the rectangle outlines visually heavy, especially on mobile where the pie + 4 cards stack into a tall block.
 
-**Hide the keyboard hint on mobile**
+A few things to note:
+- They ARE relevant on mobile too — touch users tap them to see "X of Y smoothies" details, since the pie chart's onClick is awkward on small slices. So we shouldn't *hide* them on mobile, just make them lighter.
+- The current selected state uses `border-primary bg-primary/10 shadow-sm scale-[1.02]` which is fine — selection should stay obvious.
+- The unselected state is what feels heavy: `border-border bg-card`.
 
-1. In `src/components/KeyboardShortcutsHint.tsx`: import `useIsMobile`, and return `null` early if `useIsMobile()` is true. Also skip the localStorage write/timer on mobile so we don't accidentally mark it dismissed before the user ever resizes to desktop.
+### Proposed approach
 
-2. (Optional, but cleaner) In `src/pages/Index.tsx`: leave the render call as-is — the component itself owns the "should I show?" logic, which keeps `Index.tsx` simple.
+Make the **unselected** legend items visually lighter while keeping them fully functional and accessible:
 
-**Bonus consideration — MiniCalculator on mobile**
-The floating calculator *is* still useful on mobile (tap-to-use), so we leave it visible. Its keyboard-input affordance just becomes a no-op on touch devices, which is fine.
+- Drop the persistent border + card background on unselected items → use a transparent background with no border (or a very subtle bottom hairline only).
+- Keep the colored dot, emoji, and label — these carry the meaning.
+- On hover/focus, gently reveal a subtle background (`hover:bg-muted/40`) so it still feels tappable.
+- Keep the **selected** state visually strong (border + tint + scale) so the active choice is unmistakable.
+- Focus ring stays as-is for keyboard users (WCAG requirement).
 
-### Files to change
-- `src/components/KeyboardShortcutsHint.tsx` — add `useIsMobile()` guard at the top, return `null` on mobile.
+This keeps the screen-reader experience identical (same buttons, same labels, same `aria-pressed`) while making the visual presentation much calmer — on both desktop and mobile.
 
-That's it — one tiny, targeted change.
+### File to change
+
+- `src/components/Scene2Percentages.tsx` — adjust the className on the legend `<button>` (lines ~135-143). One-line tweak, no logic changes.
+
+### Before / after (unselected state)
+
+```text
+Before:  [ • 🍓 Strawberry        ]   ← bordered card
+After:     • 🍓 Strawberry            ← borderless, transparent, hover-reveals
+```
+
+Selected state remains visually prominent and unchanged.
