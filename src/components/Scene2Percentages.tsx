@@ -135,9 +135,9 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
             >
               <div
                 className={`rounded-full flex-shrink-0 transition-all duration-200 ${
-                  isActive ? "w-4 h-4 animate-pulse ring-2 ring-offset-1 ring-offset-background" : "w-3 h-3"
+                  isActive ? "w-4 h-4" : "w-3 h-3"
                 }`}
-                style={{ backgroundColor: COLORS[i], boxShadow: isActive ? `0 0 0 2px ${COLORS[i]}` : undefined }}
+                style={{ backgroundColor: COLORS[i] }}
                 aria-hidden="true"
               />
               <div>
