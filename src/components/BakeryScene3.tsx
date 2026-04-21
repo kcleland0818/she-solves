@@ -177,7 +177,7 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
       <PennySpeech
         text={
           phase === "explore"
-            ? "Two trays, two customers. Try different fractions on each side and see which order is bigger. The tray with more frosting wins!"
+            ? `To compare fractions with different bottoms, give them a common denominator. ${fmt(exploreA)} = ${exploreA.num * exploreB.den}/${exploreA.den * exploreB.den} and ${fmt(exploreB)} = ${exploreB.num * exploreA.den}/${exploreA.den * exploreB.den} — now just compare the tops! ${exploreCompare === "equal" ? "These are equal." : `${exploreA.num * exploreB.den} ${exploreCompare === "a" ? ">" : "<"} ${exploreB.num * exploreA.den}, so ${fmt(exploreCompare === "a" ? exploreA : exploreB)} wins.`}`
             : phase === "challenge"
             ? `Two customers just placed orders! Whose tray is BIGGER — ${fmt(challenge.a)} or ${fmt(challenge.b)}? Tap their order to find out.`
             : `Nice work! When the bottoms are different, you can't just compare the tops. The trays make it easy to SEE which is bigger.`

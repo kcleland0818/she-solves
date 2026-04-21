@@ -118,7 +118,7 @@ const BakeryScene2 = ({ onComplete }: Scene2Props) => {
       <PennySpeech
         text={
           phase === "explore"
-            ? "Pick a tray, then frost some cupcakes! Watch the fraction below — when you frost 'half' a tray of 6, that's 3/6. Same as 1/2. Try it!"
+            ? `Equivalent fractions look different but mean the same amount. Rule: multiply (or divide) BOTH top and bottom by the same number. Right now: ${shaded.size}/${total}${shaded.size > 0 && exploreSimplified.d !== total ? ` simplifies to ${exploreSimplified.n}/${exploreSimplified.d} (÷${gcd(shaded.size, total)} on top and bottom).` : "."} Try a different tray!`
             : phase === "challenge"
             ? `Show me ${challenge.equivLabel} of this tray of ${total} cupcakes! Tap cupcakes to add frosting. How many should you frost?`
             : `Beautiful! ${challenge.trayLabel} = ${challenge.equivLabel}. Both top AND bottom got multiplied by the same number — the amount stays equal.`
