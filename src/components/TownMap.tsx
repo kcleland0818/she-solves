@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Lock, Check } from "lucide-react";
 import townMapBg from "@/assets/town-map-bg.jpg";
-import { getCompletedShops } from "@/lib/progress";
+import { getCompletedShops, resetProgress } from "@/lib/progress";
 import {
   Dialog,
   DialogContent,
@@ -156,6 +156,23 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
           </nav>
         </div>
       </div>
+
+      {/* Dev/testing utility: reset all shop completion */}
+      {completedShops.size > 0 && (
+        <div className="absolute bottom-1 right-2 z-20">
+          <button
+            type="button"
+            onClick={() => {
+              resetProgress();
+              window.location.reload();
+            }}
+            className="text-[10px] md:text-xs text-muted-foreground/70 hover:text-foreground underline underline-offset-2 px-2 py-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Reset all shop progress"
+          >
+            Reset progress
+          </button>
+        </div>
+      )}
 
       {/* Shop Detail Modal */}
       <Dialog
