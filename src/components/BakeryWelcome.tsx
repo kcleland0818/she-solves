@@ -31,7 +31,7 @@ const BakeryWelcome = ({ onStart }: BakeryWelcomeProps) => (
         <span className="font-semibold text-card-foreground">Penny, your baking buddy</span>
       </div>
       <p className="text-sm text-muted-foreground leading-relaxed">
-        "Hey, partner! I'm Penny. We run this bakery together today — slicing cakes, filling cupcake trays, and figuring out which dessert is BIGGER. Fractions are just fancy slices. Let's bake!"
+        "Hi, I'm Penny! I'm so glad you're here — running a bakery is way more fun with a partner. Don't worry if fractions feel tricky at first; I've got your back, and we'll figure it out one slice at a time. You've got this!"
       </p>
     </div>
     <Button
@@ -39,7 +39,7 @@ const BakeryWelcome = ({ onStart }: BakeryWelcomeProps) => (
       onClick={onStart}
       className="text-base px-8 hover-scale shadow-lg bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground"
     >
-      Start Baking! <span aria-hidden="true">🥖</span>
+      Start Baking! <span aria-hidden="true">🧁</span>
     </Button>
   </main>
 );
