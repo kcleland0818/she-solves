@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import niaAvatar from "@/assets/nia-avatar.png";
+import pennyAvatar from "@/assets/penny-avatar.png";
 
 interface BakeryWelcomeProps {
   onStart: () => void;
@@ -12,14 +12,14 @@ const BakeryWelcome = ({ onStart }: BakeryWelcomeProps) => (
       Sweet Crumbs Bakery
     </h1>
     <p className="text-muted-foreground text-base mb-4 max-w-md">
-      Welcome to the bakery! Today we're slicing cakes and trays of treats — and learning fractions while we do it.
+      Welcome to the bakery! Today you're helping behind the counter — slicing cakes, filling trays, and learning fractions while you bake.
     </p>
     <div className="bg-card border border-bakery-frosting-deep/20 rounded-2xl p-4 mb-5 max-w-sm shadow-md">
       <div className="flex items-center gap-3 mb-3">
         <div className="w-14 h-14 rounded-full bg-bakery-frosting/30 border-2 border-bakery-frosting-deep/40 overflow-hidden animate-[bounce_3s_ease-in-out_infinite]">
           <img
-            src={niaAvatar}
-            alt="Baker Nia, your guide"
+            src={pennyAvatar}
+            alt="Penny, your baking buddy"
             width={56}
             height={56}
             loading="eager"
@@ -28,10 +28,10 @@ const BakeryWelcome = ({ onStart }: BakeryWelcomeProps) => (
             className="w-full h-full object-cover"
           />
         </div>
-        <span className="font-semibold text-card-foreground">Baker Nia, your guide</span>
+        <span className="font-semibold text-card-foreground">Penny, your baking buddy</span>
       </div>
       <p className="text-sm text-muted-foreground leading-relaxed">
-        "Hi there! I'm Nia. We're going to slice some cakes, fill cupcake trays, and figure out which dessert is BIGGER. Fractions are just fancy slices — let's bake!"
+        "Hey, partner! I'm Penny. We run this bakery together today — slicing cakes, filling cupcake trays, and figuring out which dessert is BIGGER. Fractions are just fancy slices. Let's bake!"
       </p>
     </div>
     <Button

@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import NiaSpeech from "./NiaSpeech";
+import PennySpeech from "./PennySpeech";
 
 interface Scene3Props {
   onComplete: () => void;
@@ -131,7 +131,7 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
         <span aria-hidden="true">⚖️ </span>Which Slice Is Bigger?
       </h2>
 
-      <NiaSpeech
+      <PennySpeech
         text={
           phase === "challenge"
             ? `Two customers ordered different desserts. Which fraction is BIGGER — ${fmt(challenge.a)} or ${fmt(challenge.b)}? Tap the bigger one!`
