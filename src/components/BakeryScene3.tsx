@@ -49,7 +49,8 @@ interface FractionPastryProps {
   showProof: boolean;
   onClick?: () => void;
   ariaLabel: string;
-  customerEmoji: string;
+  customerAvatar: string;
+  customerName: string;
 }
 
 // Visualize each order as a strudel-style rectangular tray of pastries.
