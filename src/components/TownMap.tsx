@@ -235,7 +235,7 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
                 {selectedShop.unlocked ? (
                   <Button onClick={() => onEnterShop(selectedShop.id)}>
                     {completedShops.has(selectedShop.id) ? "Revisit Shop" : "Enter Shop"}{" "}
-                    <span aria-hidden="true">🚀</span>
+                    <span aria-hidden="true">✨</span>
                   </Button>
                 ) : (
                   <Button disabled aria-disabled="true" className="opacity-50">
