@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import PennySpeech from "./PennySpeech";
 
@@ -7,16 +7,24 @@ interface Scene2Props {
 }
 
 // Each challenge: shade `target` cupcakes on a tray of `total`, prove it equals `equivalent`.
-// e.g. 2/4 = 1/2 means tray of 4, shade 2.
+// Lead with thirds and quarters; halves come up but aren't the dominant lesson.
 const challenges = [
-  { rows: 1, cols: 2, target: 1, equivLabel: "1/2", trayLabel: "1/2" },
-  { rows: 2, cols: 2, target: 2, equivLabel: "1/2", trayLabel: "2/4" },
-  { rows: 2, cols: 3, target: 3, equivLabel: "1/2", trayLabel: "3/6" },
-  { rows: 1, cols: 3, target: 1, equivLabel: "1/3", trayLabel: "1/3" },
   { rows: 2, cols: 3, target: 2, equivLabel: "1/3", trayLabel: "2/6" },
-  { rows: 1, cols: 4, target: 1, equivLabel: "1/4", trayLabel: "1/4" },
-  { rows: 2, cols: 4, target: 2, equivLabel: "1/4", trayLabel: "2/8" },
   { rows: 2, cols: 4, target: 6, equivLabel: "3/4", trayLabel: "6/8" },
+  { rows: 3, cols: 4, target: 4, equivLabel: "1/3", trayLabel: "4/12" },
+  { rows: 2, cols: 4, target: 2, equivLabel: "1/4", trayLabel: "2/8" },
+  { rows: 2, cols: 3, target: 3, equivLabel: "1/2", trayLabel: "3/6" },
+  { rows: 3, cols: 4, target: 9, equivLabel: "3/4", trayLabel: "9/12" },
+  { rows: 2, cols: 4, target: 4, equivLabel: "1/2", trayLabel: "4/8" },
+  { rows: 3, cols: 4, target: 8, equivLabel: "2/3", trayLabel: "8/12" },
+];
+
+// Explore tray options — variety of shapes so kids see how denominators change.
+const exploreTrays = [
+  { rows: 1, cols: 3, label: "1×3 (thirds)" },
+  { rows: 2, cols: 3, label: "2×3 (sixths)" },
+  { rows: 2, cols: 4, label: "2×4 (eighths)" },
+  { rows: 3, cols: 4, label: "3×4 (twelfths)" },
 ];
 
 const pickRandom = <T,>(arr: T[], excludeIdx: number | null): { item: T; idx: number } => {
@@ -25,16 +33,28 @@ const pickRandom = <T,>(arr: T[], excludeIdx: number | null): { item: T; idx: nu
   return { item: pick.item, idx: pick.i };
 };
 
+// Reduce a/b to lowest terms.
+const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+const simplify = (n: number, d: number) => {
+  if (n === 0) return { n: 0, d: 1 };
+  const g = gcd(n, d);
+  return { n: n / g, d: d / g };
+};
+
 const BakeryScene2 = ({ onComplete }: Scene2Props) => {
+  const [phase, setPhase] = useState<"explore" | "challenge" | "done">("explore");
+  const [exploreTrayIdx, setExploreTrayIdx] = useState(1); // start at 2x3 = sixths
   const [challengeIdx, setChallengeIdx] = useState(0);
   const [lastChallengeIdx, setLastChallengeIdx] = useState<number | null>(null);
   const [shaded, setShaded] = useState<Set<number>>(new Set());
-  const [phase, setPhase] = useState<"challenge" | "done">("challenge");
   const [feedback, setFeedback] = useState("");
   const [showHint, setShowHint] = useState(false);
 
   const challenge = challenges[challengeIdx];
-  const total = challenge.rows * challenge.cols;
+  const exploreTray = exploreTrays[exploreTrayIdx];
+  const rows = phase === "explore" ? exploreTray.rows : challenge.rows;
+  const cols = phase === "explore" ? exploreTray.cols : challenge.cols;
+  const total = rows * cols;
 
   const newChallenge = useCallback(() => {
     const { idx } = pickRandom(challenges, lastChallengeIdx);
@@ -46,9 +66,20 @@ const BakeryScene2 = ({ onComplete }: Scene2Props) => {
     setPhase("challenge");
   }, [lastChallengeIdx]);
 
+  // Reset shading whenever the visible tray changes.
+  useEffect(() => {
+    setShaded(new Set());
+    setFeedback("");
+  }, [rows, cols]);
+
   const cells = useMemo(
     () => Array.from({ length: total }, (_, i) => i),
     [total],
+  );
+
+  const exploreSimplified = useMemo(
+    () => simplify(shaded.size, total),
+    [shaded.size, total],
   );
 
   const toggleCell = (i: number) => {
@@ -86,26 +117,64 @@ const BakeryScene2 = ({ onComplete }: Scene2Props) => {
 
       <PennySpeech
         text={
-          phase === "challenge"
+          phase === "explore"
+            ? "Pick a tray, then frost some cupcakes! Watch the fraction below — when you frost 'half' a tray of 6, that's 3/6. Same as 1/2. Try it!"
+            : phase === "challenge"
             ? `Show me ${challenge.equivLabel} of this tray of ${total} cupcakes! Tap cupcakes to add frosting. How many should you frost?`
             : `Beautiful! ${challenge.trayLabel} = ${challenge.equivLabel}. Both top AND bottom got multiplied by the same number — the amount stays equal.`
         }
       />
 
+      {phase === "explore" && (
+        <div className="flex flex-wrap items-center justify-center gap-2 bg-card border border-bakery-frosting-deep/20 rounded-xl p-2">
+          <span className="text-sm text-muted-foreground w-full text-center md:w-auto">Tray:</span>
+          {exploreTrays.map((t, i) => (
+            <Button
+              key={t.label}
+              type="button"
+              size="sm"
+              variant={exploreTrayIdx === i ? "default" : "outline"}
+              onClick={() => setExploreTrayIdx(i)}
+              aria-pressed={exploreTrayIdx === i}
+              className={exploreTrayIdx === i ? "bg-bakery-frosting-deep text-accent-foreground" : ""}
+            >
+              {t.label}
+            </Button>
+          ))}
+        </div>
+      )}
+
       <div className="flex flex-col items-center gap-3">
-        <p className="text-sm text-muted-foreground">
-          Goal: frost <span className="font-bold text-foreground text-base">{challenge.equivLabel}</span> of the tray
-          {" "}— frosted: <span className="font-semibold text-foreground">{shaded.size}/{total}</span>
-        </p>
+        {phase === "explore" ? (
+          <p className="text-sm text-muted-foreground text-center">
+            Frosted:{" "}
+            <span className="font-bold text-foreground text-base">
+              {shaded.size}/{total}
+            </span>
+            {shaded.size > 0 && exploreSimplified.d !== total && (
+              <>
+                {" "}— same as{" "}
+                <span className="font-bold text-foreground text-base">
+                  {exploreSimplified.n}/{exploreSimplified.d}
+                </span>
+              </>
+            )}
+          </p>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Goal: frost <span className="font-bold text-foreground text-base">{challenge.equivLabel}</span> of the tray
+            {" "}— frosted: <span className="font-semibold text-foreground">{shaded.size}/{total}</span>
+          </p>
+        )}
 
         <div
           className="bg-bakery-tray/50 rounded-2xl p-3 md:p-4 border-2 border-bakery-crust shadow-md"
           role="grid"
-          aria-label={`Cupcake tray with ${challenge.rows} rows and ${challenge.cols} columns. ${shaded.size} of ${total} frosted.`}
+          aria-label={`Cupcake tray with ${rows} rows and ${cols} columns. ${shaded.size} of ${total} frosted.`}
         >
           <div
             className="grid gap-2 md:gap-3"
-            style={{ gridTemplateColumns: `repeat(${challenge.cols}, minmax(0, 1fr))` }}
+            style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
           >
             {cells.map((i) => {
               const isShaded = shaded.has(i);
@@ -139,6 +208,15 @@ const BakeryScene2 = ({ onComplete }: Scene2Props) => {
         <p className="text-center font-medium text-sm animate-fade-in" role="status" aria-live="polite">
           {feedback}
         </p>
+      )}
+
+      {phase === "explore" && (
+        <Button
+          onClick={newChallenge}
+          className="mx-auto bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground"
+        >
+          Try a Customer Order! <span aria-hidden="true">🛎️</span>
+        </Button>
       )}
 
       {phase === "challenge" && (
