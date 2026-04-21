@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import NiaSpeech from "./NiaSpeech";
+import PennySpeech from "./PennySpeech";
 
 type ReplayScene = "scene1" | "scene2" | "scene3";
 

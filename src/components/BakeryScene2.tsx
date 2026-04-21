@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import NiaSpeech from "./NiaSpeech";
+import PennySpeech from "./PennySpeech";
 
 interface Scene2Props {
   onComplete: () => void;
