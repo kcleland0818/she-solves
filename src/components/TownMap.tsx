@@ -54,7 +54,7 @@ const shops: Shop[] = [
     learningTopics: ["Money & Change", "Budgeting", "Word Problems"],
     unlocked: false,
     position: { top: "52%", left: "32%" },
-    positionMd: { top: "55%", left: "45%" },
+    positionMd: { top: "55%", left: "38%" },
   },
 ];
 
