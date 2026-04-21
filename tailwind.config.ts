@@ -63,6 +63,14 @@ export default {
           blueberry: "hsl(var(--smoothie-blueberry))",
           mango: "hsl(var(--smoothie-mango))",
         },
+        bakery: {
+          cream: "hsl(var(--bakery-cream))",
+          frosting: "hsl(var(--bakery-frosting))",
+          "frosting-deep": "hsl(var(--bakery-frosting-deep))",
+          chocolate: "hsl(var(--bakery-chocolate))",
+          crust: "hsl(var(--bakery-crust))",
+          tray: "hsl(var(--bakery-tray))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

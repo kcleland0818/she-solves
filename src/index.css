@@ -50,6 +50,14 @@
     --smoothie-blueberry: 240 60% 55%;
     --smoothie-mango: 35 90% 55%;
     --smoothie-glass: 200 30% 90%;
+
+    /* Bakery palette — warm cream, frosting, chocolate */
+    --bakery-cream: 35 65% 92%;
+    --bakery-frosting: 340 75% 78%;
+    --bakery-frosting-deep: 340 70% 62%;
+    --bakery-chocolate: 25 45% 35%;
+    --bakery-crust: 30 55% 70%;
+    --bakery-tray: 30 35% 80%;
   }
 
   .dark {
