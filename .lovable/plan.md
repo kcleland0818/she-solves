@@ -1,56 +1,37 @@
+## Berry Bliss audit — what could still be polished
 
-You're right — let me re-read the current code carefully.
+The Berry Bliss experience is solid: 3 scenes, randomized challenges, hints, a mini calculator, keyboard shortcuts, accessible markup, town map entry, and a celebratory completion screen. Before we open Sweet Crumbs, here are the gaps I noticed — none are blockers, all are optional polish.
 
-Looking at `Scene2Percentages.tsx` lines 135-143 (the legend buttons):
+### Higher-impact ideas (pick what resonates)
 
-```tsx
-className={`flex items-center gap-2 p-2 rounded-lg text-left text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-  isActive
-    ? "bg-primary/15 ring-2 ring-primary/40 shadow-md scale-[1.04]"
-    : "bg-transparent"
-}`}
-```
+1. **Progress persistence** — If a learner refreshes mid-lesson, they restart from the town map. We could remember which scene they're on (and even mark Berry Bliss as "completed" on the town map with a checkmark badge).
+2. **"Completed" state on the town map** — Once a learner finishes Berry Bliss, the smoothie marker could show a gold star or checkmark instead of just being unlocked. Sets up nicely for a multi-shop progress system.
+3. **Replay individual scenes** — Right now from the completion screen the only path back is "Play Again" (full restart) or the town map. A "Revisit a scene" picker (Ratios / Percentages / Discounts) would help kids review one concept.
+4. **Sound / haptic feedback (opt-in)** — A soft chime on a correct answer and a gentle buzz on mobile for slider milestones. Would need a mute toggle and respect `prefers-reduced-motion` siblings.
+5. **Score / streak tracker** — Lightweight count of challenges completed per scene shown in the progress bar (e.g., "2 of 3 ratio challenges solved"). Encourages trying multiple variants instead of clicking "Next" right away.
 
-So the current state is:
-- **Unselected** = `bg-transparent` → no border, no background. Just the dot + emoji + label.
-- **Selected** = `bg-primary/15 ring-2 ring-primary/40 shadow-md scale-[1.04]` → tinted background + a **ring** (which is a Tailwind outline-style ring, not a `border`) + shadow + slight scale-up.
+### Smaller polish items
 
-### What you're actually seeing
+6. **Scene 2 — show the answer percentage on the pie/legend after a correct answer.** Right now Maya tells you the % verbally, but the chart/legend never displays the number. A small "≈ 40%" badge on the active legend item once `phase === "done"` would reinforce the lesson.
+7. **Scene 3 — quick-pick discount chips (10%, 25%, 50%)** in addition to the slider. Mental-math discounts are easier to discover when the common ones are one tap away. Slider stays for fine-grained exploration.
+8. **Welcome screen reachability** — Currently you only see the welcome screen the first time you enter the shop. After completion, "Play Again" goes to the town map and re-entering the shop shows welcome again, which is fine — but we could add a "Skip intro" memory so returning learners jump straight to Scene 1.
+9. **Town map — "Last visited" indicator** so a returning learner immediately sees where they left off.
+10. **Maya variety** — Maya's speech is static per phase. A small pool of 2–3 phrasings per moment (randomly chosen) would make repeat playthroughs feel less scripted.
 
-That `ring-2 ring-primary/40` on the selected item **is the "rectangle"** you're seeing around the highlighted flavor. A Tailwind `ring` renders visually as a rounded outline hugging the button's shape — it looks just like a border box.
+### My recommendation
 
-So when you click Strawberry, Strawberry gets that ring outline. The other three stay completely clean (no border, no background). That matches your session replay: you tap Mango → Mango gets the outline, others are bare. Tap Strawberry → outline jumps to Strawberry.
+If the goal is to launch Sweet Crumbs as part of a **growing town**, I'd do these two first because they pay off across every future shop:
 
-### The real question
+- **#2 Town map "completed" state** (visual reward + sets the multi-shop pattern)
+- **#3 Replay individual scenes** from the completion screen (better learning loop)
+- #8 Welcome screen reachability
 
-I think what you're asking now is: **"Can the selected flavor pop without that ring outline at all?"** — i.e., rely purely on the tint + shadow + scale, no rectangular outline hugging it.
+Everything else can wait until after Sweet Crumbs ships, or skip entirely.
 
-Yes, that's doable and still ADA-compliant, because we'd still have **three** non-color cues for the selected state:
-1. Background tint (`bg-primary/15`)
-2. Shadow (`shadow-md`)
-3. Scale-up (`scale-[1.04]`)
-4. `aria-pressed="true"` for screen readers
+### What I'd skip for now
 
-We can also bump the tint a bit (e.g. `bg-primary/20`) and the scale (`scale-110`) so it pops more without needing the ring.
+- Sound/haptics (scope creep, needs settings UI)
+- Score/streak (adds pressure; current free-exploration tone is nice)
+- Maya variety (nice-to-have, not load-bearing)
 
-The keyboard focus ring (`focus-visible:ring-2 ring-ring`) stays — that's separate and only appears while Tab-focused.
-
-### Proposed change
-
-In `src/components/Scene2Percentages.tsx`, change the active-state classes from:
-
-```
-bg-primary/15 ring-2 ring-primary/40 shadow-md scale-[1.04]
-```
-
-to:
-
-```
-bg-primary/20 shadow-md scale-110
-```
-
-That removes the ring outline (the "rectangle") entirely while making the selected flavor pop a bit more via stronger tint and bigger scale.
-
-### File to change
-
-- `src/components/Scene2Percentages.tsx` — single className tweak on lines 138-140. No logic changes, no a11y regression.
+Tell me which (if any) you'd like to add before we head to Sweet Crumbs — or say "none, let's go to Sweet Crumbs" and we'll move on.
