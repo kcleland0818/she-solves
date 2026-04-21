@@ -53,8 +53,8 @@ const shops: Shop[] = [
       "A cozy bookstore is opening soon! Get ready to learn about money, change, and budgeting while helping customers find their next favorite read.",
     learningTopics: ["Money & Change", "Budgeting", "Word Problems"],
     unlocked: false,
-    position: { top: "55%", left: "28%" },
-    positionMd: { top: "55%", left: "40%" },
+    position: { top: "52%", left: "32%" },
+    positionMd: { top: "55%", left: "45%" },
   },
 ];
 
