@@ -123,7 +123,7 @@ const BakeryScene1 = ({ onComplete }: Scene1Props) => {
           phase === "explore"
             ? `A fraction has two parts: numerator (top) ÷ denominator (bottom). Right now you've shaded ${shaded.size} of ${denominator} slices = ${shaded.size}/${denominator}. Try a different cake size or shade more slices to see the fraction change!`
             : phase === "challenge"
-            ? `A customer ordered ${label} of a cake! The cake has ${denominator} slices — tap slices to shade them. Show ${numerator} out of ${denominator}.`
+            ? `A customer ordered ${label} of a cake! The cake has ${denominator} slices — tap slices to shade their order.`
             : `You got it! Bottom number = total slices. Top number = how many you served. That's a fraction!`
         }
       />

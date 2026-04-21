@@ -1,6 +1,8 @@
 import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import PennySpeech from "./PennySpeech";
+import pennyAvatar from "@/assets/penny-avatar.png";
+import mayaAvatar from "@/assets/maya-avatar.webp";
 
 interface Scene3Props {
   onComplete: () => void;
@@ -47,7 +49,8 @@ interface FractionPastryProps {
   showProof: boolean;
   onClick?: () => void;
   ariaLabel: string;
-  customerEmoji: string;
+  customerAvatar: string;
+  customerName: string;
 }
 
 // Visualize each order as a strudel-style rectangular tray of pastries.
@@ -59,7 +62,8 @@ const FractionPastry = ({
   showProof,
   onClick,
   ariaLabel,
-  customerEmoji,
+  customerAvatar,
+  customerName,
 }: FractionPastryProps) => {
   const cells = Array.from({ length: den }, (_, i) => i < num);
   const ringClass =
@@ -80,7 +84,15 @@ const FractionPastry = ({
       aria-label={ariaLabel}
     >
       <div className="flex items-center gap-2">
-        <span className="text-xl md:text-2xl" aria-hidden="true">{customerEmoji}</span>
+        <img
+          src={customerAvatar}
+          alt=""
+          width={28}
+          height={28}
+          className="w-7 h-7 md:w-8 md:h-8 rounded-full object-cover border border-bakery-frosting-deep/40 shadow-sm"
+          aria-hidden="true"
+        />
+        <span className="sr-only">{customerName}: </span>
         <span className="text-2xl md:text-3xl font-bold text-foreground">{label}</span>
       </div>
       <div
@@ -187,14 +199,15 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
       {phase === "explore" && (
         <div className="grid grid-cols-2 gap-2 bg-card border border-bakery-frosting-deep/20 rounded-xl p-2">
           <div className="flex flex-col gap-1">
-            <span className="text-xs text-muted-foreground text-center">
-              <span aria-hidden="true">🧒 </span>Customer 1
+            <span className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
+              <img src={mayaAvatar} alt="" width={16} height={16} className="w-4 h-4 rounded-full object-cover" aria-hidden="true" />
+              Maya's order
             </span>
             <select
               value={exploreAIdx}
               onChange={(e) => setExploreAIdx(Number(e.target.value))}
               className="text-sm rounded-md border border-input bg-background px-2 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="Customer 1 order fraction"
+              aria-label="Maya's order fraction"
             >
               {exploreOptions.map((o, i) => (
                 <option key={i} value={i}>
@@ -204,14 +217,15 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-xs text-muted-foreground text-center">
-              <span aria-hidden="true">👵 </span>Customer 2
+            <span className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
+              <img src={pennyAvatar} alt="" width={16} height={16} className="w-4 h-4 rounded-full object-cover" aria-hidden="true" />
+              Penny's order
             </span>
             <select
               value={exploreBIdx}
               onChange={(e) => setExploreBIdx(Number(e.target.value))}
               className="text-sm rounded-md border border-input bg-background px-2 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="Customer 2 order fraction"
+              aria-label="Penny's order fraction"
             >
               {exploreOptions.map((o, i) => (
                 <option key={i} value={i}>
@@ -232,8 +246,9 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               den={exploreA.den}
               highlighted={exploreCompare === "a" ? "winner" : "none"}
               showProof
-              ariaLabel={`Customer 1 ordered ${fmt(exploreA)}`}
-              customerEmoji="🧒"
+              ariaLabel={`Maya ordered ${fmt(exploreA)}`}
+              customerAvatar={mayaAvatar}
+              customerName="Maya"
             />
             <FractionPastry
               label={fmt(exploreB)}
@@ -241,8 +256,9 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               den={exploreB.den}
               highlighted={exploreCompare === "b" ? "winner" : "none"}
               showProof
-              ariaLabel={`Customer 2 ordered ${fmt(exploreB)}`}
-              customerEmoji="👵"
+              ariaLabel={`Penny ordered ${fmt(exploreB)}`}
+              customerAvatar={pennyAvatar}
+              customerName="Penny"
             />
           </>
         ) : (
@@ -263,7 +279,8 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               showProof={phase === "done"}
               onClick={phase === "challenge" ? () => handlePick("a") : undefined}
               ariaLabel={`Choose ${fmt(challenge.a)}`}
-              customerEmoji="🧒"
+              customerAvatar={mayaAvatar}
+              customerName="Maya"
             />
             <FractionPastry
               label={fmt(challenge.b)}
@@ -281,7 +298,8 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               showProof={phase === "done"}
               onClick={phase === "challenge" ? () => handlePick("b") : undefined}
               ariaLabel={`Choose ${fmt(challenge.b)}`}
-              customerEmoji="👵"
+              customerAvatar={pennyAvatar}
+              customerName="Penny"
             />
           </>
         )}
