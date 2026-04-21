@@ -111,7 +111,7 @@ const BakeryScene1 = ({ onComplete }: Scene1Props) => {
         <span aria-hidden="true">🍰 </span>Slice the Cake
       </h2>
 
-      <NiaSpeech
+      <PennySpeech
         text={
           phase === "challenge"
             ? `A customer ordered ${label} of a cake! The cake has ${denominator} slices — tap slices to shade them. Show ${numerator} out of ${denominator}.`

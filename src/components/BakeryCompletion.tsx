@@ -36,7 +36,7 @@ const BakeryCompletion = ({ onRestart, onReplayScene }: BakeryCompletionProps) =
       Sweet Success!
     </h2>
 
-    <NiaSpeech text="You're a fractions pro now! Whether it's a cake or a tray of cupcakes, you can slice and compare like a real baker. Look what you learned:" />
+    <PennySpeech text="You're a fractions pro now! Whether it's a cake or a tray of cupcakes, you can slice and compare like a real baker. Look what you learned:" />
 
     <div className="w-full space-y-2" role="list" aria-label="Skills you learned">
       {skills.map((item) => (

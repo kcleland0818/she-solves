@@ -84,7 +84,7 @@ const BakeryScene2 = ({ onComplete }: Scene2Props) => {
         <span aria-hidden="true">🧁 </span>Equal Slices, Different Trays
       </h2>
 
-      <NiaSpeech
+      <PennySpeech
         text={
           phase === "challenge"
             ? `Show me ${challenge.equivLabel} of this tray of ${total} cupcakes! Tap cupcakes to add frosting. How many should you frost?`
