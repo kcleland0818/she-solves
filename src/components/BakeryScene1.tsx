@@ -6,17 +6,21 @@ interface Scene1Props {
   onComplete: () => void;
 }
 
-// Each challenge: target fraction shown to learner, they shade slices on a cake of `denominator` slices.
+// Explore: learner picks any cake size and shades freely.
+// Challenge: each challenge specifies the cake size (denominator) and target slices to serve.
+// Intentionally avoid leading with 1/2 — start with sixths, mix denominators.
 const challenges = [
-  { numerator: 1, denominator: 2, label: "1/2" },
-  { numerator: 1, denominator: 4, label: "1/4" },
-  { numerator: 3, denominator: 4, label: "3/4" },
+  { numerator: 5, denominator: 6, label: "5/6" },
   { numerator: 1, denominator: 3, label: "1/3" },
-  { numerator: 2, denominator: 3, label: "2/3" },
+  { numerator: 3, denominator: 4, label: "3/4" },
   { numerator: 3, denominator: 8, label: "3/8" },
+  { numerator: 2, denominator: 6, label: "2/6" },
   { numerator: 5, denominator: 8, label: "5/8" },
-  { numerator: 1, denominator: 6, label: "1/6" },
+  { numerator: 2, denominator: 3, label: "2/3" },
+  { numerator: 1, denominator: 4, label: "1/4" },
 ];
+
+const exploreSizes = [4, 6, 8];
 
 const pickRandom = <T,>(arr: T[], excludeIdx: number | null): { item: T; idx: number } => {
   const available = arr.map((item, i) => ({ item, i })).filter(({ i }) => i !== excludeIdx);
@@ -35,15 +39,17 @@ const slicePath = (cx: number, cy: number, r: number, a1: number, a2: number) =>
 };
 
 const BakeryScene1 = ({ onComplete }: Scene1Props) => {
+  const [phase, setPhase] = useState<"explore" | "challenge" | "done">("explore");
+  const [exploreDen, setExploreDen] = useState(6); // start at sixths, not halves
   const [challengeIdx, setChallengeIdx] = useState(0);
   const [lastChallengeIdx, setLastChallengeIdx] = useState<number | null>(null);
   const [shaded, setShaded] = useState<Set<number>>(new Set());
-  const [phase, setPhase] = useState<"challenge" | "done">("challenge");
   const [feedback, setFeedback] = useState("");
   const [showHint, setShowHint] = useState(false);
 
   const challenge = challenges[challengeIdx];
-  const { numerator, denominator, label } = challenge;
+  const denominator = phase === "explore" ? exploreDen : challenge.denominator;
+  const { numerator, label } = challenge;
 
   const newChallenge = useCallback(() => {
     const { idx } = pickRandom(challenges, lastChallengeIdx);
@@ -55,10 +61,11 @@ const BakeryScene1 = ({ onComplete }: Scene1Props) => {
     setPhase("challenge");
   }, [lastChallengeIdx]);
 
-  // Reset shading when challenge changes (initial mount only path).
+  // Reset shading whenever the visible cake size changes.
   useEffect(() => {
     setShaded(new Set());
-  }, [challengeIdx]);
+    setFeedback("");
+  }, [denominator]);
 
   const slices = useMemo(() => {
     const cx = 100;
@@ -113,16 +120,51 @@ const BakeryScene1 = ({ onComplete }: Scene1Props) => {
 
       <PennySpeech
         text={
-          phase === "challenge"
+          phase === "explore"
+            ? "Let's play with cakes first! Pick how many slices the cake has, then tap slices to shade them. Watch how the fraction below changes — bottom is the total, top is what you shaded."
+            : phase === "challenge"
             ? `A customer ordered ${label} of a cake! The cake has ${denominator} slices — tap slices to shade them. Show ${numerator} out of ${denominator}.`
             : `You got it! Bottom number = total slices. Top number = how many you served. That's a fraction!`
         }
       />
 
+      {phase === "explore" && (
+        <div className="flex flex-wrap items-center justify-center gap-2 bg-card border border-bakery-frosting-deep/20 rounded-xl p-2">
+          <span className="text-sm text-muted-foreground">Cake size:</span>
+          {exploreSizes.map((n) => (
+            <Button
+              key={n}
+              type="button"
+              size="sm"
+              variant={exploreDen === n ? "default" : "outline"}
+              onClick={() => setExploreDen(n)}
+              aria-pressed={exploreDen === n}
+              className={exploreDen === n ? "bg-bakery-frosting-deep text-accent-foreground" : ""}
+            >
+              {n} slices
+            </Button>
+          ))}
+        </div>
+      )}
+
       <div className="flex flex-col items-center gap-2">
         <p className="text-sm text-muted-foreground">
-          Target: <span className="font-bold text-foreground text-base">{label}</span>
-          {" "}— shaded: <span className="font-semibold text-foreground">{shaded.size}/{denominator}</span>
+          {phase === "explore" ? (
+            <>
+              Your fraction:{" "}
+              <span className="font-bold text-foreground text-base">
+                {shaded.size}/{denominator}
+              </span>
+            </>
+          ) : (
+            <>
+              Target: <span className="font-bold text-foreground text-base">{label}</span>
+              {" "}— shaded:{" "}
+              <span className="font-semibold text-foreground">
+                {shaded.size}/{denominator}
+              </span>
+            </>
+          )}
         </p>
 
         <svg
@@ -183,6 +225,15 @@ const BakeryScene1 = ({ onComplete }: Scene1Props) => {
         <p className="text-center font-medium text-sm animate-fade-in" role="status" aria-live="polite">
           {feedback}
         </p>
+      )}
+
+      {phase === "explore" && (
+        <Button
+          onClick={newChallenge}
+          className="mx-auto bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground"
+        >
+          Try a Customer Order! <span aria-hidden="true">🛎️</span>
+        </Button>
       )}
 
       {phase === "challenge" && (
