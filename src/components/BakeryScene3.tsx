@@ -62,7 +62,8 @@ const FractionPastry = ({
   showProof,
   onClick,
   ariaLabel,
-  customerEmoji,
+  customerAvatar,
+  customerName,
 }: FractionPastryProps) => {
   const cells = Array.from({ length: den }, (_, i) => i < num);
   const ringClass =
@@ -83,7 +84,15 @@ const FractionPastry = ({
       aria-label={ariaLabel}
     >
       <div className="flex items-center gap-2">
-        <span className="text-xl md:text-2xl" aria-hidden="true">{customerEmoji}</span>
+        <img
+          src={customerAvatar}
+          alt=""
+          width={28}
+          height={28}
+          className="w-7 h-7 md:w-8 md:h-8 rounded-full object-cover border border-bakery-frosting-deep/40 shadow-sm"
+          aria-hidden="true"
+        />
+        <span className="sr-only">{customerName}: </span>
         <span className="text-2xl md:text-3xl font-bold text-foreground">{label}</span>
       </div>
       <div
