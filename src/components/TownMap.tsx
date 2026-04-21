@@ -45,6 +45,17 @@ const shops: Shop[] = [
     position: { top: "62%", left: "72%" },
     positionMd: { top: "62%", left: "62%" },
   },
+  {
+    id: "bookstore",
+    name: "Page Turner Bookstore",
+    emoji: "📚",
+    description:
+      "A cozy bookstore is opening soon! Get ready to learn about money, change, and budgeting while helping customers find their next favorite read.",
+    learningTopics: ["Money & Change", "Budgeting", "Word Problems"],
+    unlocked: false,
+    position: { top: "40%", left: "30%" },
+    positionMd: { top: "40%", left: "35%" },
+  },
 ];
 
 interface TownMapProps {
