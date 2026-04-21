@@ -199,14 +199,15 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
       {phase === "explore" && (
         <div className="grid grid-cols-2 gap-2 bg-card border border-bakery-frosting-deep/20 rounded-xl p-2">
           <div className="flex flex-col gap-1">
-            <span className="text-xs text-muted-foreground text-center">
-              <span aria-hidden="true">🧒 </span>Customer 1
+            <span className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
+              <img src={mayaAvatar} alt="" width={16} height={16} className="w-4 h-4 rounded-full object-cover" aria-hidden="true" />
+              Maya's order
             </span>
             <select
               value={exploreAIdx}
               onChange={(e) => setExploreAIdx(Number(e.target.value))}
               className="text-sm rounded-md border border-input bg-background px-2 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="Customer 1 order fraction"
+              aria-label="Maya's order fraction"
             >
               {exploreOptions.map((o, i) => (
                 <option key={i} value={i}>
@@ -216,14 +217,15 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-xs text-muted-foreground text-center">
-              <span aria-hidden="true">👵 </span>Customer 2
+            <span className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
+              <img src={pennyAvatar} alt="" width={16} height={16} className="w-4 h-4 rounded-full object-cover" aria-hidden="true" />
+              Penny's order
             </span>
             <select
               value={exploreBIdx}
               onChange={(e) => setExploreBIdx(Number(e.target.value))}
               className="text-sm rounded-md border border-input bg-background px-2 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="Customer 2 order fraction"
+              aria-label="Penny's order fraction"
             >
               {exploreOptions.map((o, i) => (
                 <option key={i} value={i}>
@@ -244,8 +246,9 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               den={exploreA.den}
               highlighted={exploreCompare === "a" ? "winner" : "none"}
               showProof
-              ariaLabel={`Customer 1 ordered ${fmt(exploreA)}`}
-              customerEmoji="🧒"
+              ariaLabel={`Maya ordered ${fmt(exploreA)}`}
+              customerAvatar={mayaAvatar}
+              customerName="Maya"
             />
             <FractionPastry
               label={fmt(exploreB)}
@@ -253,8 +256,9 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               den={exploreB.den}
               highlighted={exploreCompare === "b" ? "winner" : "none"}
               showProof
-              ariaLabel={`Customer 2 ordered ${fmt(exploreB)}`}
-              customerEmoji="👵"
+              ariaLabel={`Penny ordered ${fmt(exploreB)}`}
+              customerAvatar={pennyAvatar}
+              customerName="Penny"
             />
           </>
         ) : (
@@ -275,7 +279,8 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               showProof={phase === "done"}
               onClick={phase === "challenge" ? () => handlePick("a") : undefined}
               ariaLabel={`Choose ${fmt(challenge.a)}`}
-              customerEmoji="🧒"
+              customerAvatar={mayaAvatar}
+              customerName="Maya"
             />
             <FractionPastry
               label={fmt(challenge.b)}
@@ -293,7 +298,8 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               showProof={phase === "done"}
               onClick={phase === "challenge" ? () => handlePick("b") : undefined}
               ariaLabel={`Choose ${fmt(challenge.b)}`}
-              customerEmoji="👵"
+              customerAvatar={pennyAvatar}
+              customerName="Penny"
             />
           </>
         )}
