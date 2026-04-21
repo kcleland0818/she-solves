@@ -34,3 +34,12 @@ export const markShopCompleted = (shopId: string): void => {
   set.add(shopId);
   writeSet(set);
 };
+
+export const resetProgress = (): void => {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(COMPLETION_KEY);
+  } catch {
+    // Storage unavailable; fail silently.
+  }
+};
