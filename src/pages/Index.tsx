@@ -8,6 +8,7 @@ import CompletionScreen from "@/components/CompletionScreen";
 import ProgressBar from "@/components/ProgressBar";
 import MiniCalculator from "@/components/MiniCalculator";
 import KeyboardShortcutsHint from "@/components/KeyboardShortcutsHint";
+import { isShopCompleted, markShopCompleted } from "@/lib/progress";
 
 type Screen = "town" | "welcome" | "scene1" | "scene2" | "scene3" | "complete";
 
@@ -20,6 +21,8 @@ const sceneIndex: Record<Screen, number> = {
   complete: 3,
 };
 
+const SHOP_ID = "smoothie-shop";
+
 const Index = () => {
   const [screen, setScreen] = useState<Screen>("town");
 
@@ -27,16 +30,19 @@ const Index = () => {
   const isWelcome = screen === "welcome";
   const isTown = screen === "town";
 
+  const enterShop = (shopId: string) => {
+    if (shopId !== SHOP_ID) return;
+    // Returning learners (already completed) skip the intro.
+    setScreen(isShopCompleted(SHOP_ID) ? "scene1" : "welcome");
+  };
+
+  const handleComplete = () => {
+    markShopCompleted(SHOP_ID);
+    setScreen("complete");
+  };
+
   if (isTown) {
-    return (
-      <TownMap
-        onEnterShop={(shopId) => {
-          if (shopId === "smoothie-shop") {
-            setScreen("welcome");
-          }
-        }}
-      />
-    );
+    return <TownMap onEnterShop={enterShop} />;
   }
 
   return (
@@ -58,8 +64,13 @@ const Index = () => {
         {screen === "welcome" && <WelcomeScreen onStart={() => setScreen("scene1")} />}
         {screen === "scene1" && <Scene1Ratios onComplete={() => setScreen("scene2")} />}
         {screen === "scene2" && <Scene2Percentages onComplete={() => setScreen("scene3")} />}
-        {screen === "scene3" && <Scene3Discounts onComplete={() => setScreen("complete")} />}
-        {screen === "complete" && <CompletionScreen onRestart={() => setScreen("town")} />}
+        {screen === "scene3" && <Scene3Discounts onComplete={handleComplete} />}
+        {screen === "complete" && (
+          <CompletionScreen
+            onRestart={() => setScreen("town")}
+            onReplayScene={(scene) => setScreen(scene)}
+          />
+        )}
       </div>
       {showProgress && <MiniCalculator />}
       {showProgress && <KeyboardShortcutsHint />}

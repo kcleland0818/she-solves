@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Lock } from "lucide-react";
+import { Lock, Check } from "lucide-react";
 import townMapBg from "@/assets/town-map-bg.jpg";
+import { getCompletedShops } from "@/lib/progress";
 import {
   Dialog,
   DialogContent,
@@ -52,6 +53,9 @@ interface TownMapProps {
 const TownMap = ({ onEnterShop }: TownMapProps) => {
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
   const isMobile = useIsMobile();
+  // Read once on mount; selection/dialog cycles will re-render but completion
+  // only changes when returning from a shop, which remounts this component.
+  const completedShops = useMemo(() => getCompletedShops(), []);
 
   const getPosition = (shop: Shop) => {
     if (!isMobile && shop.positionMd) return shop.positionMd;
