@@ -38,9 +38,10 @@ const shops: Shop[] = [
     id: "bakery",
     name: "Sweet Crumbs Bakery",
     emoji: "🧁",
-    description: "Coming soon!",
-    learningTopics: ["Fractions", "Measurement", "Unit Conversion"],
-    unlocked: false,
+    description:
+      "Step into the bakery! Slice cakes, frost cupcake trays, and figure out which dessert is bigger — all while learning fractions.",
+    learningTopics: ["Identifying Fractions", "Equivalent Fractions", "Comparing Fractions"],
+    unlocked: true,
     position: { top: "62%", left: "72%" },
     positionMd: { top: "62%", left: "62%" },
   },
