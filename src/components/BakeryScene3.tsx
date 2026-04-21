@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import PennySpeech from "./PennySpeech";
-import pennyAvatar from "@/assets/penny-avatar.png";
+import averyAvatar from "@/assets/avery-avatar.png";
 import mayaAvatar from "@/assets/maya-avatar.webp";
 
 interface Scene3Props {
@@ -218,14 +218,14 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
-              <img src={pennyAvatar} alt="" width={16} height={16} className="w-4 h-4 rounded-full object-cover" aria-hidden="true" />
-              Penny's order
+              <img src={averyAvatar} alt="" width={16} height={16} className="w-4 h-4 rounded-full object-cover" aria-hidden="true" />
+              Avery's order
             </span>
             <select
               value={exploreBIdx}
               onChange={(e) => setExploreBIdx(Number(e.target.value))}
               className="text-sm rounded-md border border-input bg-background px-2 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="Penny's order fraction"
+              aria-label="Avery's order fraction"
             >
               {exploreOptions.map((o, i) => (
                 <option key={i} value={i}>
@@ -256,9 +256,9 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               den={exploreB.den}
               highlighted={exploreCompare === "b" ? "winner" : "none"}
               showProof
-              ariaLabel={`Penny ordered ${fmt(exploreB)}`}
-              customerAvatar={pennyAvatar}
-              customerName="Penny"
+              ariaLabel={`Avery ordered ${fmt(exploreB)}`}
+              customerAvatar={averyAvatar}
+              customerName="Avery"
             />
           </>
         ) : (
@@ -298,8 +298,8 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               showProof={phase === "done"}
               onClick={phase === "challenge" ? () => handlePick("b") : undefined}
               ariaLabel={`Choose ${fmt(challenge.b)}`}
-              customerAvatar={pennyAvatar}
-              customerName="Penny"
+              customerAvatar={averyAvatar}
+              customerName="Avery"
             />
           </>
         )}
