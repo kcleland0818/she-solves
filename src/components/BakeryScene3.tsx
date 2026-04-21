@@ -1,6 +1,8 @@
 import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import PennySpeech from "./PennySpeech";
+import pennyAvatar from "@/assets/penny-avatar.png";
+import mayaAvatar from "@/assets/maya-avatar.webp";
 
 interface Scene3Props {
   onComplete: () => void;
