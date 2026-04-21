@@ -97,50 +97,61 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
           <span className="sr-only">Town map of SheSolves City with shops to explore.</span>
           {/* Clickable shop markers */}
           <nav id="shop-markers" aria-label="Shop locations">
-            {shops.map((shop) => (
-              <button
-                key={shop.id}
-                onClick={() => setSelectedShop(shop)}
-                className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-full ${
-                  shop.unlocked
-                    ? "hover:scale-110 cursor-pointer"
-                    : "cursor-pointer opacity-70"
-                }`}
-                style={{ top: getPosition(shop).top, left: getPosition(shop).left }}
-                aria-label={`${shop.name}${shop.unlocked ? "" : " — locked, coming soon"}`}
-              >
-                <div
-                  className={`relative flex flex-col items-center ${
-                    shop.unlocked ? "animate-[bounce_3s_ease-in-out_infinite]" : ""
+            {shops.map((shop) => {
+              const isCompleted = completedShops.has(shop.id);
+              return (
+                <button
+                  key={shop.id}
+                  onClick={() => setSelectedShop(shop)}
+                  className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-full ${
+                    shop.unlocked
+                      ? "hover:scale-110 cursor-pointer"
+                      : "cursor-pointer opacity-70"
                   }`}
+                  style={{ top: getPosition(shop).top, left: getPosition(shop).left }}
+                  aria-label={`${shop.name}${shop.unlocked ? "" : " — locked, coming soon"}${isCompleted ? " — completed" : ""}`}
                 >
                   <div
-                    className={`w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center text-lg md:text-2xl shadow-lg border-2 border-white/80 ${
-                      shop.unlocked
-                        ? "bg-white ring-2 ring-primary/40"
-                        : "bg-muted/80 grayscale"
+                    className={`relative flex flex-col items-center ${
+                      shop.unlocked ? "animate-[bounce_3s_ease-in-out_infinite]" : ""
                     }`}
-                    aria-hidden="true"
                   >
-                    {shop.unlocked ? (
-                      shop.emoji
-                    ) : (
-                      <Lock className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
-                    )}
+                    <div
+                      className={`relative w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center text-lg md:text-2xl shadow-lg border-2 border-white/80 ${
+                        shop.unlocked
+                          ? "bg-white ring-2 ring-primary/40"
+                          : "bg-muted/80 grayscale"
+                      }`}
+                      aria-hidden="true"
+                    >
+                      {shop.unlocked ? (
+                        shop.emoji
+                      ) : (
+                        <Lock className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
+                      )}
+                      {isCompleted && (
+                        <span
+                          className="absolute -top-1.5 -right-1.5 w-5 h-5 md:w-6 md:h-6 rounded-full bg-[hsl(45,95%,55%)] border-2 border-white shadow-md flex items-center justify-center"
+                          aria-hidden="true"
+                        >
+                          <Check className="w-3 h-3 md:w-3.5 md:h-3.5 text-white" strokeWidth={3} />
+                        </span>
+                      )}
+                    </div>
+                    <span
+                      className={`mt-1 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm ${
+                        shop.unlocked
+                          ? "bg-white/90 text-foreground"
+                          : "bg-muted/70 text-muted-foreground"
+                      }`}
+                      aria-hidden="true"
+                    >
+                      {shop.name.split(" ").slice(0, 2).join(" ")}
+                    </span>
                   </div>
-                  <span
-                    className={`mt-1 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm ${
-                      shop.unlocked
-                        ? "bg-white/90 text-foreground"
-                        : "bg-muted/70 text-muted-foreground"
-                    }`}
-                    aria-hidden="true"
-                  >
-                    {shop.name.split(" ").slice(0, 2).join(" ")}
-                  </span>
-                </div>
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </nav>
         </div>
       </div>
