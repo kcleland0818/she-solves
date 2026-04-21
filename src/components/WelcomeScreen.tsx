@@ -27,7 +27,7 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => (
       </p>
     </div>
     <Button size="lg" onClick={onStart} className="text-base px-8 hover-scale shadow-lg">
-      Let's Go! <span aria-hidden="true">🚀</span>
+      Let's Go! <span aria-hidden="true">✨</span>
     </Button>
   </main>
 );
