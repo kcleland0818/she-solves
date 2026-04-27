@@ -126,11 +126,17 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
   const [exploreBIdx, setExploreBIdx] = useState(2); // 2/3
   const [challengeIdx, setChallengeIdx] = useState(0);
   const [lastChallengeIdx, setLastChallengeIdx] = useState<number | null>(null);
-  const [selected, setSelected] = useState<"a" | "b" | null>(null);
+  const [selected, setSelected] = useState<"a" | "b" | "equal" | null>(null);
   const [feedback, setFeedback] = useState("");
   const [showHint, setShowHint] = useState(false);
 
   const challenge = challenges[challengeIdx];
+
+  const isTie: boolean = useMemo(() => {
+    const va = challenge.a.num / challenge.a.den;
+    const vb = challenge.b.num / challenge.b.den;
+    return Math.abs(va - vb) < 1e-9;
+  }, [challenge]);
 
   const winner: "a" | "b" = useMemo(() => {
     const va = challenge.a.num / challenge.a.den;
@@ -157,21 +163,29 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
     setPhase("challenge");
   }, [lastChallengeIdx]);
 
-  const handlePick = (which: "a" | "b") => {
+  const handlePick = (which: "a" | "b" | "equal") => {
     if (phase === "done") return;
     setSelected(which);
-    if (which === winner) {
-      const w = challenge[winner];
-      const l = challenge[winner === "a" ? "b" : "a"];
-      const va = challenge.a.num / challenge.a.den;
-      const vb = challenge.b.num / challenge.b.den;
-      const tie = Math.abs(va - vb) < 1e-9;
-      setFeedback(
-        tie
-          ? `Tied! ${fmt(w)} and ${fmt(l)} are the same amount — both customers ordered equal portions.`
-          : `Correct! ${fmt(w)} is bigger than ${fmt(l)}. See how more of the tray is frosted?`,
-      );
+    const correct = isTie ? which === "equal" : which === winner;
+    if (correct) {
+      if (isTie) {
+        setFeedback(
+          `Tied! ${fmt(challenge.a)} and ${fmt(challenge.b)} are the same amount — both customers ordered equal portions.`,
+        );
+      } else {
+        const w = challenge[winner];
+        const l = challenge[winner === "a" ? "b" : "a"];
+        setFeedback(
+          `Correct! ${fmt(w)} is bigger than ${fmt(l)}. See how more of the tray is frosted?`,
+        );
+      }
       setPhase("done");
+    } else if (which === "equal") {
+      // Learner thought they were equal, but one is bigger.
+      setFeedback("Not quite — look again. One tray actually has more pink filled in than the other.");
+    } else if (isTie) {
+      // Learner picked a side, but the trays are actually equal.
+      setFeedback("Look closer — the trays might LOOK different, but they're actually the same amount. Try the \"They're equal!\" button.");
     } else {
       setFeedback("Not quite — look at the frosted trays again. Which one has MORE pink filled in?");
     }
