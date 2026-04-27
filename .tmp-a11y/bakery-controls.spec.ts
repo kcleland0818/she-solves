@@ -130,7 +130,7 @@ async function auditControls(page: any, scene: string): Promise<ControlReport> {
       })
     );
 
-    // Debug: count by tag
+    // Diagnostic: per-tag/role count to make scene snapshots easy to verify by hand.
     const byTag: Record<string, number> = {};
     for (const el of all) {
       const k = el.tagName.toLowerCase() + (el.getAttribute("role") ? `[role=${el.getAttribute("role")}]` : "");
