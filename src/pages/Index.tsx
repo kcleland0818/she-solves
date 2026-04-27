@@ -84,7 +84,11 @@ const Index = () => {
       <div id="main-content" className="max-w-2xl mx-auto">
         {showProgress && (
           <div className="mb-4">
-            <ProgressBar currentScene={stageIndex[stage]} totalScenes={3} />
+            <ProgressBar
+              currentScene={stageIndex[stage]}
+              totalScenes={3}
+              labels={SHOP_PROGRESS_LABELS[shop]}
+            />
           </div>
         )}
 
