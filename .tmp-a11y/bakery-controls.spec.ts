@@ -100,8 +100,13 @@ async function auditControls(page: any, scene: string): Promise<ControlReport> {
     const isVisible = (el: Element): boolean => {
       const rect = (el as HTMLElement).getBoundingClientRect();
       if (rect.width === 0 && rect.height === 0) return false;
-      const style = window.getComputedStyle(el as HTMLElement);
-      if (style.display === "none" || style.visibility === "hidden" || style.opacity === "0") return false;
+      // computedStyle may be partial for SVG sub-elements; check ancestor display/visibility too.
+      let p: Element | null = el;
+      while (p) {
+        const style = window.getComputedStyle(p as HTMLElement);
+        if (style.display === "none" || style.visibility === "hidden") return false;
+        p = p.parentElement;
+      }
       return true;
     };
 
