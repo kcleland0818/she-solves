@@ -252,11 +252,19 @@ test("every Sweet Crumbs control has an accessible name and is keyboard reachabl
   await waitForChallengePhase(page);
   reports.push(await auditControls(page, "bakery-scene1-challenge"));
 
-  // Force advance to scene 2
-  for (let i = 0; i < 8; i++) {
-    if (await tryClickByName(page, /^next scene/i)) break;
-    await tryClickByName(page, /check my slices/i);
-    await page.waitForTimeout(300);
+  // Solve scene 1 challenge: read "Target: N/D" then shade N cake slices (role="button" SVG paths).
+  {
+    const fr = await appFrame(page);
+    const targetText = await fr.locator('text=/Target:\\s*\\d+\\/\\d+/').first().innerText();
+    const m = targetText.match(/(\d+)\s*\/\s*(\d+)/);
+    const n = m ? parseInt(m[1], 10) : 1;
+    const slices = fr.locator('[role="button"][aria-label^="Slice "]');
+    for (let j = 0; j < n; j++) {
+      await slices.nth(j).click().catch(() => {});
+    }
+    await clickByName(page, /check my slices/i);
+    await fr.getByRole("button", { name: /^next scene/i }).first().waitFor({ state: "visible", timeout: 8000 });
+    await clickByName(page, /^next scene/i);
   }
   await waitForBakeryScene(page, 2);
 
@@ -267,19 +275,32 @@ test("every Sweet Crumbs control has an accessible name and is keyboard reachabl
   await waitForChallengePhase(page);
   reports.push(await auditControls(page, "bakery-scene2-challenge"));
 
-  // Force advance to scene 3
-  for (let i = 0; i < 10; i++) {
-    if (await tryClickByName(page, /^next scene/i)) break;
+  // Solve scene 2: read "Goal: frost X/Y" then frost X cupcakes.
+  {
     const fr = await appFrame(page);
+    const goalText = await fr.locator('text=/Goal:.*\\d+\\/\\d+/').first().innerText();
+    // Goal label uses the equivalent fraction like "1/3"; we need to count by shading until check passes.
+    // Easier: brute-force — frost all then peel off until check succeeds is slow; instead, parse the
+    // "frosted: M/N" line which updates live. But target is the EQUIVALENT, e.g., "1/3 of tray of 6"
+    // means 2 cupcakes. Compute from the equivalent and the total.
+    const equivMatch = goalText.match(/(\d+)\s*\/\s*(\d+)/);
+    const totalText = await fr.locator('text=/of\\s+\\d+\\s+cupcakes/i').first().innerText().catch(() => "");
+    const totalMatch = totalText.match(/of\s+(\d+)\s+cupcakes/i);
+    let toFrost = 0;
+    if (equivMatch && totalMatch) {
+      const en = parseInt(equivMatch[1], 10);
+      const ed = parseInt(equivMatch[2], 10);
+      const total = parseInt(totalMatch[1], 10);
+      toFrost = Math.round((en / ed) * total);
+    }
     const cells = fr.locator('button[aria-label^="Cupcake"]');
-    const count = await cells.count();
-    for (let j = 0; j < count; j++) {
+    for (let j = 0; j < toFrost; j++) {
       await cells.nth(j).click().catch(() => {});
     }
-    await tryClickByName(page, /check the tray/i);
-    await page.waitForTimeout(300);
+    await clickByName(page, /check the tray/i);
+    await fr.getByRole("button", { name: /^next scene/i }).first().waitFor({ state: "visible", timeout: 8000 });
+    await clickByName(page, /^next scene/i);
   }
-  await waitForBakeryScene(page, 3);
 
   // ----- Scene 3 -----
   reports.push(await auditControls(page, "bakery-scene3-explore"));
