@@ -283,7 +283,7 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               den={challenge.a.den}
               highlighted={
                 phase === "done"
-                  ? winner === "a"
+                  ? isTie || winner === "a"
                     ? "winner"
                     : "none"
                   : selected === "a"
@@ -302,7 +302,7 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               den={challenge.b.den}
               highlighted={
                 phase === "done"
-                  ? winner === "b"
+                  ? isTie || winner === "b"
                     ? "winner"
                     : "none"
                   : selected === "b"
@@ -318,6 +318,24 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
           </>
         )}
       </div>
+
+      {phase === "challenge" && (
+        <div className="flex justify-center">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => handlePick("equal")}
+            aria-pressed={selected === "equal"}
+            className={
+              selected === "equal"
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-bakery-frosting-deep/40"
+            }
+          >
+            <span aria-hidden="true">⚖️ </span>They're equal!
+          </Button>
+        </div>
+      )}
 
       {phase === "explore" && (
         <p className="text-center text-sm text-muted-foreground" aria-live="polite">
