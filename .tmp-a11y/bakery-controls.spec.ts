@@ -217,6 +217,7 @@ async function auditControls(page: any, scene: string): Promise<ControlReport> {
       totalControls: all.length,
       missingName,
       notFocusable,
+      byTag,
     };
   }, scene);
   return result;
