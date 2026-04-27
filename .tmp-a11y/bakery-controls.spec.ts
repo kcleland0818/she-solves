@@ -210,6 +210,21 @@ async function auditControls(page: any, scene: string): Promise<ControlReport> {
   return result;
 }
 
+async function waitForBakeryScene(page: any, sceneNumber: 1 | 2 | 3) {
+  const f = await appFrame(page);
+  // Heading id pattern: bakery-scene1-heading, etc.
+  const heading = f.locator(`h2#bakery-scene${sceneNumber}-heading`);
+  await heading.waitFor({ state: "visible", timeout: 8000 });
+  // Settle a tick for hint/feedback rendering.
+  await page.waitForTimeout(200);
+}
+
+async function waitForChallengePhase(page: any) {
+  const f = await appFrame(page);
+  // Challenge phase shows Hint button + Check button
+  await f.getByRole("button", { name: /^hint$/i }).first().waitFor({ state: "visible", timeout: 8000 });
+}
+
 async function enterBakery(page: any) {
   await page.goto("/");
   await page.waitForLoadState("domcontentloaded");
@@ -220,7 +235,7 @@ async function enterBakery(page: any) {
   await clickByName(page, /^enter shop|^revisit shop/i);
   await page.waitForTimeout(400);
   await clickByName(page, /start baking/i);
-  await page.waitForTimeout(500);
+  await waitForBakeryScene(page, 1);
 }
 
 test("every Sweet Crumbs control has an accessible name and is keyboard reachable", async ({ page }) => {
