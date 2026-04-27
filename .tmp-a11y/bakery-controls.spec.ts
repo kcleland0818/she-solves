@@ -130,6 +130,13 @@ async function auditControls(page: any, scene: string): Promise<ControlReport> {
       })
     );
 
+    // Debug: count by tag
+    const byTag: Record<string, number> = {};
+    for (const el of all) {
+      const k = el.tagName.toLowerCase() + (el.getAttribute("role") ? `[role=${el.getAttribute("role")}]` : "");
+      byTag[k] = (byTag[k] || 0) + 1;
+    }
+
     const missingName: Array<{ tag: string; html: string; outerSnippet: string }> = [];
     const notFocusable: Array<{
       tag: string; html: string; outerSnippet: string; reason: string;
