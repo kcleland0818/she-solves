@@ -173,6 +173,30 @@ async function auditControls(page: any, scene: string): Promise<ControlReport> {
 
       if (!focusable) {
         notFocusable.push({ tag, html, outerSnippet, reason });
+        continue;
+      }
+
+      // Programmatic focus check — confirms the browser actually places focus on it.
+      // Disabled buttons are intentionally non-focusable; skip them.
+      if (!isDisabled) {
+        try {
+          (el as HTMLElement).focus();
+          if (document.activeElement !== el) {
+            notFocusable.push({
+              tag,
+              html,
+              outerSnippet,
+              reason: "element.focus() did not move document.activeElement",
+            });
+          }
+        } catch (err) {
+          notFocusable.push({
+            tag,
+            html,
+            outerSnippet,
+            reason: "focus() threw: " + String(err),
+          });
+        }
       }
     }
 
