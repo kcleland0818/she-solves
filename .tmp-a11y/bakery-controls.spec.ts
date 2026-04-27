@@ -245,37 +245,31 @@ test("every Sweet Crumbs control has an accessible name and is keyboard reachabl
 
   const reports: ControlReport[] = [];
 
-  // Scene 1 explore
+  // ----- Scene 1 -----
   reports.push(await auditControls(page, "bakery-scene1-explore"));
 
-  // Scene 1 challenge
-  await tryClickByName(page, /try a customer order|try the challenge/i);
-  await page.waitForTimeout(400);
+  await clickByName(page, /try a customer order/i);
+  await waitForChallengePhase(page);
   reports.push(await auditControls(page, "bakery-scene1-challenge"));
 
   // Force advance to scene 2
-  for (let i = 0; i < 6; i++) {
-    if (await tryClickByName(page, /^next scene/i)) {
-      await page.waitForTimeout(400);
-      break;
-    }
+  for (let i = 0; i < 8; i++) {
+    if (await tryClickByName(page, /^next scene/i)) break;
     await tryClickByName(page, /check my slices/i);
     await page.waitForTimeout(300);
   }
+  await waitForBakeryScene(page, 2);
 
-  // Scene 2 explore
+  // ----- Scene 2 -----
   reports.push(await auditControls(page, "bakery-scene2-explore"));
 
-  await tryClickByName(page, /try a customer order|try the challenge/i);
-  await page.waitForTimeout(400);
+  await clickByName(page, /try a customer order/i);
+  await waitForChallengePhase(page);
   reports.push(await auditControls(page, "bakery-scene2-challenge"));
 
   // Force advance to scene 3
-  for (let i = 0; i < 8; i++) {
-    if (await tryClickByName(page, /^next scene/i)) {
-      await page.waitForTimeout(400);
-      break;
-    }
+  for (let i = 0; i < 10; i++) {
+    if (await tryClickByName(page, /^next scene/i)) break;
     const fr = await appFrame(page);
     const cells = fr.locator('button[aria-label^="Cupcake"]');
     const count = await cells.count();
@@ -285,12 +279,13 @@ test("every Sweet Crumbs control has an accessible name and is keyboard reachabl
     await tryClickByName(page, /check the tray/i);
     await page.waitForTimeout(300);
   }
+  await waitForBakeryScene(page, 3);
 
-  // Scene 3 explore
+  // ----- Scene 3 -----
   reports.push(await auditControls(page, "bakery-scene3-explore"));
 
-  await tryClickByName(page, /take real orders|try the challenge/i);
-  await page.waitForTimeout(400);
+  await clickByName(page, /take real orders/i);
+  await waitForChallengePhase(page);
   reports.push(await auditControls(page, "bakery-scene3-challenge"));
 
   // Print machine-parseable report
