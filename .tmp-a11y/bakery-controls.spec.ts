@@ -105,11 +105,11 @@ async function auditControls(page: any, scene: string): Promise<ControlReport> {
       return true;
     };
 
-    // Scope: <section> with bakery heading id, or main content if scene container not found.
-    const scenes = document.querySelectorAll(
-      'section[aria-labelledby^="bakery-"], #main-content'
+    // Scope: ALL <section> elements with bakery- heading id (in case more than one is mounted).
+    const sceneEls = Array.from(
+      document.querySelectorAll('section[aria-labelledby^="bakery-"]')
     );
-    const root: Element = scenes[0] || document.body;
+    const roots: Element[] = sceneEls.length > 0 ? sceneEls : [document.body];
 
     const selector =
       'button, a[href], input:not([type="hidden"]), select, textarea, [role="button"], [role="link"], [tabindex]';
