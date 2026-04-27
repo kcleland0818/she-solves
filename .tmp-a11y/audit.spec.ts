@@ -163,4 +163,62 @@ test("a11y audit across every scene", async ({ page }) => {
   await tryClickByName(page, /let.?s go/i);
   await page.waitForTimeout(1500);
   await runAxe(page, "8-keyboard-hint-visible");
+
+  // ===== Sweet Crumbs Bakery flow =====
+  await page.goto("/");
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForTimeout(1500);
+
+  // 9. Bakery shop dialog
+  const fb = await appFrame(page);
+  await fb.locator('button[aria-label*="Sweet Crumbs" i]').first().click();
+  await page.waitForTimeout(600);
+  await runAxe(page, "9-bakery-shop-dialog");
+
+  // 10. Bakery welcome
+  await clickByName(page, /^enter shop|^revisit shop/i);
+  await page.waitForTimeout(500);
+  await runAxe(page, "10-bakery-welcome");
+
+  // 11. Bakery Scene 1 (fractions - slicing)
+  await clickByName(page, /start baking/i);
+  await page.waitForTimeout(500);
+  await runAxe(page, "11-bakery-scene1-slices");
+
+  for (let i = 0; i < 6; i++) {
+    if (await tryClickByName(page, /^next scene/i)) {
+      await page.waitForTimeout(400);
+      break;
+    }
+    await tryClickByName(page, /check my slices/i);
+    await page.waitForTimeout(300);
+  }
+
+  // 12. Bakery Scene 2 (equivalent fractions - frosting)
+  await page.waitForTimeout(400);
+  await runAxe(page, "12-bakery-scene2-frosting");
+
+  for (let i = 0; i < 8; i++) {
+    if (await tryClickByName(page, /^next scene/i)) {
+      await page.waitForTimeout(400);
+      break;
+    }
+    // Click some cells in the tray to attempt frosting
+    const fr = await appFrame(page);
+    const cells = fr.locator('[role="button"], button').filter({ hasText: "" });
+    const count = await cells.count();
+    for (let j = 0; j < Math.min(count, 4); j++) {
+      await cells.nth(j).click().catch(() => {});
+    }
+    await tryClickByName(page, /check the tray/i);
+    await page.waitForTimeout(300);
+  }
+
+  // 13. Bakery Scene 3 (comparing fractions)
+  await page.waitForTimeout(400);
+  await runAxe(page, "13-bakery-scene3-compare");
+
+  await tryClickByName(page, /try the challenge/i);
+  await page.waitForTimeout(400);
+  await runAxe(page, "13b-bakery-scene3-challenge");
 });

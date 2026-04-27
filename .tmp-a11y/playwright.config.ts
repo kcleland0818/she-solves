@@ -4,7 +4,7 @@ export default defineConfig({
   timeout: 180_000,
   reporter: "line",
   use: {
-    baseURL: "https://she-solves.lovable.app",
+    baseURL: process.env.BASE_URL || "https://she-solves.lovable.app",
   },
   projects: [
     {
