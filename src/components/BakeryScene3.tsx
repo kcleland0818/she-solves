@@ -126,11 +126,17 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
   const [exploreBIdx, setExploreBIdx] = useState(2); // 2/3
   const [challengeIdx, setChallengeIdx] = useState(0);
   const [lastChallengeIdx, setLastChallengeIdx] = useState<number | null>(null);
-  const [selected, setSelected] = useState<"a" | "b" | null>(null);
+  const [selected, setSelected] = useState<"a" | "b" | "equal" | null>(null);
   const [feedback, setFeedback] = useState("");
   const [showHint, setShowHint] = useState(false);
 
   const challenge = challenges[challengeIdx];
+
+  const isTie: boolean = useMemo(() => {
+    const va = challenge.a.num / challenge.a.den;
+    const vb = challenge.b.num / challenge.b.den;
+    return Math.abs(va - vb) < 1e-9;
+  }, [challenge]);
 
   const winner: "a" | "b" = useMemo(() => {
     const va = challenge.a.num / challenge.a.den;
@@ -157,21 +163,29 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
     setPhase("challenge");
   }, [lastChallengeIdx]);
 
-  const handlePick = (which: "a" | "b") => {
+  const handlePick = (which: "a" | "b" | "equal") => {
     if (phase === "done") return;
     setSelected(which);
-    if (which === winner) {
-      const w = challenge[winner];
-      const l = challenge[winner === "a" ? "b" : "a"];
-      const va = challenge.a.num / challenge.a.den;
-      const vb = challenge.b.num / challenge.b.den;
-      const tie = Math.abs(va - vb) < 1e-9;
-      setFeedback(
-        tie
-          ? `Tied! ${fmt(w)} and ${fmt(l)} are the same amount — both customers ordered equal portions.`
-          : `Correct! ${fmt(w)} is bigger than ${fmt(l)}. See how more of the tray is frosted?`,
-      );
+    const correct = isTie ? which === "equal" : which === winner;
+    if (correct) {
+      if (isTie) {
+        setFeedback(
+          `Tied! ${fmt(challenge.a)} and ${fmt(challenge.b)} are the same amount — both customers ordered equal portions.`,
+        );
+      } else {
+        const w = challenge[winner];
+        const l = challenge[winner === "a" ? "b" : "a"];
+        setFeedback(
+          `Correct! ${fmt(w)} is bigger than ${fmt(l)}. See how more of the tray is frosted?`,
+        );
+      }
       setPhase("done");
+    } else if (which === "equal") {
+      // Learner thought they were equal, but one is bigger.
+      setFeedback("Not quite — look again. One tray actually has more pink filled in than the other.");
+    } else if (isTie) {
+      // Learner picked a side, but the trays are actually equal.
+      setFeedback("Look closer — the trays might LOOK different, but they're actually the same amount. Try the \"They're equal!\" button.");
     } else {
       setFeedback("Not quite — look at the frosted trays again. Which one has MORE pink filled in?");
     }
@@ -191,7 +205,7 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
           phase === "explore"
             ? `To compare fractions with different bottoms, give them a common denominator. ${fmt(exploreA)} = ${exploreA.num * exploreB.den}/${exploreA.den * exploreB.den} and ${fmt(exploreB)} = ${exploreB.num * exploreA.den}/${exploreA.den * exploreB.den} — now just compare the tops! ${exploreCompare === "equal" ? "These are equal." : `${exploreA.num * exploreB.den} ${exploreCompare === "a" ? ">" : "<"} ${exploreB.num * exploreA.den}, so ${fmt(exploreCompare === "a" ? exploreA : exploreB)} wins.`}`
             : phase === "challenge"
-            ? `Two customers just placed orders! Whose tray is BIGGER — ${fmt(challenge.a)} or ${fmt(challenge.b)}? Tap their order to find out.`
+            ? `Two customers just placed orders! Compare ${fmt(challenge.a)} and ${fmt(challenge.b)} — tap the bigger order, or use "They're equal!" if they're the same.`
             : `Nice work! When the bottoms are different, you can't just compare the tops. The trays make it easy to SEE which is bigger.`
         }
       />
@@ -269,7 +283,7 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               den={challenge.a.den}
               highlighted={
                 phase === "done"
-                  ? winner === "a"
+                  ? isTie || winner === "a"
                     ? "winner"
                     : "none"
                   : selected === "a"
@@ -288,7 +302,7 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
               den={challenge.b.den}
               highlighted={
                 phase === "done"
-                  ? winner === "b"
+                  ? isTie || winner === "b"
                     ? "winner"
                     : "none"
                   : selected === "b"
@@ -304,6 +318,24 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
           </>
         )}
       </div>
+
+      {phase === "challenge" && (
+        <div className="flex justify-center">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => handlePick("equal")}
+            aria-pressed={selected === "equal"}
+            className={
+              selected === "equal"
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-bakery-frosting-deep/40"
+            }
+          >
+            <span aria-hidden="true">⚖️ </span>They're equal!
+          </Button>
+        </div>
+      )}
 
       {phase === "explore" && (
         <p className="text-center text-sm text-muted-foreground" aria-live="polite">
@@ -354,7 +386,7 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
           className="text-center text-sm text-muted-foreground bg-secondary/50 rounded-lg p-3 animate-fade-in"
           role="status"
         >
-          Look at the pink frosting in each tray. The one with MORE pink is the bigger order. You can also think: is each fraction more or less than 1/2?
+          Look at the pink frosting in each tray. The one with MORE pink is the bigger order — but if both trays look like the same amount filled, they might be equivalent fractions! You can also think: is each fraction more or less than 1/2?
         </p>
       )}
 
