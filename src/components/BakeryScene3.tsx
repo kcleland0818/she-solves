@@ -386,7 +386,7 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
           className="text-center text-sm text-muted-foreground bg-secondary/50 rounded-lg p-3 animate-fade-in"
           role="status"
         >
-          Look at the pink frosting in each tray. The one with MORE pink is the bigger order. You can also think: is each fraction more or less than 1/2?
+          Look at the pink frosting in each tray. The one with MORE pink is the bigger order — but if both trays look like the same amount filled, they might be equivalent fractions! You can also think: is each fraction more or less than 1/2?
         </p>
       )}
 
