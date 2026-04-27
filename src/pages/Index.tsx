@@ -41,6 +41,11 @@ const SHOP_BG: Record<Shop, string> = {
     "bg-gradient-to-br from-[hsl(35,65%,94%)] via-[hsl(20,55%,93%)] to-[hsl(340,55%,93%)]",
 };
 
+const SHOP_PROGRESS_LABELS: Record<Shop, string[]> = {
+  smoothie: ["Mix It", "Sales", "Discounts"],
+  bakery: ["Slice", "Frost", "Compare"],
+};
+
 const Index = () => {
   const [screen, setScreen] = useState<Screen>({ kind: "town" });
 
@@ -79,7 +84,11 @@ const Index = () => {
       <div id="main-content" className="max-w-2xl mx-auto">
         {showProgress && (
           <div className="mb-4">
-            <ProgressBar currentScene={stageIndex[stage]} totalScenes={3} />
+            <ProgressBar
+              currentScene={stageIndex[stage]}
+              totalScenes={3}
+              labels={SHOP_PROGRESS_LABELS[shop]}
+            />
           </div>
         )}
 

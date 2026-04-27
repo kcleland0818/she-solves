@@ -3,11 +3,13 @@ import { cn } from "@/lib/utils";
 interface ProgressBarProps {
   currentScene: number;
   totalScenes: number;
+  /** Step labels for this lesson. Defaults to the smoothie shop labels. */
+  labels?: string[];
 }
 
-const labels = ["Mix It", "Sales", "Discounts"];
+const DEFAULT_LABELS = ["Mix It", "Sales", "Discounts"];
 
-const ProgressBar = ({ currentScene, totalScenes }: ProgressBarProps) => (
+const ProgressBar = ({ currentScene, totalScenes, labels = DEFAULT_LABELS }: ProgressBarProps) => (
   <nav aria-label="Lesson progress" className="w-full max-w-xs mx-auto">
     <span className="sr-only">
       Step {Math.min(currentScene + 1, totalScenes)} of {totalScenes}: {labels[Math.min(currentScene, totalScenes - 1)]}
