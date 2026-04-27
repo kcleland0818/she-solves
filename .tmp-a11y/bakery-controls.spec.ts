@@ -34,7 +34,7 @@ interface ControlReport {
   totalControls: number;
   missingName: Array<{ tag: string; html: string; outerSnippet: string }>;
   notFocusable: Array<{ tag: string; html: string; outerSnippet: string; reason: string }>;
-}
+  byTag: Record<string, number>;
 
 // Audit every interactive control inside the bakery scene container:
 //   - has a non-empty accessible name (aria-label, aria-labelledby, or text)
