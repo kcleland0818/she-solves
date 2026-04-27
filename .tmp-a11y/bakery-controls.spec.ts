@@ -113,15 +113,17 @@ async function auditControls(page: any, scene: string): Promise<ControlReport> {
 
     const selector =
       'button, a[href], input:not([type="hidden"]), select, textarea, [role="button"], [role="link"], [tabindex]';
-    const all = Array.from(root.querySelectorAll(selector)).filter((el) => {
-      // Skip elements inside aria-hidden subtrees
-      let p: Element | null = el;
-      while (p) {
-        if (p.getAttribute && p.getAttribute("aria-hidden") === "true") return false;
-        p = p.parentElement;
-      }
-      return isVisible(el);
-    });
+    const all = roots.flatMap((root) =>
+      Array.from(root.querySelectorAll(selector)).filter((el) => {
+        // Skip elements inside aria-hidden subtrees
+        let p: Element | null = el;
+        while (p) {
+          if (p.getAttribute && p.getAttribute("aria-hidden") === "true") return false;
+          p = p.parentElement;
+        }
+        return isVisible(el);
+      })
+    );
 
     const missingName: Array<{ tag: string; html: string; outerSnippet: string }> = [];
     const notFocusable: Array<{
