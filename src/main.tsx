@@ -3,9 +3,11 @@ import App from "./App.tsx";
 import "./index.css";
 import townMapBg from "./assets/town-map-bg.jpg";
 import { applyTheme, getInitialTheme } from "./lib/theme";
+import { applyMotionPref, getStoredMotion } from "./lib/motion";
 
-// Apply persisted theme before React mounts to avoid a flash of default colors.
+// Apply persisted theme + motion pref before React mounts to avoid a flash.
 applyTheme(getInitialTheme());
+applyMotionPref(getStoredMotion());
 
 // Preload the LCP image (town map background) so the browser can fetch it
 // in parallel with the JS bundle, reducing LCP resource load delay.
