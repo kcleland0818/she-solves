@@ -1,19 +1,20 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import TownMap from "@/components/TownMap";
-import WelcomeScreen from "@/components/WelcomeScreen";
-import Scene1Ratios from "@/components/Scene1Ratios";
-import Scene2Percentages from "@/components/Scene2Percentages";
-import Scene3Discounts from "@/components/Scene3Discounts";
-import CompletionScreen from "@/components/CompletionScreen";
-import BakeryWelcome from "@/components/BakeryWelcome";
-import BakeryScene1 from "@/components/BakeryScene1";
-import BakeryScene2 from "@/components/BakeryScene2";
-import BakeryScene3 from "@/components/BakeryScene3";
-import BakeryCompletion from "@/components/BakeryCompletion";
 import ProgressBar from "@/components/ProgressBar";
-import MiniCalculator from "@/components/MiniCalculator";
-import KeyboardShortcutsHint from "@/components/KeyboardShortcutsHint";
 import { isShopCompleted, markShopCompleted } from "@/lib/progress";
+
+const WelcomeScreen = lazy(() => import("@/components/WelcomeScreen"));
+const Scene1Ratios = lazy(() => import("@/components/Scene1Ratios"));
+const Scene2Percentages = lazy(() => import("@/components/Scene2Percentages"));
+const Scene3Discounts = lazy(() => import("@/components/Scene3Discounts"));
+const CompletionScreen = lazy(() => import("@/components/CompletionScreen"));
+const BakeryWelcome = lazy(() => import("@/components/BakeryWelcome"));
+const BakeryScene1 = lazy(() => import("@/components/BakeryScene1"));
+const BakeryScene2 = lazy(() => import("@/components/BakeryScene2"));
+const BakeryScene3 = lazy(() => import("@/components/BakeryScene3"));
+const BakeryCompletion = lazy(() => import("@/components/BakeryCompletion"));
+const MiniCalculator = lazy(() => import("@/components/MiniCalculator"));
+const KeyboardShortcutsHint = lazy(() => import("@/components/KeyboardShortcutsHint"));
 
 type Shop = "smoothie" | "bakery";
 type Stage = "welcome" | "scene1" | "scene2" | "scene3" | "complete";
@@ -92,38 +93,44 @@ const Index = () => {
           </div>
         )}
 
-        {shop === "smoothie" && (
-          <>
-            {stage === "welcome" && <WelcomeScreen onStart={() => setStage("scene1")} />}
-            {stage === "scene1" && <Scene1Ratios onComplete={() => setStage("scene2")} />}
-            {stage === "scene2" && <Scene2Percentages onComplete={() => setStage("scene3")} />}
-            {stage === "scene3" && <Scene3Discounts onComplete={() => handleComplete("smoothie")} />}
-            {stage === "complete" && (
-              <CompletionScreen
-                onRestart={goToTown}
-                onReplayScene={(s) => setStage(s)}
-              />
-            )}
-          </>
-        )}
+        <Suspense fallback={<div className="min-h-[40vh]" aria-busy="true" />}>
+          {shop === "smoothie" && (
+            <>
+              {stage === "welcome" && <WelcomeScreen onStart={() => setStage("scene1")} />}
+              {stage === "scene1" && <Scene1Ratios onComplete={() => setStage("scene2")} />}
+              {stage === "scene2" && <Scene2Percentages onComplete={() => setStage("scene3")} />}
+              {stage === "scene3" && <Scene3Discounts onComplete={() => handleComplete("smoothie")} />}
+              {stage === "complete" && (
+                <CompletionScreen
+                  onRestart={goToTown}
+                  onReplayScene={(s) => setStage(s)}
+                />
+              )}
+            </>
+          )}
 
-        {shop === "bakery" && (
-          <>
-            {stage === "welcome" && <BakeryWelcome onStart={() => setStage("scene1")} />}
-            {stage === "scene1" && <BakeryScene1 onComplete={() => setStage("scene2")} />}
-            {stage === "scene2" && <BakeryScene2 onComplete={() => setStage("scene3")} />}
-            {stage === "scene3" && <BakeryScene3 onComplete={() => handleComplete("bakery")} />}
-            {stage === "complete" && (
-              <BakeryCompletion
-                onRestart={goToTown}
-                onReplayScene={(s) => setStage(s)}
-              />
-            )}
-          </>
-        )}
+          {shop === "bakery" && (
+            <>
+              {stage === "welcome" && <BakeryWelcome onStart={() => setStage("scene1")} />}
+              {stage === "scene1" && <BakeryScene1 onComplete={() => setStage("scene2")} />}
+              {stage === "scene2" && <BakeryScene2 onComplete={() => setStage("scene3")} />}
+              {stage === "scene3" && <BakeryScene3 onComplete={() => handleComplete("bakery")} />}
+              {stage === "complete" && (
+                <BakeryCompletion
+                  onRestart={goToTown}
+                  onReplayScene={(s) => setStage(s)}
+                />
+              )}
+            </>
+          )}
+        </Suspense>
       </div>
-      {showProgress && <MiniCalculator />}
-      {showProgress && <KeyboardShortcutsHint />}
+      {showProgress && (
+        <Suspense fallback={null}>
+          <MiniCalculator />
+          <KeyboardShortcutsHint />
+        </Suspense>
+      )}
     </div>
   );
 };
