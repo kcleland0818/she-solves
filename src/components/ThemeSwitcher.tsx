@@ -8,6 +8,13 @@ import {
   setStoredTheme,
   getInitialTheme,
 } from "@/lib/theme";
+import {
+  type MotionPref,
+  getStoredMotion,
+  setStoredMotion,
+  applyMotionPref,
+  isMotionReduced,
+} from "@/lib/motion";
 
 const ThemeSwitcher = () => {
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
