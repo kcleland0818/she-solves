@@ -18,10 +18,22 @@ import {
 
 const ThemeSwitcher = () => {
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
+  const [motion, setMotion] = useState<MotionPref>(() => getStoredMotion());
   const [open, setOpen] = useState(false);
   const openBtnRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  const reduced = isMotionReduced(motion);
+
+  const toggleMotion = useCallback(() => {
+    // Tri-state cycle, but the toggle just flips between on/off based on
+    // current effective state (most users want a simple switch).
+    const next: MotionPref = reduced ? "off" : "on";
+    setMotion(next);
+    setStoredMotion(next);
+    applyMotionPref(next);
+  }, [reduced]);
 
   const choose = useCallback((next: Theme) => {
     setTheme(next);
@@ -155,8 +167,38 @@ const ThemeSwitcher = () => {
             })}
           </div>
 
+          <div className="mt-3 pt-3 border-t border-border">
+            <label className="flex items-center justify-between gap-3 cursor-pointer">
+              <span className="flex-1 min-w-0">
+                <span className="block text-sm font-semibold text-foreground">
+                  Reduce motion
+                </span>
+                <span className="block text-xs text-muted-foreground leading-snug">
+                  Turn off animations and transitions.
+                </span>
+              </span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={reduced}
+                onClick={toggleMotion}
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full border border-border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                  reduced ? "bg-primary" : "bg-muted"
+                }`}
+              >
+                <span className="sr-only">Reduce motion</span>
+                <span
+                  aria-hidden="true"
+                  className={`inline-block h-4 w-4 transform rounded-full bg-card shadow transition-transform ${
+                    reduced ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </label>
+          </div>
+
           <p className="text-[11px] text-muted-foreground mt-2 leading-snug">
-            Choose colors that feel comfortable to you. Your choice is saved on this device.
+            Your choices are saved on this device.
           </p>
         </div>
       )}
