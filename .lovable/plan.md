@@ -1,37 +1,64 @@
-## Berry Bliss audit — what could still be polished
+## Goal
 
-The Berry Bliss experience is solid: 3 scenes, randomized challenges, hints, a mini calculator, keyboard shortcuts, accessible markup, town map entry, and a celebratory completion screen. Before we open Sweet Crumbs, here are the gaps I noticed — none are blockers, all are optional polish.
+Add a floating theme switcher with 4 presets: **Berry** (current default), **Calm** (muted blue-green), **Warm** (cream + terracotta), and **High Contrast** (near-black on near-white, WCAG AAA-aimed). Choice persists across visits. Default behavior is unchanged for users who don't open the switcher.
 
-### Higher-impact ideas (pick what resonates)
+## How it works
 
-1. **Progress persistence** — If a learner refreshes mid-lesson, they restart from the town map. We could remember which scene they're on (and even mark Berry Bliss as "completed" on the town map with a checkmark badge).
-2. **"Completed" state on the town map** — Once a learner finishes Berry Bliss, the smoothie marker could show a gold star or checkmark instead of just being unlocked. Sets up nicely for a multi-shop progress system.
-3. **Replay individual scenes** — Right now from the completion screen the only path back is "Play Again" (full restart) or the town map. A "Revisit a scene" picker (Ratios / Percentages / Discounts) would help kids review one concept.
-4. **Sound / haptic feedback (opt-in)** — A soft chime on a correct answer and a gentle buzz on mobile for slider milestones. Would need a mute toggle and respect `prefers-reduced-motion` siblings.
-5. **Score / streak tracker** — Lightweight count of challenges completed per scene shown in the progress bar (e.g., "2 of 3 ratio challenges solved"). Encourages trying multiple variants instead of clicking "Next" right away.
+Each theme is just a swap of the existing CSS custom properties already in `src/index.css` (`--background`, `--foreground`, `--primary`, `--card`, `--accent`, `--muted-foreground`, `--border`, `--ring`, etc.). Tailwind reads them via `hsl(var(--*))`, so every existing component automatically restyles — no component edits needed.
 
-### Smaller polish items
+The active theme is stored as a `data-theme` attribute on `<html>`. CSS rules like `[data-theme="calm"] { --background: ...; ... }` override the `:root` defaults.
 
-6. **Scene 2 — show the answer percentage on the pie/legend after a correct answer.** Right now Maya tells you the % verbally, but the chart/legend never displays the number. A small "≈ 40%" badge on the active legend item once `phase === "done"` would reinforce the lesson.
-7. **Scene 3 — quick-pick discount chips (10%, 25%, 50%)** in addition to the slider. Mental-math discounts are easier to discover when the common ones are one tap away. Slider stays for fine-grained exploration.
-8. **Welcome screen reachability** — Currently you only see the welcome screen the first time you enter the shop. After completion, "Play Again" goes to the town map and re-entering the shop shows welcome again, which is fine — but we could add a "Skip intro" memory so returning learners jump straight to Scene 1.
-9. **Town map — "Last visited" indicator** so a returning learner immediately sees where they left off.
-10. **Maya variety** — Maya's speech is static per phase. A small pool of 2–3 phrasings per moment (randomly chosen) would make repeat playthroughs feel less scripted.
+## Files to change/add
 
-### My recommendation
+### 1. `src/index.css` — add theme variable blocks
+After the existing `:root { ... }` block, add three new selectors: `[data-theme="calm"]`, `[data-theme="warm"]`, `[data-theme="high-contrast"]`. Each redefines the same set of variables `:root` already uses. Berry needs no block — it stays as `:root`.
 
-If the goal is to launch Sweet Crumbs as part of a **growing town**, I'd do these two first because they pay off across every future shop:
+Indicative palettes (HSL):
+- **Calm**: bg `190 35% 96%`, fg `200 25% 20%`, primary `190 50% 42%`, accent `170 45% 45%`, muted-fg `200 20% 32%`
+- **Warm**: bg `35 55% 95%`, fg `25 35% 18%`, primary `15 65% 50%`, accent `30 70% 55%`, muted-fg `25 25% 32%`
+- **High Contrast**: bg `0 0% 100%`, fg `0 0% 8%`, primary `220 90% 35%`, accent `340 80% 35%`, muted-fg `0 0% 20%`, border `0 0% 30%`, ring `220 90% 35%`
 
-- **#2 Town map "completed" state** (visual reward + sets the multi-shop pattern)
-- **#3 Replay individual scenes** from the completion screen (better learning loop)
-- #8 Welcome screen reachability
+Each contrast pair is checked against WCAG AA (4.5:1) for body text and AAA (7:1) for High Contrast.
 
-Everything else can wait until after Sweet Crumbs ships, or skip entirely.
+### 2. `src/lib/theme.ts` — new file
+Tiny module with the same shape as `progress.ts`:
+- `type Theme = "berry" | "calm" | "warm" | "high-contrast"`
+- `getStoredTheme()` / `setStoredTheme(t)` using `localStorage` key `shesolves:theme`
+- `applyTheme(t)` sets `document.documentElement.dataset.theme` (omits attribute for `berry` to keep `:root` defaults)
+- `getInitialTheme()` returns stored theme, else honors `prefers-contrast: more` → `high-contrast`, else `berry`
+- All wrapped in try/catch + `typeof window` guards (matches existing pattern)
 
-### What I'd skip for now
+### 3. `src/main.tsx` — apply theme before React mounts
+One added line: `applyTheme(getInitialTheme())` before `createRoot(...)`. This prevents a flash of default theme on reload.
 
-- Sound/haptics (scope creep, needs settings UI)
-- Score/streak (adds pressure; current free-exploration tone is nice)
-- Maya variety (nice-to-have, not load-bearing)
+### 4. `src/components/ThemeSwitcher.tsx` — new component
+- Floating button bottom-right (mirrors `MiniCalculator`'s positioning style — likely `fixed bottom-4 right-4` stack offset so they don't overlap; calculator stays at right-4, theme button at right-20 or stacked above)
+- Lucide `Palette` icon, `aria-label="Change color theme"`, `aria-expanded`, `aria-controls`
+- Click opens a popover panel (plain div with focus trap + Escape to close, same pattern as `MiniCalculator`) listing 4 options as radio buttons
+- Each option: small color swatch (3 dots showing bg/primary/accent of that theme), theme name, short description ("Soft & playful", "Muted & focused", "Cozy & warm", "Maximum readability")
+- Uses `role="radiogroup"` with `aria-label="Color theme"`; each option is a `role="radio"` button with `aria-checked`
+- On select: calls `setStoredTheme` + `applyTheme`, updates local state, closes panel, returns focus to opener
+- Keyboard: arrow keys move between options, Enter/Space selects
 
-Tell me which (if any) you'd like to add before we head to Sweet Crumbs — or say "none, let's go to Sweet Crumbs" and we'll move on.
+### 5. `src/pages/Index.tsx` — mount the switcher
+Add `<ThemeSwitcher />` alongside `<MiniCalculator />` inside the existing `Suspense`. Lazy-loaded the same way to avoid bloating the initial bundle. Visible on every screen (town map + shops), not gated by `showProgress`, so users can change theme from the welcome screen too — this means moving it out of the `showProgress` block, or rendering it at the page root in both `town` and `shop` branches.
+
+Cleanest: render `<ThemeSwitcher />` once at the top of the `Index` component return, outside the conditional branches. Requires a small refactor — wrap the existing town/shop return in a fragment with the switcher always mounted.
+
+## What stays the same
+
+- Default Berry theme — no visual change for existing users until they opt in
+- All scene-specific colors (smoothie fruits, bakery cream/frosting tokens) — these are separate CSS variables not touched by themes
+- `prefers-reduced-motion` handling
+- Existing `.dark` class block (untouched; not exposed in switcher)
+
+## Out of scope
+
+- Free color picker
+- Per-shop theming
+- Dark mode toggle (existing `.dark` styles aren't fully tested; deferred)
+- Syncing theme across devices (localStorage only)
+
+## Risk
+
+Very low. Pure additive change. Worst case if the switcher has a bug: user's stored theme might apply unexpectedly — mitigated by a "Reset to Berry" option in the panel and graceful fallback in `getInitialTheme()`.
