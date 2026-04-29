@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Lock, Check } from "lucide-react";
+import { Lock, Check, RotateCcw } from "lucide-react";
 import townMapBg from "@/assets/town-map-bg.jpg";
 import { getCompletedShops, resetProgress } from "@/lib/progress";
 import {
@@ -10,6 +10,17 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
 interface Shop {
@@ -168,20 +179,40 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
         </div>
       </div>
 
-      {/* Dev/testing utility: reset all shop completion */}
+      {/* Reset all shop completion — floating button with confirmation. */}
       {completedShops.size > 0 && (
-        <div className="absolute bottom-1 right-2 z-20">
-          <button
-            type="button"
-            onClick={() => {
-              resetProgress();
-              window.location.reload();
-            }}
-            className="text-[10px] md:text-xs text-muted-foreground/70 hover:text-foreground underline underline-offset-2 px-2 py-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label="Reset all shop progress"
-          >
-            Reset progress
-          </button>
+        <div className="fixed bottom-4 right-36 z-50">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <button
+                type="button"
+                className="bg-card text-foreground border border-border rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                aria-label="Reset all shop progress"
+              >
+                <RotateCcw className="w-5 h-5" aria-hidden="true" />
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Reset all progress?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will clear every shop you've completed and let you start fresh. This can't be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Keep my progress</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    resetProgress();
+                    window.location.reload();
+                  }}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Yes, reset everything
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       )}
 
