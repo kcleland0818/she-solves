@@ -181,7 +181,7 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
 
       {/* Reset all shop completion — floating button with confirmation. */}
       {completedShops.size > 0 && (
-        <div className="fixed bottom-4 right-36 z-50">
+        <div className="fixed bottom-4 right-4 z-50">
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <button
