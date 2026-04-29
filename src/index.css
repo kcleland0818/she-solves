@@ -95,7 +95,8 @@
     @apply absolute left-2 top-2 z-[100] -translate-y-20 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg transition-transform focus:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
   }
 
-  /* Respect reduced motion preferences (WCAG 2.3.3) */
+  /* Respect reduced motion preferences (WCAG 2.3.3).
+     Triggered by the OS setting OR the in-app toggle (data-reduce-motion). */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -105,6 +106,15 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+
+  html[data-reduce-motion="true"] *,
+  html[data-reduce-motion="true"] *::before,
+  html[data-reduce-motion="true"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
