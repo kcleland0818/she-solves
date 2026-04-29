@@ -90,13 +90,21 @@ const ThemeSwitcher = () => {
         ref={openBtnRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="fixed top-4 right-4 md:top-auto md:bottom-4 md:right-20 z-50 bg-card text-foreground border border-border rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="
+          fixed z-50
+          top-1/3 right-0 rounded-l-full rounded-r-none w-8 h-10 border-r-0
+          md:top-auto md:bottom-4 md:right-20 md:rounded-full md:rounded-l-full md:w-12 md:h-12 md:border-r
+          bg-card text-foreground border border-border
+          flex items-center justify-center shadow-lg
+          hover:scale-105 md:hover:scale-110 transition-transform
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+        "
         aria-label="Change color theme"
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls="theme-switcher-panel"
       >
-        <Palette className="w-5 h-5" aria-hidden="true" />
+        <Palette className="w-4 h-4 md:w-5 md:h-5" aria-hidden="true" />
       </button>
 
       {open && (
@@ -105,7 +113,7 @@ const ThemeSwitcher = () => {
           id="theme-switcher-panel"
           role="dialog"
           aria-label="Color theme"
-          className="fixed top-16 right-4 md:top-auto md:bottom-20 md:right-4 z-50 w-72 max-w-[calc(100vw-2rem)] bg-card border border-border rounded-2xl shadow-xl p-3 animate-fade-in"
+          className="fixed top-1/3 right-10 md:top-auto md:bottom-20 md:right-4 z-50 w-72 max-w-[calc(100vw-3rem)] bg-card border border-border rounded-2xl shadow-xl p-3 animate-fade-in"
         >
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs font-semibold text-muted-foreground inline-flex items-center gap-1.5">
