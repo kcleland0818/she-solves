@@ -90,7 +90,7 @@ const ThemeSwitcher = () => {
         ref={openBtnRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-4 right-20 z-50 bg-card text-foreground border border-border rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="fixed top-4 right-4 md:top-auto md:bottom-4 md:right-20 z-50 bg-card text-foreground border border-border rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         aria-label="Change color theme"
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -105,7 +105,7 @@ const ThemeSwitcher = () => {
           id="theme-switcher-panel"
           role="dialog"
           aria-label="Color theme"
-          className="fixed bottom-20 right-4 z-50 w-72 bg-card border border-border rounded-2xl shadow-xl p-3 animate-fade-in"
+          className="fixed top-16 right-4 md:top-auto md:bottom-20 md:right-4 z-50 w-72 max-w-[calc(100vw-2rem)] bg-card border border-border rounded-2xl shadow-xl p-3 animate-fade-in"
         >
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs font-semibold text-muted-foreground inline-flex items-center gap-1.5">
