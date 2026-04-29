@@ -15,6 +15,7 @@ const BakeryScene3 = lazy(() => import("@/components/BakeryScene3"));
 const BakeryCompletion = lazy(() => import("@/components/BakeryCompletion"));
 const MiniCalculator = lazy(() => import("@/components/MiniCalculator"));
 const KeyboardShortcutsHint = lazy(() => import("@/components/KeyboardShortcutsHint"));
+const ThemeSwitcher = lazy(() => import("@/components/ThemeSwitcher"));
 
 type Shop = "smoothie" | "bakery";
 type Stage = "welcome" | "scene1" | "scene2" | "scene3" | "complete";
@@ -71,7 +72,14 @@ const Index = () => {
   const goToTown = () => setScreen({ kind: "town" });
 
   if (screen.kind === "town") {
-    return <TownMap onEnterShop={enterShop} />;
+    return (
+      <>
+        <TownMap onEnterShop={enterShop} />
+        <Suspense fallback={null}>
+          <ThemeSwitcher />
+        </Suspense>
+      </>
+    );
   }
 
   const { shop, stage } = screen;
@@ -125,12 +133,15 @@ const Index = () => {
           )}
         </Suspense>
       </div>
-      {showProgress && (
-        <Suspense fallback={null}>
-          <MiniCalculator />
-          <KeyboardShortcutsHint />
-        </Suspense>
-      )}
+      <Suspense fallback={null}>
+        <ThemeSwitcher />
+        {showProgress && (
+          <>
+            <MiniCalculator />
+            <KeyboardShortcutsHint />
+          </>
+        )}
+      </Suspense>
     </div>
   );
 };
