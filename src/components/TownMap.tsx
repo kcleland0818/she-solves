@@ -100,12 +100,12 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
         Skip to shops
       </a>
 
-      {/* Header */}
+      {/* Header — locked to light text colors because the map artwork is a fixed light illustration */}
       <div className="text-center pt-3 pb-1 md:pt-4 md:pb-2 z-10 relative shrink-0">
-        <h1 className="text-2xl md:text-4xl font-extrabold text-foreground drop-shadow-sm">
+        <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 drop-shadow-sm">
           <span aria-hidden="true">📍 </span>SheSolves City
         </h1>
-        <p className="text-muted-foreground text-xs md:text-base mt-0.5">
+        <p className="text-slate-700 text-xs md:text-base mt-0.5">
           Tap a shop to start solving!
         </p>
       </div>
@@ -164,8 +164,8 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
                     <span
                       className={`mt-1 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm ${
                         shop.unlocked
-                          ? "bg-white/90 text-foreground"
-                          : "bg-muted/70 text-muted-foreground"
+                          ? "bg-white/95 text-slate-900"
+                          : "bg-white/70 text-slate-600"
                       }`}
                       aria-hidden="true"
                     >
