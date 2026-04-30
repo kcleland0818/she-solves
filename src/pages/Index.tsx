@@ -36,11 +36,13 @@ const SHOP_IDS: Record<Shop, string> = {
   bakery: "bakery",
 };
 
+// Light gradients for the welcome screen. In dark mode we fall back to the
+// themed background so text stays readable.
 const SHOP_BG: Record<Shop, string> = {
   smoothie:
-    "bg-gradient-to-br from-[hsl(280,60%,92%)] via-[hsl(320,50%,93%)] to-[hsl(340,60%,92%)]",
+    "bg-gradient-to-br from-[hsl(280,60%,92%)] via-[hsl(320,50%,93%)] to-[hsl(340,60%,92%)] dark:from-background dark:via-background dark:to-background",
   bakery:
-    "bg-gradient-to-br from-[hsl(35,65%,94%)] via-[hsl(20,55%,93%)] to-[hsl(340,55%,93%)]",
+    "bg-gradient-to-br from-[hsl(35,65%,94%)] via-[hsl(20,55%,93%)] to-[hsl(340,55%,93%)] dark:from-background dark:via-background dark:to-background",
 };
 
 const SHOP_PROGRESS_LABELS: Record<Shop, string[]> = {
