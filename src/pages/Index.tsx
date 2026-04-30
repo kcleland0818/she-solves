@@ -1,6 +1,7 @@
 import { useState, lazy, Suspense } from "react";
 import TownMap from "@/components/TownMap";
 import ProgressBar from "@/components/ProgressBar";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { isShopCompleted, markShopCompleted } from "@/lib/progress";
 
 const WelcomeScreen = lazy(() => import("@/components/WelcomeScreen"));
@@ -15,7 +16,6 @@ const BakeryScene3 = lazy(() => import("@/components/BakeryScene3"));
 const BakeryCompletion = lazy(() => import("@/components/BakeryCompletion"));
 const MiniCalculator = lazy(() => import("@/components/MiniCalculator"));
 const KeyboardShortcutsHint = lazy(() => import("@/components/KeyboardShortcutsHint"));
-const ThemeSwitcher = lazy(() => import("@/components/ThemeSwitcher"));
 
 type Shop = "smoothie" | "bakery";
 type Stage = "welcome" | "scene1" | "scene2" | "scene3" | "complete";
@@ -75,9 +75,7 @@ const Index = () => {
     return (
       <>
         <TownMap onEnterShop={enterShop} />
-        <Suspense fallback={null}>
-          <ThemeSwitcher />
-        </Suspense>
+        <ThemeSwitcher />
       </>
     );
   }
@@ -133,15 +131,13 @@ const Index = () => {
           )}
         </Suspense>
       </div>
-      <Suspense fallback={null}>
-        <ThemeSwitcher />
-        {showProgress && (
-          <>
-            <MiniCalculator />
-            <KeyboardShortcutsHint />
-          </>
-        )}
-      </Suspense>
+      <ThemeSwitcher />
+      {showProgress && (
+        <Suspense fallback={null}>
+          <MiniCalculator />
+          <KeyboardShortcutsHint />
+        </Suspense>
+      )}
     </div>
   );
 };
