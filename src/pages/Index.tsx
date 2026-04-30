@@ -75,9 +75,7 @@ const Index = () => {
     return (
       <>
         <TownMap onEnterShop={enterShop} />
-        <Suspense fallback={null}>
-          <ThemeSwitcher />
-        </Suspense>
+        <ThemeSwitcher />
       </>
     );
   }
