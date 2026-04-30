@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import TownMap from "@/components/TownMap";
 import ProgressBar from "@/components/ProgressBar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
