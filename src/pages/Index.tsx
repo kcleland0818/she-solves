@@ -141,7 +141,23 @@ const Index = () => {
           </div>
         )}
 
-        <Suspense fallback={<div className="min-h-[40vh]" aria-busy="true" />}>
+        <Suspense
+          fallback={
+            <div
+              className="min-h-[40vh] flex items-center justify-center"
+              aria-busy="true"
+              aria-live="polite"
+            >
+              <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                <div
+                  className="w-8 h-8 rounded-full border-2 border-muted border-t-primary animate-spin"
+                  aria-hidden="true"
+                />
+                <span className="text-sm">Loading…</span>
+              </div>
+            </div>
+          }
+        >
           {shop === "smoothie" && (
             <>
               {stage === "welcome" && <WelcomeScreen onStart={() => setStage("scene1")} />}
