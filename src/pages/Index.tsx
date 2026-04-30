@@ -87,7 +87,11 @@ const saveScreen = (screen: Screen) => {
 };
 
 const Index = () => {
-  const [screen, setScreen] = useState<Screen>({ kind: "town" });
+  const [screen, setScreen] = useState<Screen>(getInitialScreen);
+
+  useEffect(() => {
+    saveScreen(screen);
+  }, [screen]);
 
   const enterShop = (shopId: string) => {
     const shop: Shop | null =
