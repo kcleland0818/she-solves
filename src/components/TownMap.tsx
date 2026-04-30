@@ -97,12 +97,12 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
         Skip to shops
       </a>
 
-      {/* Header — locked to light text colors because the map artwork is a fixed light illustration */}
+      {/* Header — light gradient bg in light mode, themed dark bg in dark mode. */}
       <div className="text-center pt-3 pb-1 md:pt-4 md:pb-2 z-10 relative shrink-0">
-        <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 drop-shadow-sm">
+        <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 dark:text-foreground drop-shadow-sm">
           <span aria-hidden="true">📍 </span>SheSolves City
         </h1>
-        <p className="text-slate-700 text-xs md:text-base mt-0.5">
+        <p className="text-slate-700 dark:text-muted-foreground text-xs md:text-base mt-0.5">
           Tap a shop to start solving!
         </p>
       </div>
