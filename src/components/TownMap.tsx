@@ -87,10 +87,7 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
 
   return (
     <main
-      className="h-[100dvh] flex flex-col relative overflow-hidden"
-      style={{
-        background: "linear-gradient(to bottom, hsl(200, 60%, 92%), hsl(200, 40%, 96%))",
-      }}
+      className="h-[100dvh] flex flex-col relative overflow-hidden bg-gradient-to-b from-[hsl(200,60%,92%)] to-[hsl(200,40%,96%)] dark:from-background dark:to-background"
     >
       {/* Skip link for keyboard users */}
       <a
