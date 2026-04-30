@@ -207,6 +207,45 @@ const ThemeSwitcher = () => {
           </div>
 
           <div className="mt-3 pt-3 border-t border-border">
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <span className="text-xs font-semibold text-muted-foreground inline-flex items-center gap-1.5">
+                <Sun className="w-3.5 h-3.5" aria-hidden="true" />
+                Appearance
+              </span>
+            </div>
+            <div
+              role="radiogroup"
+              aria-label="Appearance"
+              className="grid grid-cols-3 gap-1.5"
+            >
+              {COLOR_MODES.map((m, idx) => {
+                const { label, Icon } = COLOR_MODE_META[m];
+                const selected = colorMode === m;
+                return (
+                  <button
+                    key={m}
+                    ref={(el) => { modeRefs.current[idx] = el; }}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    tabIndex={selected ? 0 : -1}
+                    onClick={() => chooseColorMode(m)}
+                    onKeyDown={(e) => handleModeKey(e, idx)}
+                    className={`flex flex-col items-center justify-center gap-1 py-2 rounded-lg border text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                      selected
+                        ? "border-primary bg-primary/10 text-foreground"
+                        : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" aria-hidden="true" />
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-3 pt-3 border-t border-border">
             <label className="flex items-center justify-between gap-3 cursor-pointer">
               <span className="flex-1 min-w-0">
                 <span className="block text-sm font-semibold text-foreground">
