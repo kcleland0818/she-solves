@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Palette, Check } from "lucide-react";
+import { Palette, Check, Monitor, Sun, Moon } from "lucide-react";
 import {
   type Theme,
   THEMES,
@@ -15,14 +15,45 @@ import {
   applyMotionPref,
   isMotionReduced,
 } from "@/lib/motion";
+import {
+  type ColorMode,
+  getStoredColorMode,
+  setStoredColorMode,
+  applyColorMode,
+} from "@/lib/color-mode";
+
+const COLOR_MODES: ColorMode[] = ["system", "light", "dark"];
+const COLOR_MODE_META: Record<ColorMode, { label: string; Icon: typeof Sun }> = {
+  system: { label: "System", Icon: Monitor },
+  light: { label: "Light", Icon: Sun },
+  dark: { label: "Dark", Icon: Moon },
+};
 
 const ThemeSwitcher = () => {
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
   const [motion, setMotion] = useState<MotionPref>(() => getStoredMotion());
+  const [colorMode, setColorMode] = useState<ColorMode>(() => getStoredColorMode());
   const [open, setOpen] = useState(false);
   const openBtnRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const modeRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  const chooseColorMode = useCallback((next: ColorMode) => {
+    setColorMode(next);
+    setStoredColorMode(next);
+    applyColorMode(next);
+  }, []);
+
+  const handleModeKey = (e: React.KeyboardEvent<HTMLButtonElement>, idx: number) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      modeRefs.current[(idx + 1) % COLOR_MODES.length]?.focus();
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      modeRefs.current[(idx - 1 + COLOR_MODES.length) % COLOR_MODES.length]?.focus();
+    }
+  };
 
   const reduced = isMotionReduced(motion);
 
