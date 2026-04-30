@@ -50,6 +50,42 @@ const SHOP_PROGRESS_LABELS: Record<Shop, string[]> = {
   bakery: ["Slice", "Frost", "Compare"],
 };
 
+// Persist the current screen across reloads (incl. Vite HMR full reloads)
+// so a learner mid-activity isn't bounced back to the map. sessionStorage
+// (not localStorage) — closing the tab still starts fresh at the map.
+const SCREEN_STORAGE_KEY = "shesolves:screen";
+const VALID_STAGES: Stage[] = ["welcome", "scene1", "scene2", "scene3", "complete"];
+const VALID_SHOPS: Shop[] = ["smoothie", "bakery"];
+
+const getInitialScreen = (): Screen => {
+  if (typeof window === "undefined") return { kind: "town" };
+  try {
+    const raw = window.sessionStorage.getItem(SCREEN_STORAGE_KEY);
+    if (!raw) return { kind: "town" };
+    const parsed = JSON.parse(raw);
+    if (parsed?.kind === "town") return { kind: "town" };
+    if (
+      parsed?.kind === "shop" &&
+      VALID_SHOPS.includes(parsed.shop) &&
+      VALID_STAGES.includes(parsed.stage)
+    ) {
+      return { kind: "shop", shop: parsed.shop, stage: parsed.stage };
+    }
+  } catch {
+    // ignore
+  }
+  return { kind: "town" };
+};
+
+const saveScreen = (screen: Screen) => {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(SCREEN_STORAGE_KEY, JSON.stringify(screen));
+  } catch {
+    // ignore
+  }
+};
+
 const Index = () => {
   const [screen, setScreen] = useState<Screen>({ kind: "town" });
 
