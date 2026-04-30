@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Palette, Check } from "lucide-react";
+import { Palette, Check, Monitor, Sun, Moon } from "lucide-react";
 import {
   type Theme,
   THEMES,
@@ -15,14 +15,45 @@ import {
   applyMotionPref,
   isMotionReduced,
 } from "@/lib/motion";
+import {
+  type ColorMode,
+  getStoredColorMode,
+  setStoredColorMode,
+  applyColorMode,
+} from "@/lib/color-mode";
+
+const COLOR_MODES: ColorMode[] = ["system", "light", "dark"];
+const COLOR_MODE_META: Record<ColorMode, { label: string; Icon: typeof Sun }> = {
+  system: { label: "System", Icon: Monitor },
+  light: { label: "Light", Icon: Sun },
+  dark: { label: "Dark", Icon: Moon },
+};
 
 const ThemeSwitcher = () => {
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
   const [motion, setMotion] = useState<MotionPref>(() => getStoredMotion());
+  const [colorMode, setColorMode] = useState<ColorMode>(() => getStoredColorMode());
   const [open, setOpen] = useState(false);
   const openBtnRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const modeRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  const chooseColorMode = useCallback((next: ColorMode) => {
+    setColorMode(next);
+    setStoredColorMode(next);
+    applyColorMode(next);
+  }, []);
+
+  const handleModeKey = (e: React.KeyboardEvent<HTMLButtonElement>, idx: number) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      modeRefs.current[(idx + 1) % COLOR_MODES.length]?.focus();
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      modeRefs.current[(idx - 1 + COLOR_MODES.length) % COLOR_MODES.length]?.focus();
+    }
+  };
 
   const reduced = isMotionReduced(motion);
 
@@ -173,6 +204,45 @@ const ThemeSwitcher = () => {
                 </button>
               );
             })}
+          </div>
+
+          <div className="mt-3 pt-3 border-t border-border">
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <span className="text-xs font-semibold text-muted-foreground inline-flex items-center gap-1.5">
+                <Sun className="w-3.5 h-3.5" aria-hidden="true" />
+                Appearance
+              </span>
+            </div>
+            <div
+              role="radiogroup"
+              aria-label="Appearance"
+              className="grid grid-cols-3 gap-1.5"
+            >
+              {COLOR_MODES.map((m, idx) => {
+                const { label, Icon } = COLOR_MODE_META[m];
+                const selected = colorMode === m;
+                return (
+                  <button
+                    key={m}
+                    ref={(el) => { modeRefs.current[idx] = el; }}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    tabIndex={selected ? 0 : -1}
+                    onClick={() => chooseColorMode(m)}
+                    onKeyDown={(e) => handleModeKey(e, idx)}
+                    className={`flex flex-col items-center justify-center gap-1 py-2 rounded-lg border text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                      selected
+                        ? "border-primary bg-primary/10 text-foreground"
+                        : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" aria-hidden="true" />
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="mt-3 pt-3 border-t border-border">

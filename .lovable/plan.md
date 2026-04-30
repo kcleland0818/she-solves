@@ -1,64 +1,73 @@
 ## Goal
 
-Add a floating theme switcher with 4 presets: **Berry** (current default), **Calm** (muted blue-green), **Warm** (cream + terracotta), and **High Contrast** (near-black on near-white, WCAG AAA-aimed). Choice persists across visits. Default behavior is unchanged for users who don't open the switcher.
+Add a **light / dark / system** color-mode control that works on top of all four existing themes (Berry, Calm, Warm, High Contrast). Persists per device in localStorage, defaults to following the OS, and applies before React mounts to avoid a flash.
 
-## How it works
+## Design choices
 
-Each theme is just a swap of the existing CSS custom properties already in `src/index.css` (`--background`, `--foreground`, `--primary`, `--card`, `--accent`, `--muted-foreground`, `--border`, `--ring`, etc.). Tailwind reads them via `hsl(var(--*))`, so every existing component automatically restyles — no component edits needed.
+- **Three states, not a toggle**: `system` (follow OS), `light`, `dark`. "System" is the default — it's what users almost always want, and it stays in sync if they flip OS dark mode at night.
+- **Lives on top of themes, not inside them**: dark mode is orthogonal to the color theme. Picking "Calm + Dark" should give a dark calm palette, not force you back to Berry.
+- **Same shape as `motion.ts`**: `auto` / explicit override pattern. Keeps the codebase consistent and migration-friendly when accounts arrive.
+- **Stays in localStorage forever**: as discussed, this is a device preference. It will not move to Cloud when accounts ship.
 
-The active theme is stored as a `data-theme` attribute on `<html>`. CSS rules like `[data-theme="calm"] { --background: ...; ... }` override the `:root` defaults.
+## Files
 
-## Files to change/add
+### 1. `src/lib/color-mode.ts` (new)
+Mirrors `motion.ts` exactly in shape:
+- `type ColorMode = "system" | "light" | "dark"`
+- `getStoredColorMode()` / `setStoredColorMode(mode)` — key `shesolves:color-mode`, removes the key when set to `system`
+- `systemPrefersDark()` — wraps `matchMedia("(prefers-color-scheme: dark)")`
+- `isDark(mode?)` — resolves effective state
+- `applyColorMode(mode)` — toggles the `dark` class on `<html>` (Tailwind already configured for `darkMode: ["class"]`)
+- `subscribeToSystemColorMode(cb)` — listens to OS changes and re-applies, but only while the stored mode is `system`. Returns an unsubscribe function.
 
-### 1. `src/index.css` — add theme variable blocks
-After the existing `:root { ... }` block, add three new selectors: `[data-theme="calm"]`, `[data-theme="warm"]`, `[data-theme="high-contrast"]`. Each redefines the same set of variables `:root` already uses. Berry needs no block — it stays as `:root`.
+All wrapped in `try`/`catch` + `typeof window` guards.
 
-Indicative palettes (HSL):
-- **Calm**: bg `190 35% 96%`, fg `200 25% 20%`, primary `190 50% 42%`, accent `170 45% 45%`, muted-fg `200 20% 32%`
-- **Warm**: bg `35 55% 95%`, fg `25 35% 18%`, primary `15 65% 50%`, accent `30 70% 55%`, muted-fg `25 25% 32%`
-- **High Contrast**: bg `0 0% 100%`, fg `0 0% 8%`, primary `220 90% 35%`, accent `340 80% 35%`, muted-fg `0 0% 20%`, border `0 0% 30%`, ring `220 90% 35%`
+### 2. `src/index.css` — add dark variants for the three non-default themes
+Currently only `:root` (Berry light) and `.dark` (Berry dark) exist. Calm/Warm/High-Contrast have no dark variants, so toggling dark mode while on those themes would fall back to Berry-dark, which looks broken.
 
-Each contrast pair is checked against WCAG AA (4.5:1) for body text and AAA (7:1) for High Contrast.
+Add three new selector blocks:
+- `[data-theme="calm"].dark { ... }` — dark calm: deep teal background, lighter primary
+- `[data-theme="warm"].dark { ... }` — dark warm: deep brown/cocoa background, warm orange primary
+- `[data-theme="high-contrast"].dark { ... }` — pure black bg / pure white fg, AAA-aimed
 
-### 2. `src/lib/theme.ts` — new file
-Tiny module with the same shape as `progress.ts`:
-- `type Theme = "berry" | "calm" | "warm" | "high-contrast"`
-- `getStoredTheme()` / `setStoredTheme(t)` using `localStorage` key `shesolves:theme`
-- `applyTheme(t)` sets `document.documentElement.dataset.theme` (omits attribute for `berry` to keep `:root` defaults)
-- `getInitialTheme()` returns stored theme, else honors `prefers-contrast: more` → `high-contrast`, else `berry`
-- All wrapped in try/catch + `typeof window` guards (matches existing pattern)
+Each redefines the same semantic tokens the light variant defines. Each contrast pair is checked against WCAG AA (body text 4.5:1) and AAA (7:1) for the high-contrast variant.
 
-### 3. `src/main.tsx` — apply theme before React mounts
-One added line: `applyTheme(getInitialTheme())` before `createRoot(...)`. This prevents a flash of default theme on reload.
+Indicative HSLs:
+- **Calm dark**: bg `200 30% 10%`, fg `190 15% 92%`, primary `190 60% 60%`, accent `170 55% 55%`, muted-fg `190 15% 70%`, border `200 20% 22%`
+- **Warm dark**: bg `25 25% 10%`, fg `35 25% 92%`, primary `15 70% 60%`, accent `30 75% 60%`, muted-fg `30 20% 70%`, border `25 20% 22%`
+- **High-contrast dark**: bg `0 0% 0%`, fg `0 0% 100%`, primary `210 100% 75%`, accent `340 100% 75%`, muted-fg `0 0% 85%`, border `0 0% 75%`
 
-### 4. `src/components/ThemeSwitcher.tsx` — new component
-- Floating button bottom-right (mirrors `MiniCalculator`'s positioning style — likely `fixed bottom-4 right-4` stack offset so they don't overlap; calculator stays at right-4, theme button at right-20 or stacked above)
-- Lucide `Palette` icon, `aria-label="Change color theme"`, `aria-expanded`, `aria-controls`
-- Click opens a popover panel (plain div with focus trap + Escape to close, same pattern as `MiniCalculator`) listing 4 options as radio buttons
-- Each option: small color swatch (3 dots showing bg/primary/accent of that theme), theme name, short description ("Soft & playful", "Muted & focused", "Cozy & warm", "Maximum readability")
-- Uses `role="radiogroup"` with `aria-label="Color theme"`; each option is a `role="radio"` button with `aria-checked`
-- On select: calls `setStoredTheme` + `applyTheme`, updates local state, closes panel, returns focus to opener
-- Keyboard: arrow keys move between options, Enter/Space selects
+### 3. `src/main.tsx` — apply before mount
+Two added lines next to the existing theme/motion calls:
+```ts
+applyColorMode(getStoredColorMode());
+```
+And subscribe to OS changes once at module level so `system` mode auto-updates without React having to re-render:
+```ts
+subscribeToSystemColorMode(() => applyColorMode(getStoredColorMode()));
+```
 
-### 5. `src/pages/Index.tsx` — mount the switcher
-Add `<ThemeSwitcher />` alongside `<MiniCalculator />` inside the existing `Suspense`. Lazy-loaded the same way to avoid bloating the initial bundle. Visible on every screen (town map + shops), not gated by `showProgress`, so users can change theme from the welcome screen too — this means moving it out of the `showProgress` block, or rendering it at the page root in both `town` and `shop` branches.
+### 4. `src/components/ThemeSwitcher.tsx` — add an "Appearance" section
+Add a new section to the existing panel, between the theme radio group and the "Reduce motion" switch, separated with a `border-t` divider (same pattern as motion).
 
-Cleanest: render `<ThemeSwitcher />` once at the top of the `Index` component return, outside the conditional branches. Requires a small refactor — wrap the existing town/shop return in a fragment with the switcher always mounted.
+- Heading: small label "Appearance" with a `Sun`/`Moon` icon (lucide)
+- A 3-button segmented control: **System** / **Light** / **Dark**
+- Implemented as `role="radiogroup"` with three `role="radio"` buttons; same arrow-key navigation pattern already used for theme selection (factor out a tiny `radioKeyHandler` helper or inline — both fine)
+- Selected state uses the same `border-primary bg-primary/10` styling as the theme options
+- Icons: `Monitor` (system), `Sun` (light), `Moon` (dark) from lucide-react
+- On select: updates state, calls `setStoredColorMode` + `applyColorMode`, keeps panel open (matches motion toggle UX)
 
-## What stays the same
-
-- Default Berry theme — no visual change for existing users until they opt in
-- All scene-specific colors (smoothie fruits, bakery cream/frosting tokens) — these are separate CSS variables not touched by themes
-- `prefers-reduced-motion` handling
-- Existing `.dark` class block (untouched; not exposed in switcher)
+### 5. No change needed elsewhere
+- `tailwind.config.ts` already has `darkMode: ["class"]`
+- All existing components use semantic tokens (`bg-card`, `text-foreground`, etc.), so they restyle automatically
+- The existing scene-specific tokens (smoothie/bakery palettes) stay light-only intentionally — those are illustrative colors that should look the same in both modes
 
 ## Out of scope
 
-- Free color picker
-- Per-shop theming
-- Dark mode toggle (existing `.dark` styles aren't fully tested; deferred)
-- Syncing theme across devices (localStorage only)
+- Per-shop dark variants of the smoothie/bakery scene palettes (they read fine as-is on dark surfaces; can revisit if QA flags any)
+- Syncing across devices (deferred to accounts work)
+- Auto-switch on a schedule (sunset/sunrise)
 
 ## Risk
 
-Very low. Pure additive change. Worst case if the switcher has a bug: user's stored theme might apply unexpectedly — mitigated by a "Reset to Berry" option in the panel and graceful fallback in `getInitialTheme()`.
+Low. Additive change. Worst case: a specific dark+theme combination has weak contrast somewhere — mitigated by checking the three new palettes against WCAG before shipping, and by the existing High Contrast theme always being available as an escape hatch.
