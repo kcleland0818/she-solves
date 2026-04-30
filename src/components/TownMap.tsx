@@ -164,8 +164,8 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
                     <span
                       className={`mt-1 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm ${
                         shop.unlocked
-                          ? "bg-white/90 text-foreground"
-                          : "bg-muted/70 text-muted-foreground"
+                          ? "bg-white/95 text-slate-900"
+                          : "bg-white/70 text-slate-600"
                       }`}
                       aria-hidden="true"
                     >
