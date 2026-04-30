@@ -131,15 +131,13 @@ const Index = () => {
           )}
         </Suspense>
       </div>
-      <Suspense fallback={null}>
-        <ThemeSwitcher />
-        {showProgress && (
-          <>
-            <MiniCalculator />
-            <KeyboardShortcutsHint />
-          </>
-        )}
-      </Suspense>
+      <ThemeSwitcher />
+      {showProgress && (
+        <Suspense fallback={null}>
+          <MiniCalculator />
+          <KeyboardShortcutsHint />
+        </Suspense>
+      )}
     </div>
   );
 };
