@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import TownMap from "@/components/TownMap";
 import ProgressBar from "@/components/ProgressBar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import ReloadDebugButton from "@/components/ReloadDebugButton";
 import { isShopCompleted, markShopCompleted } from "@/lib/progress";
 
 const WelcomeScreen = lazy(() => import("@/components/WelcomeScreen"));
