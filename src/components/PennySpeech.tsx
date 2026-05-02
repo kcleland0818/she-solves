@@ -30,7 +30,7 @@ const PennySpeech = ({ text, children, className }: PennySpeechProps) => (
     <div className="bg-card border border-bakery-frosting-deep/20 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm max-w-md">
       <p className="text-sm leading-relaxed text-card-foreground">
         <span className="sr-only">Penny says: </span>
-        {text}
+        {children ?? text}
       </p>
     </div>
   </div>
