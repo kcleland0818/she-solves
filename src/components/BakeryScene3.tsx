@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import PennySpeech from "./PennySpeech";
+import Inequality from "./Inequality";
 import averyAvatar from "@/assets/avery-avatar.png";
 import mayaAvatar from "@/assets/maya-avatar.webp";
 
