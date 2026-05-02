@@ -224,6 +224,17 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
         )}
       </PennySpeech>
 
+      {phase === "explore" && exploreCompare !== "equal" && (
+        <p className="text-center text-xs text-muted-foreground -mt-1">
+          <span aria-hidden="true">💡 </span>
+          Not sure what the symbol means? Tap any{" "}
+          <span className="font-semibold text-foreground">{"<"}</span> or{" "}
+          <span className="font-semibold text-foreground">{">"}</span> with a{" "}
+          <span className="inline-flex items-center justify-center text-[0.65rem] font-bold w-3.5 h-3.5 rounded-full bg-primary/20 text-primary align-middle">?</span>{" "}
+          for a hint.
+        </p>
+      )}
+
       {phase === "explore" && (
         <div className="grid grid-cols-2 gap-2 bg-card border border-bakery-frosting-deep/20 rounded-xl p-2">
           <div className="flex flex-col gap-1">
