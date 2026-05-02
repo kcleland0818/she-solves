@@ -1,90 +1,54 @@
-## Why the preview keeps flashing white and dropping back to the map
+## Problem
 
-There is **no runtime crash and no auto-reload from the deployed app** — I checked runtime errors (none) and the dev-server log (only HMR updates, no `page reload` while you're playing). The behavior you're seeing while iterating is two separate things stacking up:
+In Bakery Scene 3's explore phase, Penny says things like:
 
-### 1. Vite HMR is doing full page reloads while I edit (the real cause)
+> 8 `<`? 9, so 2/3 wins.
 
-`src/main.tsx` has top-level side effects that run on every import:
+The superscript `?` badge sits right between two numbers, so it reads like an unknown operand: *"8 less than WHAT 9?"* That's the opposite of what we want — the `?` should clearly be a help affordance, not part of the math.
 
-```ts
-applyTheme(getInitialTheme());
-applyMotionPref(getStoredMotion());
-applyColorMode(getStoredColorMode());
-subscribeToSystemColorMode(...);
+## Goal
 
-const preloadLink = document.createElement("link");
-...
-document.head.appendChild(preloadLink);
+Keep the popover-on-tap behavior (it's working well) and the helper line below Penny (also working), but redesign the trigger so it never looks like part of the expression.
 
-createRoot(...).render(<App />);
+## Proposed approach
+
+Drop the inline `?` badge entirely. Instead, make the **symbol itself** the affordance:
+
+- Wrap the `<` / `>` in a subtle pill: soft primary-tinted background, dotted underline, slightly bolder weight.
+- On hover/focus: pill brightens, cursor becomes `help`.
+- On tap/click/Enter: same Popover opens with the plain-English name + memory tip.
+- Keep `aria-label="less than — tap for hint"` so screen readers still announce it as interactive.
+
+This way `8 < 9` reads cleanly as math, but the `<` visibly looks "different" from the surrounding numbers — like a defined term in an article (think Wikipedia's dotted-underline glossary links, or a hyperlink).
+
+### Update the helper line to match
+
+Current line says *"Tap any `<` or `>` with a `?` for a hint."* Since there's no more `?`, change it to:
+
+> 💡 Not sure what a symbol means? Tap any **highlighted** `<` or `>` for a hint.
+
+Where the two symbols in that sentence render with the same pill styling, so learners visually connect "this is the thing I tap."
+
+### Files to change
+
+1. **`src/components/Inequality.tsx`** — remove the `?` badge span; restyle the trigger button as a pill with primary-tinted background + dotted underline.
+2. **`src/components/BakeryScene3.tsx`** — update the helper text below Penny so the inline `<` and `>` examples render via `<Inequality />` (they'll then visually match what learners see in the speech bubble).
+
+### What stays the same
+
+- Popover content (symbol + "means 'less than'" + memory tip).
+- Touch/keyboard/screen-reader behavior.
+- The `<Inequality op="..." />` API — no changes needed in `BakeryScene3.tsx` beyond the helper line.
+
+## Visual sketch
+
+```text
+Before:  8 <? 9      ← reads as "8 less than what 9?"
+After:   8 ⟦<⟧ 9     ← the < is a tappable pill, math reads cleanly
 ```
 
-Vite cannot hot-replace a module that mounts the React root and mutates `document.head`, so any change that propagates up to `main.tsx` (or any module change while the app is loading) causes Vite to do a **full page reload** instead of HMR. The dev log confirms it: `[vite] page reload src/main.tsx`.
+Where `⟦<⟧` = the `<` character on a soft primary background with a dotted underline, same height as surrounding text.
 
-A full reload re-runs `Index.tsx` from scratch. Since the current scene is stored only in component state (`useState<Screen>({ kind: "town" })`), the app boots back to the town map — exactly the "white flash → map" symptom. This won't happen for end users in the deployed build, but it's disruptive while developing and during preview hot updates.
+## Open question
 
-### 2. The Suspense fallback for lazy scenes is invisible
-
-In `src/pages/Index.tsx`:
-
-```tsx
-<Suspense fallback={<div className="min-h-[40vh]" aria-busy="true" />}>
-```
-
-When you click "Next Scene", the next chunk (`Scene2Percentages`, `BakeryScene2`, etc.) has to load. During that brief window the fallback is a literally empty div on a `bg-background` page — i.e. a white (or themed-bg) flash. On a slow network it looks like the app blanked out.
-
----
-
-## Plan
-
-### A. Make scene state survive a reload (also a nice UX win)
-
-Persist the current screen to `sessionStorage` so HMR reloads — and accidental browser refreshes mid-activity — don't kick the learner back to the map.
-
-- In `src/pages/Index.tsx`:
-  - Add `getInitialScreen()` / `saveScreen()` helpers backed by `sessionStorage` under key `shesolves:screen`.
-  - Initialize `useState<Screen>(getInitialScreen)`.
-  - `useEffect` to persist `screen` whenever it changes.
-  - Validate the stored shape (`kind`, `shop`, `stage`) before using it; fall back to `{ kind: "town" }` on any mismatch.
-
-Use `sessionStorage` (not `localStorage`) so closing the tab still starts fresh at the map — matches the existing "shop completed" semantics where `localStorage` is reserved for true progress.
-
-### B. Reduce HMR full-reloads from `main.tsx`
-
-Move the side-effects out of the module top level so editing related files doesn't force a full reload:
-
-- Keep `createRoot(...).render(<App />)` in `main.tsx`.
-- Move the preload-link creation behind an `if (!document.querySelector('link[data-preload="town-map"]'))` guard and tag the link with that attribute, so re-runs are idempotent.
-- The theme/motion/color-mode `apply*` calls are already idempotent (they just toggle a class / data attr), so they're fine to leave — the bigger win is the guarded preload.
-
-This won't eliminate every Vite full-reload (entry modules sometimes still reload), but combined with (A) the user no longer notices, because state survives.
-
-### C. Give the Suspense fallback something visible
-
-Replace the empty fallback in `src/pages/Index.tsx` with a small centered loader that uses theme tokens:
-
-```tsx
-<Suspense fallback={
-  <div className="min-h-[40vh] flex items-center justify-center" aria-busy="true" aria-live="polite">
-    <div className="flex flex-col items-center gap-2 text-muted-foreground">
-      <div className="w-8 h-8 rounded-full border-2 border-muted border-t-primary animate-spin" aria-hidden="true" />
-      <span className="text-sm">Loading…</span>
-    </div>
-  </div>
-} >
-```
-
-Respects `prefers-reduced-motion` (the `motion.ts` system already disables `animate-*` via the `.motion-reduced` class — no extra work needed).
-
-### D. Quick verification
-
-- Click into Berry Bliss → advance to Scene 2 → manually refresh the browser → you should land back on Scene 2, not the map.
-- Click "Back" via the existing refresh/exit flow → still returns to the map (sessionStorage gets overwritten with `{ kind: "town" }`).
-- Switch themes / dark mode while inside a scene → no map bounce.
-
-### Files touched
-
-- `src/pages/Index.tsx` — sessionStorage persistence + nicer Suspense fallback.
-- `src/main.tsx` — guard the preload link insertion.
-
-No new dependencies. No changes to scene components, theming, or the existing shop-completion `localStorage` logic.
+If the pill alone still feels too subtle for first-time discovery, a fallback is to show a one-time toast or banner the first time a learner enters the explore phase: *"Tip: tap any `<` or `>` symbol to see what it means."* I'd suggest shipping the pill first and only adding the banner if it's still not getting noticed — happy to add it now if you'd rather be safe.

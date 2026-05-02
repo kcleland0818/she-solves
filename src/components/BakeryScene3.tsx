@@ -227,11 +227,8 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
       {phase === "explore" && exploreCompare !== "equal" && (
         <p className="text-center text-xs text-muted-foreground -mt-1">
           <span aria-hidden="true">💡 </span>
-          Not sure what the symbol means? Tap any{" "}
-          <span className="font-semibold text-foreground">{"<"}</span> or{" "}
-          <span className="font-semibold text-foreground">{">"}</span> with a{" "}
-          <span className="inline-flex items-center justify-center text-[0.65rem] font-bold w-3.5 h-3.5 rounded-full bg-primary/20 text-primary align-middle">?</span>{" "}
-          for a hint.
+          Not sure what a symbol means? Tap any highlighted{" "}
+          <Inequality op="lt" /> or <Inequality op="gt" /> for a hint.
         </p>
       )}
 
