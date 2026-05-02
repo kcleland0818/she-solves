@@ -1,14 +1,14 @@
 /**
- * Renders an inequality symbol (<, >, ≤, ≥, =) with a visible "?" badge
- * that learners can hover, tap, or focus to reveal the plain-English name
- * ("less than", "greater than", etc.).
+ * Renders an inequality symbol (<, >, ≤, ≥, =) styled as a tappable "pill"
+ * — soft primary-tinted background + dotted underline — that signals it's
+ * a defined term you can interact with, without inserting an extra "?"
+ * character that would visually pollute the math expression.
  *
- * Uses Popover (not Tooltip) so a single tap on touch devices opens it —
- * Radix Tooltip only opens on hover/focus, which fails on phones.
+ * Tap / click / Enter / focus opens a Popover with the plain-English name
+ * and a memory tip. Uses Popover (not Tooltip) so it works on touch.
  *
- * Accessibility: the trigger button has an aria-label with the spoken
- * phrase, so screen readers announce e.g. "less than, hint" instead of
- * the raw character (which assistive tech often skips or mispronounces).
+ * Accessibility: aria-label spells out the spoken phrase + hint affordance,
+ * since assistive tech often skips or mispronounces raw < and > glyphs.
  */
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -56,18 +56,15 @@ const Inequality = ({ op, className }: InequalityProps) => {
           type="button"
           aria-label={`${label} — tap for hint`}
           className={cn(
-            "group relative inline-flex items-center font-semibold cursor-help align-baseline",
-            "rounded-sm px-0.5 hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            "inline-flex items-center justify-center align-baseline font-semibold cursor-help",
+            "px-1.5 rounded-md bg-primary/10 text-foreground",
+            "underline decoration-dotted decoration-primary/60 underline-offset-4",
+            "hover:bg-primary/20 hover:decoration-primary transition-colors",
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
             className,
           )}
         >
-          <span aria-hidden="true">{SYMBOL[op]}</span>
-          <span
-            aria-hidden="true"
-            className="ml-0.5 inline-flex items-center justify-center text-[0.6em] font-bold w-3.5 h-3.5 rounded-full bg-primary/20 text-primary -translate-y-1.5 group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-          >
-            ?
-          </span>
+          {SYMBOL[op]}
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-56 text-sm" side="top" align="center">
