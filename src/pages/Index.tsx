@@ -192,6 +192,7 @@ const Index = () => {
         </Suspense>
       </div>
       <ThemeSwitcher />
+      <ReloadDebugButton />
       {showProgress && (
         <Suspense fallback={null}>
           <MiniCalculator />
