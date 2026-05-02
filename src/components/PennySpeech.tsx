@@ -2,11 +2,13 @@ import { cn } from "@/lib/utils";
 import pennyAvatar from "@/assets/penny-avatar.png";
 
 interface PennySpeechProps {
-  text: string;
+  /** Plain-text message. Use `children` instead when you need inline JSX (e.g. <Inequality />). */
+  text?: string;
+  children?: React.ReactNode;
   className?: string;
 }
 
-const PennySpeech = ({ text, className }: PennySpeechProps) => (
+const PennySpeech = ({ text, children, className }: PennySpeechProps) => (
   <div
     className={cn("flex items-start gap-3 animate-fade-in", className)}
     role="status"
