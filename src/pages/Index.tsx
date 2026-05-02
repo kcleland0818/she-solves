@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import TownMap from "@/components/TownMap";
 import ProgressBar from "@/components/ProgressBar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import ReloadDebugButton from "@/components/ReloadDebugButton";
 import { isShopCompleted, markShopCompleted } from "@/lib/progress";
 
 const WelcomeScreen = lazy(() => import("@/components/WelcomeScreen"));
@@ -118,6 +119,7 @@ const Index = () => {
       <>
         <TownMap onEnterShop={enterShop} />
         <ThemeSwitcher />
+        <ReloadDebugButton />
       </>
     );
   }
@@ -190,6 +192,7 @@ const Index = () => {
         </Suspense>
       </div>
       <ThemeSwitcher />
+      <ReloadDebugButton />
       {showProgress && (
         <Suspense fallback={null}>
           <MiniCalculator />
