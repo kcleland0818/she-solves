@@ -201,15 +201,28 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
         <span aria-hidden="true">🛎️ </span>Whose Order Is Bigger?
       </h2>
 
-      <PennySpeech
-        text={
-          phase === "explore"
-            ? `To compare fractions with different bottoms, give them a common denominator. ${fmt(exploreA)} = ${exploreA.num * exploreB.den}/${exploreA.den * exploreB.den} and ${fmt(exploreB)} = ${exploreB.num * exploreA.den}/${exploreA.den * exploreB.den} — now just compare the tops! ${exploreCompare === "equal" ? "These are equal." : `${exploreA.num * exploreB.den} ${exploreCompare === "a" ? ">" : "<"} ${exploreB.num * exploreA.den}, so ${fmt(exploreCompare === "a" ? exploreA : exploreB)} wins.`}`
-            : phase === "challenge"
-            ? `Two customers just placed orders! Compare ${fmt(challenge.a)} and ${fmt(challenge.b)} — tap the bigger order, or use "They're equal!" if they're the same.`
-            : `Nice work! When the bottoms are different, you can't just compare the tops. The trays make it easy to SEE which is bigger.`
-        }
-      />
+      <PennySpeech>
+        {phase === "explore" ? (
+          <>
+            To compare fractions with different bottoms, give them a common denominator.{" "}
+            {fmt(exploreA)} = {exploreA.num * exploreB.den}/{exploreA.den * exploreB.den} and{" "}
+            {fmt(exploreB)} = {exploreB.num * exploreA.den}/{exploreA.den * exploreB.den} — now just compare the tops!{" "}
+            {exploreCompare === "equal" ? (
+              "These are equal."
+            ) : (
+              <>
+                {exploreA.num * exploreB.den}{" "}
+                <Inequality op={exploreCompare === "a" ? "gt" : "lt"} />{" "}
+                {exploreB.num * exploreA.den}, so {fmt(exploreCompare === "a" ? exploreA : exploreB)} wins.
+              </>
+            )}
+          </>
+        ) : phase === "challenge" ? (
+          `Two customers just placed orders! Compare ${fmt(challenge.a)} and ${fmt(challenge.b)} — tap the bigger order, or use "They're equal!" if they're the same.`
+        ) : (
+          `Nice work! When the bottoms are different, you can't just compare the tops. The trays make it easy to SEE which is bigger.`
+        )}
+      </PennySpeech>
 
       {phase === "explore" && (
         <div className="grid grid-cols-2 gap-2 bg-card border border-bakery-frosting-deep/20 rounded-xl p-2">
