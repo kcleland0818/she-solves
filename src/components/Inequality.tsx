@@ -57,9 +57,10 @@ const Inequality = ({ op, className }: InequalityProps) => {
           aria-label={`${label} — tap for hint`}
           className={cn(
             "inline-flex items-center justify-center align-baseline font-semibold cursor-help",
-            "px-1.5 rounded-md bg-primary/10 text-foreground",
-            "underline decoration-dotted decoration-primary/60 underline-offset-4",
-            "hover:bg-primary/20 hover:decoration-primary transition-colors",
+            "px-1.5 rounded-md bg-primary/15 text-foreground ring-1 ring-primary/30",
+            "underline decoration-dotted decoration-primary underline-offset-4",
+            "dark:bg-primary/25 dark:ring-primary/50 dark:text-primary-foreground",
+            "hover:bg-primary/30 dark:hover:bg-primary/40 transition-colors",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
             className,
           )}
