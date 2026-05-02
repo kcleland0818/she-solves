@@ -2,11 +2,13 @@ import { cn } from "@/lib/utils";
 import pennyAvatar from "@/assets/penny-avatar.png";
 
 interface PennySpeechProps {
-  text: string;
+  /** Plain-text message. Use `children` instead when you need inline JSX (e.g. <Inequality />). */
+  text?: string;
+  children?: React.ReactNode;
   className?: string;
 }
 
-const PennySpeech = ({ text, className }: PennySpeechProps) => (
+const PennySpeech = ({ text, children, className }: PennySpeechProps) => (
   <div
     className={cn("flex items-start gap-3 animate-fade-in", className)}
     role="status"
@@ -28,7 +30,7 @@ const PennySpeech = ({ text, className }: PennySpeechProps) => (
     <div className="bg-card border border-bakery-frosting-deep/20 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm max-w-md">
       <p className="text-sm leading-relaxed text-card-foreground">
         <span className="sr-only">Penny says: </span>
-        {text}
+        {children ?? text}
       </p>
     </div>
   </div>
