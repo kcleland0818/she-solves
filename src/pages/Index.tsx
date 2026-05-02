@@ -119,6 +119,7 @@ const Index = () => {
       <>
         <TownMap onEnterShop={enterShop} />
         <ThemeSwitcher />
+        <ReloadDebugButton />
       </>
     );
   }
