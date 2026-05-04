@@ -1,8 +1,21 @@
 import { useState, useEffect, lazy, Suspense } from "react";
+import { Map } from "lucide-react";
 import TownMap from "@/components/TownMap";
 import ProgressBar from "@/components/ProgressBar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import ReloadDebugButton from "@/components/ReloadDebugButton";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { isShopCompleted, markShopCompleted } from "@/lib/progress";
 
 const WelcomeScreen = lazy(() => import("@/components/WelcomeScreen"));
