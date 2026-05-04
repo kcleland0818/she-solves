@@ -147,12 +147,44 @@ const Index = () => {
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <div id="main-content" className="max-w-2xl mx-auto">
         {showProgress && (
-          <div className="mb-4">
-            <ProgressBar
-              currentScene={stageIndex[stage]}
-              totalScenes={3}
-              labels={SHOP_PROGRESS_LABELS[shop]}
-            />
+          <div className="mb-4 flex items-center gap-3">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="shrink-0 text-xs h-8 px-2 gap-1"
+                  aria-label="Leave shop and return to town map"
+                >
+                  <Map className="w-4 h-4" aria-hidden="true" />
+                  <span className="hidden sm:inline">Map</span>
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Leave this shop?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Your progress on this scene won't be saved. You can come back and start the shop again anytime.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep going</AlertDialogCancel>
+                  <AlertDialogAction onClick={goToTown}>
+                    Back to map
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <div className="flex-1">
+              <ProgressBar
+                currentScene={stageIndex[stage]}
+                totalScenes={3}
+                labels={SHOP_PROGRESS_LABELS[shop]}
+              />
+            </div>
+            {/* Spacer to keep ProgressBar visually centered */}
+            <div className="shrink-0 w-8 sm:w-[60px]" aria-hidden="true" />
           </div>
         )}
 
