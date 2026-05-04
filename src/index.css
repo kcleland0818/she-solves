@@ -255,3 +255,16 @@
   --input: 0 0% 75%;
   --ring: 210 100% 75%;
 }
+
+/* Visible keyboard focus for the SVG cake slices in BakeryScene1.
+   Tailwind's `ring` utilities don't apply to SVG <path>, so we use
+   the native `outline` (stroked outside the path bounds via offset). */
+.cake-slice {
+  outline: none;
+}
+.cake-slice:focus-visible {
+  outline: 3px solid hsl(var(--ring));
+  outline-offset: 2px;
+  stroke: hsl(var(--ring));
+  stroke-width: 2.5;
+}
