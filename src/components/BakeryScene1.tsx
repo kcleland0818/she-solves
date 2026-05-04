@@ -182,9 +182,9 @@ const BakeryScene1 = ({ onComplete }: Scene1Props) => {
                 <path
                   d={s.d}
                   fill={isShaded ? "hsl(var(--bakery-frosting))" : "hsl(var(--bakery-cream))"}
-                  stroke="hsl(var(--bakery-chocolate))"
+                  stroke={"hsl(var(--bakery-chocolate))"}
                   strokeWidth="1.5"
-                  className="cursor-pointer transition-colors duration-200 hover:opacity-80 focus:outline-none"
+                  className="cake-slice cursor-pointer transition-colors duration-200 hover:opacity-80"
                   onClick={() => toggleSlice(s.idx)}
                   tabIndex={0}
                   role="button"
