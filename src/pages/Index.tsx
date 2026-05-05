@@ -118,7 +118,13 @@ const Index = () => {
 
   const enterShop = (shopId: string) => {
     const shop: Shop | null =
-      shopId === SHOP_IDS.smoothie ? "smoothie" : shopId === SHOP_IDS.bakery ? "bakery" : null;
+      shopId === SHOP_IDS.smoothie
+        ? "smoothie"
+        : shopId === SHOP_IDS.bakery
+        ? "bakery"
+        : shopId === SHOP_IDS.bookstore
+        ? "bookstore"
+        : null;
     if (!shop) return;
     // Returning learners (already completed) skip the intro.
     const stage: Stage = isShopCompleted(SHOP_IDS[shop]) ? "scene1" : "welcome";
