@@ -28,6 +28,11 @@ const BakeryScene1 = lazy(() => import("@/components/BakeryScene1"));
 const BakeryScene2 = lazy(() => import("@/components/BakeryScene2"));
 const BakeryScene3 = lazy(() => import("@/components/BakeryScene3"));
 const BakeryCompletion = lazy(() => import("@/components/BakeryCompletion"));
+const BookstoreWelcome = lazy(() => import("@/components/BookstoreWelcome"));
+const BookstoreScene1 = lazy(() => import("@/components/BookstoreScene1"));
+const BookstoreScene2 = lazy(() => import("@/components/BookstoreScene2"));
+const BookstoreScene3 = lazy(() => import("@/components/BookstoreScene3"));
+const BookstoreCompletion = lazy(() => import("@/components/BookstoreCompletion"));
 const MiniCalculator = lazy(() => import("@/components/MiniCalculator"));
 const KeyboardShortcutsHint = lazy(() => import("@/components/KeyboardShortcutsHint"));
 
