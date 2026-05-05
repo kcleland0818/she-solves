@@ -266,15 +266,6 @@ const Index = () => {
               )}
             </>
           )}
-              {stage === "scene3" && <BakeryScene3 onComplete={() => handleComplete("bakery")} />}
-              {stage === "complete" && (
-                <BakeryCompletion
-                  onRestart={goToTown}
-                  onReplayScene={(s) => setStage(s)}
-                />
-              )}
-            </>
-          )}
         </Suspense>
       </main>
       <ThemeSwitcher />
