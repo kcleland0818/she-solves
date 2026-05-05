@@ -28,10 +28,15 @@ const BakeryScene1 = lazy(() => import("@/components/BakeryScene1"));
 const BakeryScene2 = lazy(() => import("@/components/BakeryScene2"));
 const BakeryScene3 = lazy(() => import("@/components/BakeryScene3"));
 const BakeryCompletion = lazy(() => import("@/components/BakeryCompletion"));
+const BookstoreWelcome = lazy(() => import("@/components/BookstoreWelcome"));
+const BookstoreScene1 = lazy(() => import("@/components/BookstoreScene1"));
+const BookstoreScene2 = lazy(() => import("@/components/BookstoreScene2"));
+const BookstoreScene3 = lazy(() => import("@/components/BookstoreScene3"));
+const BookstoreCompletion = lazy(() => import("@/components/BookstoreCompletion"));
 const MiniCalculator = lazy(() => import("@/components/MiniCalculator"));
 const KeyboardShortcutsHint = lazy(() => import("@/components/KeyboardShortcutsHint"));
 
-type Shop = "smoothie" | "bakery";
+type Shop = "smoothie" | "bakery" | "bookstore";
 type Stage = "welcome" | "scene1" | "scene2" | "scene3" | "complete";
 type Screen =
   | { kind: "town" }
@@ -48,6 +53,7 @@ const stageIndex: Record<Stage, number> = {
 const SHOP_IDS: Record<Shop, string> = {
   smoothie: "smoothie-shop",
   bakery: "bakery",
+  bookstore: "bookstore",
 };
 
 // Light gradients for the welcome screen. In dark mode we fall back to the
@@ -57,11 +63,14 @@ const SHOP_BG: Record<Shop, string> = {
     "bg-gradient-to-br from-[hsl(280,60%,92%)] via-[hsl(320,50%,93%)] to-[hsl(340,60%,92%)] dark:from-background dark:via-background dark:to-background",
   bakery:
     "bg-gradient-to-br from-[hsl(35,65%,94%)] via-[hsl(20,55%,93%)] to-[hsl(340,55%,93%)] dark:from-background dark:via-background dark:to-background",
+  bookstore:
+    "bg-gradient-to-br from-[hsl(38,55%,94%)] via-[hsl(28,40%,90%)] to-[hsl(220,30%,90%)] dark:from-background dark:via-background dark:to-background",
 };
 
 const SHOP_PROGRESS_LABELS: Record<Shop, string[]> = {
   smoothie: ["Mix It", "Sales", "Discounts"],
   bakery: ["Slice", "Frost", "Compare"],
+  bookstore: ["Read", "Write", "Compare"],
 };
 
 // Persist the current screen across reloads (incl. Vite HMR full reloads)
@@ -109,7 +118,13 @@ const Index = () => {
 
   const enterShop = (shopId: string) => {
     const shop: Shop | null =
-      shopId === SHOP_IDS.smoothie ? "smoothie" : shopId === SHOP_IDS.bakery ? "bakery" : null;
+      shopId === SHOP_IDS.smoothie
+        ? "smoothie"
+        : shopId === SHOP_IDS.bakery
+        ? "bakery"
+        : shopId === SHOP_IDS.bookstore
+        ? "bookstore"
+        : null;
     if (!shop) return;
     // Returning learners (already completed) skip the intro.
     const stage: Stage = isShopCompleted(SHOP_IDS[shop]) ? "scene1" : "welcome";
@@ -142,13 +157,18 @@ const Index = () => {
   const showProgress = stage !== "welcome" && stage !== "complete";
   const bg = isWelcome ? SHOP_BG[shop] : "bg-background";
 
+  const shopName =
+    shop === "smoothie"
+      ? "Berry Bliss Smoothies"
+      : shop === "bakery"
+      ? "Sweet Crumbs Bakery"
+      : "Page Turner Bookstore";
+
   return (
     <div className={`min-h-screen px-4 py-5 md:py-6 ${bg}`}>
       <a href="#main-content" className="skip-link">Skip to main content</a>
-      <main id="main-content" className="max-w-2xl mx-auto" aria-label={`${shop === "smoothie" ? "Berry Bliss Smoothies" : "Sweet Crumbs Bakery"} activity`}>
-        <h1 className="sr-only">
-          {shop === "smoothie" ? "Berry Bliss Smoothies" : "Sweet Crumbs Bakery"}
-        </h1>
+      <main id="main-content" className="max-w-2xl mx-auto" aria-label={`${shopName} activity`}>
+        <h1 className="sr-only">{shopName}</h1>
         {showProgress && (
           <div className="mb-4 flex items-center gap-3">
             <AlertDialog>
@@ -231,6 +251,21 @@ const Index = () => {
               {stage === "scene3" && <BakeryScene3 onComplete={() => handleComplete("bakery")} />}
               {stage === "complete" && (
                 <BakeryCompletion
+                  onRestart={goToTown}
+                  onReplayScene={(s) => setStage(s)}
+                />
+              )}
+            </>
+          )}
+
+          {shop === "bookstore" && (
+            <>
+              {stage === "welcome" && <BookstoreWelcome onStart={() => setStage("scene1")} />}
+              {stage === "scene1" && <BookstoreScene1 onComplete={() => setStage("scene2")} />}
+              {stage === "scene2" && <BookstoreScene2 onComplete={() => setStage("scene3")} />}
+              {stage === "scene3" && <BookstoreScene3 onComplete={() => handleComplete("bookstore")} />}
+              {stage === "complete" && (
+                <BookstoreCompletion
                   onRestart={goToTown}
                   onReplayScene={(s) => setStage(s)}
                 />

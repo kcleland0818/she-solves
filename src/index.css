@@ -56,6 +56,14 @@
     --bakery-chocolate: 25 45% 35%;
     --bakery-crust: 30 55% 70%;
     --bakery-tray: 30 35% 80%;
+
+    /* Bookstore palette — cozy library: parchment, ink, leather */
+    --bookstore-parchment: 38 55% 92%;
+    --bookstore-ink: 220 35% 22%;
+    --bookstore-leather: 15 45% 38%;
+    --bookstore-leather-deep: 15 55% 28%;
+    --bookstore-gold: 42 75% 52%;
+    --bookstore-shelf: 25 35% 28%;
   }
 
   .dark {

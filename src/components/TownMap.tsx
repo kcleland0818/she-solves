@@ -61,9 +61,9 @@ const shops: Shop[] = [
     name: "Page Turner Bookstore",
     emoji: "📚",
     description:
-      "A cozy bookstore is opening soon! Get ready to learn about money, change, and budgeting while helping customers find their next favorite read.",
-    learningTopics: ["Money & Change", "Budgeting", "Word Problems"],
-    unlocked: false,
+      "Step into the cozy bookstore! Help Avery sort, recommend, and compare books — all using inequalities like <, >, ≤, and ≥.",
+    learningTopics: ["Reading Inequalities", "Writing Inequalities", "Comparing With Inequalities"],
+    unlocked: true,
     position: { top: "52%", left: "32%" },
     positionMd: { top: "55%", left: "42%" },
   },
