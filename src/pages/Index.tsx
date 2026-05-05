@@ -36,7 +36,7 @@ const BookstoreCompletion = lazy(() => import("@/components/BookstoreCompletion"
 const MiniCalculator = lazy(() => import("@/components/MiniCalculator"));
 const KeyboardShortcutsHint = lazy(() => import("@/components/KeyboardShortcutsHint"));
 
-type Shop = "smoothie" | "bakery";
+type Shop = "smoothie" | "bakery" | "bookstore";
 type Stage = "welcome" | "scene1" | "scene2" | "scene3" | "complete";
 type Screen =
   | { kind: "town" }
@@ -53,6 +53,7 @@ const stageIndex: Record<Stage, number> = {
 const SHOP_IDS: Record<Shop, string> = {
   smoothie: "smoothie-shop",
   bakery: "bakery",
+  bookstore: "bookstore",
 };
 
 // Light gradients for the welcome screen. In dark mode we fall back to the
@@ -62,11 +63,14 @@ const SHOP_BG: Record<Shop, string> = {
     "bg-gradient-to-br from-[hsl(280,60%,92%)] via-[hsl(320,50%,93%)] to-[hsl(340,60%,92%)] dark:from-background dark:via-background dark:to-background",
   bakery:
     "bg-gradient-to-br from-[hsl(35,65%,94%)] via-[hsl(20,55%,93%)] to-[hsl(340,55%,93%)] dark:from-background dark:via-background dark:to-background",
+  bookstore:
+    "bg-gradient-to-br from-[hsl(38,55%,94%)] via-[hsl(28,40%,90%)] to-[hsl(220,30%,90%)] dark:from-background dark:via-background dark:to-background",
 };
 
 const SHOP_PROGRESS_LABELS: Record<Shop, string[]> = {
   smoothie: ["Mix It", "Sales", "Discounts"],
   bakery: ["Slice", "Frost", "Compare"],
+  bookstore: ["Read", "Write", "Compare"],
 };
 
 // Persist the current screen across reloads (incl. Vite HMR full reloads)
