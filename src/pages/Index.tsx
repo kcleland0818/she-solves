@@ -151,27 +151,18 @@ const Index = () => {
   const showProgress = stage !== "welcome" && stage !== "complete";
   const bg = isWelcome ? SHOP_BG[shop] : "bg-background";
 
+  const shopName =
+    shop === "smoothie"
+      ? "Berry Bliss Smoothies"
+      : shop === "bakery"
+      ? "Sweet Crumbs Bakery"
+      : "Page Turner Bookstore";
+
   return (
     <div className={`min-h-screen px-4 py-5 md:py-6 ${bg}`}>
       <a href="#main-content" className="skip-link">Skip to main content</a>
-      {(() => {
-        const shopName =
-          shop === "smoothie"
-            ? "Berry Bliss Smoothies"
-            : shop === "bakery"
-            ? "Sweet Crumbs Bakery"
-            : "Page Turner Bookstore";
-        return (
-          <main id="main-content" className="max-w-2xl mx-auto" aria-label={`${shopName} activity`}>
-            <h1 className="sr-only">{shopName}</h1>
-          </main>
-        );
-      })()}
-      <main className="max-w-2xl mx-auto" aria-hidden="true" hidden></main>
-      <main className="max-w-2xl mx-auto" aria-label={`${shop === "smoothie" ? "Berry Bliss Smoothies" : shop === "bakery" ? "Sweet Crumbs Bakery" : "Page Turner Bookstore"} activity`}>
-        <h1 className="sr-only">
-          {shop === "smoothie" ? "Berry Bliss Smoothies" : shop === "bakery" ? "Sweet Crumbs Bakery" : "Page Turner Bookstore"}
-        </h1>
+      <main id="main-content" className="max-w-2xl mx-auto" aria-label={`${shopName} activity`}>
+        <h1 className="sr-only">{shopName}</h1>
         {showProgress && (
           <div className="mb-4 flex items-center gap-3">
             <AlertDialog>
