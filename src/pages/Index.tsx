@@ -251,6 +251,30 @@ const Index = () => {
               )}
             </>
           )}
+
+          {shop === "bookstore" && (
+            <>
+              {stage === "welcome" && <BookstoreWelcome onStart={() => setStage("scene1")} />}
+              {stage === "scene1" && <BookstoreScene1 onComplete={() => setStage("scene2")} />}
+              {stage === "scene2" && <BookstoreScene2 onComplete={() => setStage("scene3")} />}
+              {stage === "scene3" && <BookstoreScene3 onComplete={() => handleComplete("bookstore")} />}
+              {stage === "complete" && (
+                <BookstoreCompletion
+                  onRestart={goToTown}
+                  onReplayScene={(s) => setStage(s)}
+                />
+              )}
+            </>
+          )}
+              {stage === "scene3" && <BakeryScene3 onComplete={() => handleComplete("bakery")} />}
+              {stage === "complete" && (
+                <BakeryCompletion
+                  onRestart={goToTown}
+                  onReplayScene={(s) => setStage(s)}
+                />
+              )}
+            </>
+          )}
         </Suspense>
       </main>
       <ThemeSwitcher />
