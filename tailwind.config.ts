@@ -71,6 +71,14 @@ export default {
           crust: "hsl(var(--bakery-crust))",
           tray: "hsl(var(--bakery-tray))",
         },
+        bookstore: {
+          parchment: "hsl(var(--bookstore-parchment))",
+          ink: "hsl(var(--bookstore-ink))",
+          leather: "hsl(var(--bookstore-leather))",
+          "leather-deep": "hsl(var(--bookstore-leather-deep))",
+          gold: "hsl(var(--bookstore-gold))",
+          shelf: "hsl(var(--bookstore-shelf))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
