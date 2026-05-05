@@ -238,7 +238,7 @@ const Index = () => {
             </>
           )}
         </Suspense>
-      </div>
+      </main>
       <ThemeSwitcher />
       <ReloadDebugButton />
       {showProgress && (
