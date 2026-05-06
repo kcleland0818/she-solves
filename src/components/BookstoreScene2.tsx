@@ -205,7 +205,7 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
         <span aria-hidden="true">✍️ </span>Write & Visualize
       </h2>
 
-      <AverySpeech text="Pick the symbol that fits the sentence — then watch the number line shade in to show every value that works." />
+      <AverySpeech text="Pick the symbol that fits the sentence — the number line shades every value that works, and each test value gets a ✓ or ✗." />
 
       <div className="bg-card border border-bookstore-leather/30 rounded-2xl p-4 shadow-sm">
         <p className="text-center text-sm text-muted-foreground mb-2">
