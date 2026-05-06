@@ -258,7 +258,7 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
       {picked && (
         <p className="text-center font-medium text-sm" role="status" aria-live="polite">
           {isCorrect
-            ? `Right! "${problem.variable} ${SYM[problem.answer]} ${problem.number}" — green values satisfy it, red ones don't.`
+            ? `Right! "${problem.variable} ${SYM[problem.answer]} ${problem.number}" — values marked ✓ satisfy it, ✗ do not.`
             : `Look at the number line — does the shaded region match what the sentence allows?`}
         </p>
       )}
