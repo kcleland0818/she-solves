@@ -86,8 +86,10 @@ const BookstoreScene1 = ({ onComplete }: Scene1Props) => {
       </h2>
 
       <AverySpeech>
-        Read this aloud. Remember: <Inequality op="lt" /> "less than", <Inequality op="gt" /> "greater than",{" "}
-        <Inequality op="eq" /> "equals". Is the statement true or false?
+        Tap a symbol to hear what it means: <Inequality op="lt" /> is "less than",{" "}
+        <Inequality op="gt" /> is "greater than", <Inequality op="eq" /> is "equal".
+        Trick: the small point of <Inequality op="lt" /> or <Inequality op="gt" /> always points to
+        the <em>smaller</em> number. Read the shelf tag and tell me — true or false?
       </AverySpeech>
 
       <div className="bg-card border border-bookstore-leather/30 rounded-2xl p-4 shadow-sm">
