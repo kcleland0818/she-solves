@@ -165,9 +165,9 @@ const Index = () => {
       : "Page Turner Bookstore";
 
   return (
-    <div className={`min-h-screen px-4 py-5 md:py-6 ${bg}`}>
+    <div className={`min-h-screen flex flex-col px-4 py-5 md:py-6 ${bg}`}>
       <a href="#main-content" className="skip-link">Skip to main content</a>
-      <main id="main-content" className="max-w-2xl mx-auto" aria-label={`${shopName} activity`}>
+      <main id="main-content" className="w-full max-w-2xl mx-auto flex-1 flex flex-col justify-center" aria-label={`${shopName} activity`}>
         <h1 className="sr-only">{shopName}</h1>
         {showProgress && (
           <div className="mb-4 flex items-center gap-3">

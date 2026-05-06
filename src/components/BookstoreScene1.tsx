@@ -7,48 +7,69 @@ interface Scene1Props {
   onComplete: () => void;
 }
 
-// Read: given two book facts, pick the symbol that makes the statement true.
+// READ: a fully-formed inequality statement is shown with two book covers
+// and their values. Learner reads it and decides TRUE or FALSE.
 type Problem = {
-  leftLabel: string;
+  leftTitle: string;
+  leftEmoji: string;
   leftValue: number;
-  rightLabel: string;
+  rightTitle: string;
+  rightEmoji: string;
   rightValue: number;
-  unit: string;
-  // Allowed correct ops — usually one, but = could be two valid (lt+lte) etc.
-  // We'll just compute the strict op (lt/gt/eq) as the correct answer.
+  unit: string;       // "pages" | "dollars"
+  unitSymbol: string; // "" or "$"
+  shownOp: InequalityOp;
 };
 
 const PROBLEMS: Problem[] = [
-  { leftLabel: "Picture book", leftValue: 24, rightLabel: "Chapter book", rightValue: 110, unit: "pages" },
-  { leftLabel: "Mystery", leftValue: 248, rightLabel: "Fantasy", rightValue: 248, unit: "pages" },
-  { leftLabel: "Hardcover price", leftValue: 22, rightLabel: "Paperback price", rightValue: 14, unit: "dollars" },
-  { leftLabel: "Cookbook", leftValue: 180, rightLabel: "Travel guide", rightValue: 96, unit: "pages" },
-  { leftLabel: "New release", leftValue: 18, rightLabel: "Used copy", rightValue: 18, unit: "dollars" },
-  { leftLabel: "Sci-fi", leftValue: 312, rightLabel: "Biography", rightValue: 420, unit: "pages" },
+  { leftTitle: "Tiny Tales", leftEmoji: "📕", leftValue: 24, rightTitle: "Epic Quest", rightEmoji: "📗", rightValue: 410, unit: "pages", unitSymbol: "", shownOp: "lt" },
+  { leftTitle: "Bake Book", leftEmoji: "📙", leftValue: 22, rightTitle: "Travel Log", rightEmoji: "📘", rightValue: 14, unit: "dollars", unitSymbol: "$", shownOp: "lt" }, // false
+  { leftTitle: "Mystery", leftEmoji: "📕", leftValue: 248, rightTitle: "Sci-Fi", rightEmoji: "📗", rightValue: 248, unit: "pages", unitSymbol: "", shownOp: "eq" },
+  { leftTitle: "Comic", leftEmoji: "📙", leftValue: 9, rightTitle: "Atlas", rightEmoji: "📘", rightValue: 35, unit: "dollars", unitSymbol: "$", shownOp: "gt" }, // false
+  { leftTitle: "Cookbook", leftEmoji: "📕", leftValue: 180, rightTitle: "Poems", rightEmoji: "📗", rightValue: 96, unit: "pages", unitSymbol: "", shownOp: "gt" },
+  { leftTitle: "Used", leftEmoji: "📙", leftValue: 12, rightTitle: "New", rightEmoji: "📘", rightValue: 18, unit: "dollars", unitSymbol: "$", shownOp: "lt" },
 ];
 
-const correctOp = (a: number, b: number): InequalityOp =>
-  a < b ? "lt" : a > b ? "gt" : "eq";
+const SYM: Record<InequalityOp, string> = { lt: "<", gt: ">", eq: "=", lte: "≤", gte: "≥" };
 
-const OPTIONS: InequalityOp[] = ["lt", "gt", "eq"];
-
-const SYMBOL_TEXT: Record<InequalityOp, string> = {
-  lt: "<", gt: ">", eq: "=", lte: "≤", gte: "≥",
+const evalOp = (a: number, op: InequalityOp, b: number) => {
+  switch (op) {
+    case "lt": return a < b;
+    case "gt": return a > b;
+    case "eq": return a === b;
+    case "lte": return a <= b;
+    case "gte": return a >= b;
+  }
 };
+
+const BookCover = ({ emoji, title, value, unitSymbol, unit }: { emoji: string; title: string; value: number; unitSymbol: string; unit: string }) => (
+  <div className="flex flex-col items-center">
+    <div className="relative w-20 h-28 sm:w-24 sm:h-32 rounded-md bg-gradient-to-br from-bookstore-leather to-bookstore-leather-deep shadow-md flex items-center justify-center text-4xl sm:text-5xl border-r-4 border-bookstore-leather-deep" aria-hidden="true">
+      {emoji}
+    </div>
+    <div className="mt-2 text-center">
+      <div className="font-semibold text-sm">{title}</div>
+      <div className="text-xl font-extrabold">
+        {unitSymbol}{value}
+      </div>
+      <div className="text-[11px] text-muted-foreground">{unit}</div>
+    </div>
+  </div>
+);
 
 const BookstoreScene1 = ({ onComplete }: Scene1Props) => {
   const [idx, setIdx] = useState(0);
-  const [picked, setPicked] = useState<InequalityOp | null>(null);
+  const [picked, setPicked] = useState<"true" | "false" | null>(null);
   const [solved, setSolved] = useState<Set<number>>(new Set());
 
   const problem = PROBLEMS[idx];
-  const answer = useMemo(() => correctOp(problem.leftValue, problem.rightValue), [problem]);
-  const isCorrect = picked === answer;
+  const truth = useMemo(() => evalOp(problem.leftValue, problem.shownOp, problem.rightValue), [problem]);
+  const isCorrect = picked !== null && (picked === "true") === truth;
   const allDone = solved.size === PROBLEMS.length;
 
-  const submit = (op: InequalityOp) => {
-    setPicked(op);
-    if (op === answer) {
+  const submit = (choice: "true" | "false") => {
+    setPicked(choice);
+    if ((choice === "true") === truth) {
       setSolved((s) => new Set(s).add(idx));
     }
   };
@@ -59,61 +80,56 @@ const BookstoreScene1 = ({ onComplete }: Scene1Props) => {
   };
 
   return (
-    <section className="flex flex-col gap-3 animate-fade-in max-w-lg mx-auto" aria-labelledby="bookstore-scene1-heading">
+    <section className="flex flex-col gap-3 animate-fade-in max-w-lg mx-auto w-full" aria-labelledby="bookstore-scene1-heading">
       <h2 id="bookstore-scene1-heading" className="text-2xl font-bold text-center">
-        <span aria-hidden="true">📖 </span>Read the Symbol
+        <span aria-hidden="true">📖 </span>Read & Check
       </h2>
 
       <AverySpeech>
-        Tap a symbol to read this comparison aloud. <Inequality op="lt" /> means "less than",{" "}
-        <Inequality op="gt" /> means "greater than", and <Inequality op="eq" /> means "equal".
-        Pick the one that makes the sentence true!
+        Read this aloud. Remember: <Inequality op="lt" /> "less than", <Inequality op="gt" /> "greater than",{" "}
+        <Inequality op="eq" /> "equals". Is the statement true or false?
       </AverySpeech>
 
       <div className="bg-card border border-bookstore-leather/30 rounded-2xl p-4 shadow-sm">
-        <p className="text-center text-sm text-muted-foreground mb-2">
-          Problem {idx + 1} of {PROBLEMS.length} · solved {solved.size}/{PROBLEMS.length}
+        <p className="text-center text-sm text-muted-foreground mb-3">
+          Statement {idx + 1} of {PROBLEMS.length} · solved {solved.size}/{PROBLEMS.length}
         </p>
-        <div className="flex items-center justify-center gap-3 text-foreground flex-wrap">
-          <div className="text-center">
-            <div className="font-semibold">{problem.leftLabel}</div>
-            <div className="text-2xl font-extrabold">{problem.leftValue}</div>
-            <div className="text-xs text-muted-foreground">{problem.unit}</div>
+        <div className="flex items-end justify-center gap-3 sm:gap-5 flex-wrap">
+          <BookCover {...{ emoji: problem.leftEmoji, title: problem.leftTitle, value: problem.leftValue, unitSymbol: problem.unitSymbol, unit: problem.unit }} />
+          <div className="pb-10 text-4xl sm:text-5xl font-extrabold text-bookstore-leather-deep dark:text-bookstore-gold" aria-label={`is ${problem.shownOp === "lt" ? "less than" : problem.shownOp === "gt" ? "greater than" : "equal to"}`}>
+            {SYM[problem.shownOp]}
           </div>
-          <div
-            className="text-3xl font-bold w-12 h-12 rounded-lg flex items-center justify-center bg-bookstore-parchment text-bookstore-ink dark:bg-muted dark:text-foreground border-2 border-dashed border-bookstore-leather/40"
-            aria-label={picked ? `picked ${SYMBOL_TEXT[picked]}` : "missing symbol"}
-          >
-            {picked ? SYMBOL_TEXT[picked] : "?"}
-          </div>
-          <div className="text-center">
-            <div className="font-semibold">{problem.rightLabel}</div>
-            <div className="text-2xl font-extrabold">{problem.rightValue}</div>
-            <div className="text-xs text-muted-foreground">{problem.unit}</div>
-          </div>
+          <BookCover {...{ emoji: problem.rightEmoji, title: problem.rightTitle, value: problem.rightValue, unitSymbol: problem.unitSymbol, unit: problem.unit }} />
         </div>
+        <p className="text-center text-xs text-muted-foreground mt-3 italic">
+          "{problem.unitSymbol}{problem.leftValue} {SYM[problem.shownOp]} {problem.unitSymbol}{problem.rightValue}"
+        </p>
       </div>
 
-      <div className="flex gap-2 justify-center" role="group" aria-label="Choose a comparison symbol">
-        {OPTIONS.map((op) => (
-          <Button
-            key={op}
-            type="button"
-            variant={picked === op ? "default" : "outline"}
-            onClick={() => submit(op)}
-            className="text-2xl font-bold w-16 h-14"
-            aria-label={`Pick ${op === "lt" ? "less than" : op === "gt" ? "greater than" : "equals"}`}
-          >
-            {SYMBOL_TEXT[op]}
-          </Button>
-        ))}
+      <div className="flex gap-3 justify-center" role="group" aria-label="True or false">
+        <Button
+          type="button"
+          variant={picked === "true" ? "default" : "outline"}
+          onClick={() => submit("true")}
+          className="text-base font-bold w-28 h-12"
+        >
+          <span aria-hidden="true">✓ </span>True
+        </Button>
+        <Button
+          type="button"
+          variant={picked === "false" ? "default" : "outline"}
+          onClick={() => submit("false")}
+          className="text-base font-bold w-28 h-12"
+        >
+          <span aria-hidden="true">✗ </span>False
+        </Button>
       </div>
 
       {picked && (
         <p className="text-center font-medium text-sm" role="status" aria-live="polite">
           {isCorrect
-            ? `Yes! ${problem.leftValue} ${SYMBOL_TEXT[answer]} ${problem.rightValue} — ${problem.leftLabel.toLowerCase()} is ${answer === "lt" ? "less than" : answer === "gt" ? "greater than" : "equal to"} ${problem.rightLabel.toLowerCase()}.`
-            : `Not quite. Compare the numbers ${problem.leftValue} and ${problem.rightValue} again.`}
+            ? `Right! ${problem.unitSymbol}${problem.leftValue} ${SYM[problem.shownOp]} ${problem.unitSymbol}${problem.rightValue} is ${truth ? "true" : "false"}.`
+            : `Not quite — read the numbers again: ${problem.unitSymbol}${problem.leftValue} and ${problem.unitSymbol}${problem.rightValue}.`}
         </p>
       )}
 
