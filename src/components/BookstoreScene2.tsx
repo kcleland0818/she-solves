@@ -134,26 +134,39 @@ const NumberLine = ({
         <div className="absolute top-full mt-1 -translate-x-1/2 text-[11px] font-semibold" style={{ left: `${tPct}%` }}>
           {threshold}
         </div>
-        {/* samples */}
+        {/* samples — encoded with shape + icon, not just color, for color-blind readers */}
         {samples.map((v) => {
           const ok = op ? evalOp(v, op, threshold) : null;
+          const status = ok === null ? "unknown" : ok ? "satisfies" : "does not satisfy";
           return (
             <div
               key={v}
-              className="absolute -translate-x-1/2 -top-2 text-center"
+              className="absolute -translate-x-1/2 -top-3 text-center"
               style={{ left: `${pct(v)}%` }}
             >
               <div
-                className={`w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center border-2 transition-colors ${
+                className={`relative w-7 h-7 text-[11px] font-bold flex items-center justify-center transition-colors ${
                   ok === null
-                    ? "bg-muted text-foreground border-border"
+                    ? "rounded-full bg-muted text-foreground border-2 border-border"
                     : ok
-                    ? "bg-green-500/20 text-green-700 dark:text-green-400 border-green-500"
-                    : "bg-destructive/20 text-destructive border-destructive"
+                    ? "rounded-full bg-foreground text-background border-2 border-foreground"
+                    : "rounded-sm bg-background text-foreground border-2 border-foreground"
                 }`}
-                aria-label={`${variable} = ${v}${ok === null ? "" : ok ? " satisfies" : " does not satisfy"}`}
+                aria-label={`${variable} = ${v}, ${status}`}
               >
                 {v}
+                {ok !== null && (
+                  <span
+                    aria-hidden="true"
+                    className={`absolute -top-2 -right-2 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center border ${
+                      ok
+                        ? "bg-background text-foreground border-foreground"
+                        : "bg-foreground text-background border-foreground"
+                    }`}
+                  >
+                    {ok ? "✓" : "✗"}
+                  </span>
+                )}
               </div>
             </div>
           );
@@ -192,7 +205,7 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
         <span aria-hidden="true">✍️ </span>Write & Visualize
       </h2>
 
-      <AverySpeech text="Pick the symbol that fits the sentence — then watch the number line shade in to show every value that works." />
+      <AverySpeech text="Pick the symbol that fits the sentence — the number line shades every value that works, and each test value gets a ✓ or ✗." />
 
       <div className="bg-card border border-bookstore-leather/30 rounded-2xl p-4 shadow-sm">
         <p className="text-center text-sm text-muted-foreground mb-2">
@@ -245,7 +258,7 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
       {picked && (
         <p className="text-center font-medium text-sm" role="status" aria-live="polite">
           {isCorrect
-            ? `Right! "${problem.variable} ${SYM[problem.answer]} ${problem.number}" — green values satisfy it, red ones don't.`
+            ? `Right! "${problem.variable} ${SYM[problem.answer]} ${problem.number}" — values marked ✓ satisfy it, ✗ do not.`
             : `Look at the number line — does the shaded region match what the sentence allows?`}
         </p>
       )}
