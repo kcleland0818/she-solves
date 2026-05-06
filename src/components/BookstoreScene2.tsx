@@ -134,26 +134,39 @@ const NumberLine = ({
         <div className="absolute top-full mt-1 -translate-x-1/2 text-[11px] font-semibold" style={{ left: `${tPct}%` }}>
           {threshold}
         </div>
-        {/* samples */}
+        {/* samples — encoded with shape + icon, not just color, for color-blind readers */}
         {samples.map((v) => {
           const ok = op ? evalOp(v, op, threshold) : null;
+          const status = ok === null ? "unknown" : ok ? "satisfies" : "does not satisfy";
           return (
             <div
               key={v}
-              className="absolute -translate-x-1/2 -top-2 text-center"
+              className="absolute -translate-x-1/2 -top-3 text-center"
               style={{ left: `${pct(v)}%` }}
             >
               <div
-                className={`w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center border-2 transition-colors ${
+                className={`relative w-7 h-7 text-[11px] font-bold flex items-center justify-center transition-colors ${
                   ok === null
-                    ? "bg-muted text-foreground border-border"
+                    ? "rounded-full bg-muted text-foreground border-2 border-border"
                     : ok
-                    ? "bg-green-500/20 text-green-700 dark:text-green-400 border-green-500"
-                    : "bg-destructive/20 text-destructive border-destructive"
+                    ? "rounded-full bg-foreground text-background border-2 border-foreground"
+                    : "rounded-sm bg-background text-foreground border-2 border-foreground"
                 }`}
-                aria-label={`${variable} = ${v}${ok === null ? "" : ok ? " satisfies" : " does not satisfy"}`}
+                aria-label={`${variable} = ${v}, ${status}`}
               >
                 {v}
+                {ok !== null && (
+                  <span
+                    aria-hidden="true"
+                    className={`absolute -top-2 -right-2 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center border ${
+                      ok
+                        ? "bg-background text-foreground border-foreground"
+                        : "bg-foreground text-background border-foreground"
+                    }`}
+                  >
+                    {ok ? "✓" : "✗"}
+                  </span>
+                )}
               </div>
             </div>
           );
