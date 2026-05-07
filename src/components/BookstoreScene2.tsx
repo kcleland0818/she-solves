@@ -201,6 +201,8 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
   const isCorrect = picked === problem.answer;
   const allDone = useMemo(() => solved.size === PROBLEMS.length, [solved]);
 
+  const [testValue, setTestValue] = useState<number>(problem.number);
+
   const submit = (op: InequalityOp) => {
     setPicked(op);
     if (op === problem.answer) {
@@ -211,7 +213,9 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
   const next = () => {
     setPicked(null);
     setShowHint(false);
-    setIdx((i) => (i + 1) % PROBLEMS.length);
+    const nextIdx = (idx + 1) % PROBLEMS.length;
+    setIdx(nextIdx);
+    setTestValue(PROBLEMS[nextIdx].number);
   };
 
   return (
@@ -220,7 +224,7 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
         <span aria-hidden="true">✍️ </span>Write & Visualize
       </h2>
 
-      <AverySpeech text="Pick the symbol that fits the sentence — the number line shades every value that works, and each test value gets a ✓ or ✗." />
+      <AverySpeech text="Pick the symbol that fits the sentence — the number line shades every value that works. Drag the slider to try different numbers and watch the ✓ or ✗." />
 
       <div className="bg-card border border-bookstore-leather/30 rounded-2xl p-4 shadow-sm">
         <p className="text-center text-sm text-muted-foreground mb-2">
@@ -249,8 +253,9 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
           max={problem.range[1]}
           threshold={problem.number}
           op={picked}
-          samples={problem.samples}
           variable={problem.variable}
+          value={testValue}
+          onValueChange={setTestValue}
         />
       </div>
 
