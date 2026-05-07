@@ -115,7 +115,7 @@ const NumberLine = ({
   const status = ok === null ? "no symbol picked yet" : ok ? "satisfies the inequality" : "does not satisfy the inequality";
 
   return (
-    <div className="px-2 pt-8 pb-4">
+    <div className="px-2 pt-3 pb-4">
       <div className="relative h-10">
         {/* shaded region */}
         {shade && (
