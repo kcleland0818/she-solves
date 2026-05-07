@@ -58,9 +58,9 @@ const BookstoreScene3 = ({ onComplete }: Scene3Props) => {
   const round = ROUNDS[roundIdx];
   const book = round.books[bookIdx];
   const isPriceRound = roundIdx === 1;
-  const value = book.pages; // reused as price in round 2 for simplicity
+  const value = book?.pages ?? 0;
   const correctShelf = useMemo(
-    () => round.shelves.find((s) => s.test(value))!,
+    () => round.shelves.find((s) => s.test(value)) ?? round.shelves[0],
     [round, value]
   );
   const allBooksDone = bookIdx >= round.books.length;
