@@ -91,15 +91,17 @@ const evalOp = (a: number, op: InequalityOp, b: number) => {
   }
 };
 
-// Compact number line that shades the solution region for the picked op.
+// Compact number line with a draggable slider so learners can test any value
+// against their chosen inequality and watch the ✓/✗ flip in real time.
 const NumberLine = ({
-  min, max, threshold, op, samples, variable,
+  min, max, threshold, op, variable, value, onValueChange,
 }: {
-  min: number; max: number; threshold: number; op: InequalityOp | null; samples: number[]; variable: string;
+  min: number; max: number; threshold: number; op: InequalityOp | null; variable: string; value: number; onValueChange: (v: number) => void;
 }) => {
   const span = max - min;
   const pct = (v: number) => ((v - min) / span) * 100;
   const tPct = pct(threshold);
+  const vPct = pct(value);
 
   const shade =
     op === "lt" || op === "lte"
@@ -109,9 +111,11 @@ const NumberLine = ({
       : null;
 
   const closed = op === "lte" || op === "gte";
+  const ok = op ? evalOp(value, op, threshold) : null;
+  const status = ok === null ? "no symbol picked yet" : ok ? "satisfies the inequality" : "does not satisfy the inequality";
 
   return (
-    <div className="px-2 pt-2 pb-6">
+    <div className="px-2 pt-8 pb-4">
       <div className="relative h-10">
         {/* shaded region */}
         {shade && (
@@ -131,46 +135,57 @@ const NumberLine = ({
         >
           <div className={`w-4 h-4 rounded-full border-2 ${op ? "border-bookstore-leather-deep" : "border-foreground/50"} ${closed ? "bg-bookstore-leather-deep" : "bg-background"}`} />
         </div>
-        <div className="absolute top-full mt-1 -translate-x-1/2 text-[11px] font-semibold" style={{ left: `${tPct}%` }}>
+        <div className="absolute top-full mt-1 -translate-x-1/2 text-[11px] font-semibold" style={{ left: `${tPct}%` }} aria-hidden="true">
           {threshold}
         </div>
-        {/* samples — encoded with shape + icon, not just color, for color-blind readers */}
-        {samples.map((v) => {
-          const ok = op ? evalOp(v, op, threshold) : null;
-          const status = ok === null ? "unknown" : ok ? "satisfies" : "does not satisfy";
-          return (
-            <div
-              key={v}
-              className="absolute -translate-x-1/2 -top-3 text-center"
-              style={{ left: `${pct(v)}%` }}
-            >
-              <div
-                className={`relative w-7 h-7 text-[11px] font-bold flex items-center justify-center transition-colors ${
-                  ok === null
-                    ? "rounded-full bg-muted text-foreground border-2 border-border"
-                    : ok
-                    ? "rounded-full bg-foreground text-background border-2 border-foreground"
-                    : "rounded-sm bg-background text-foreground border-2 border-foreground"
+        {/* draggable value chip — encoded with shape + icon, not just color */}
+        <div
+          className="absolute -translate-x-1/2 -top-7 text-center pointer-events-none"
+          style={{ left: `${vPct}%` }}
+          aria-hidden="true"
+        >
+          <div
+            className={`relative w-9 h-9 text-xs font-bold flex items-center justify-center transition-all ${
+              ok === null
+                ? "rounded-full bg-muted text-foreground border-2 border-border"
+                : ok
+                ? "rounded-full bg-foreground text-background border-2 border-foreground"
+                : "rounded-sm bg-background text-foreground border-2 border-foreground"
+            }`}
+          >
+            {value}
+            {ok !== null && (
+              <span
+                className={`absolute -top-2 -right-2 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center border ${
+                  ok
+                    ? "bg-background text-foreground border-foreground"
+                    : "bg-foreground text-background border-foreground"
                 }`}
-                aria-label={`${variable} = ${v}, ${status}`}
               >
-                {v}
-                {ok !== null && (
-                  <span
-                    aria-hidden="true"
-                    className={`absolute -top-2 -right-2 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center border ${
-                      ok
-                        ? "bg-background text-foreground border-foreground"
-                        : "bg-foreground text-background border-foreground"
-                    }`}
-                  >
-                    {ok ? "✓" : "✗"}
-                  </span>
-                )}
-              </div>
-            </div>
-          );
-        })}
+                {ok ? "✓" : "✗"}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="mt-3">
+        <label className="block text-xs text-muted-foreground mb-1 text-center">
+          Drag to try a value for <span className="font-semibold text-foreground">{variable}</span> — currently {value} ({status})
+        </label>
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={1}
+          value={value}
+          onChange={(e) => onValueChange(Number(e.target.value))}
+          className="w-full accent-bookstore-leather-deep"
+          aria-label={`Test value for ${variable}, currently ${value}, ${status}`}
+        />
+        <div className="flex justify-between text-[10px] text-muted-foreground mt-0.5">
+          <span>{min}</span>
+          <span>{max}</span>
+        </div>
       </div>
     </div>
   );
@@ -186,6 +201,8 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
   const isCorrect = picked === problem.answer;
   const allDone = useMemo(() => solved.size === PROBLEMS.length, [solved]);
 
+  const [testValue, setTestValue] = useState<number>(problem.number);
+
   const submit = (op: InequalityOp) => {
     setPicked(op);
     if (op === problem.answer) {
@@ -196,7 +213,9 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
   const next = () => {
     setPicked(null);
     setShowHint(false);
-    setIdx((i) => (i + 1) % PROBLEMS.length);
+    const nextIdx = (idx + 1) % PROBLEMS.length;
+    setIdx(nextIdx);
+    setTestValue(PROBLEMS[nextIdx].number);
   };
 
   return (
@@ -205,7 +224,7 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
         <span aria-hidden="true">✍️ </span>Write & Visualize
       </h2>
 
-      <AverySpeech text="Pick the symbol that fits the sentence — the number line shades every value that works, and each test value gets a ✓ or ✗." />
+      <AverySpeech text="Pick the symbol that fits the sentence — the number line shades every value that works. Drag the slider to try different numbers and watch the ✓ or ✗." />
 
       <div className="bg-card border border-bookstore-leather/30 rounded-2xl p-4 shadow-sm">
         <p className="text-center text-sm text-muted-foreground mb-2">
@@ -234,8 +253,9 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
           max={problem.range[1]}
           threshold={problem.number}
           op={picked}
-          samples={problem.samples}
           variable={problem.variable}
+          value={testValue}
+          onValueChange={setTestValue}
         />
       </div>
 
