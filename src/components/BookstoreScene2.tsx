@@ -138,40 +138,26 @@ const NumberLine = ({
         <div className="absolute top-full mt-1 -translate-x-1/2 text-[11px] font-semibold" style={{ left: `${tPct}%` }} aria-hidden="true">
           {threshold}
         </div>
-        {/* draggable value chip — encoded with shape + icon, not just color */}
-        <div
-          className="absolute -translate-x-1/2 -top-7 text-center pointer-events-none"
-          style={{ left: `${vPct}%` }}
-          aria-hidden="true"
-        >
-          <div
-            className={`relative w-9 h-9 text-xs font-bold flex items-center justify-center transition-all ${
-              ok === null
-                ? "rounded-full bg-muted text-foreground border-2 border-border"
-                : ok
-                ? "rounded-full bg-foreground text-background border-2 border-foreground"
-                : "rounded-sm bg-background text-foreground border-2 border-foreground"
-            }`}
-          >
-            {value}
-            {ok !== null && (
-              <span
-                className={`absolute -top-2 -right-2 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center border ${
-                  ok
-                    ? "bg-background text-foreground border-foreground"
-                    : "bg-foreground text-background border-foreground"
-                }`}
-              >
-                {ok ? "✓" : "✗"}
-              </span>
-            )}
-          </div>
-        </div>
       </div>
       <div className="mt-3">
         <label className="block text-xs text-muted-foreground mb-1 text-center">
-          Drag to try a value for <span className="font-semibold text-foreground">{variable}</span> — currently {value} ({status})
+          Try a value for <span className="font-semibold text-foreground">{variable}</span>:{" "}
+          <span className="font-bold text-foreground">{value}</span>
+          {ok !== null && (
+            <span
+              className={`ml-2 inline-flex items-center justify-center w-5 h-5 text-[11px] font-bold border align-middle ${
+                ok
+                  ? "rounded-full bg-foreground text-background border-foreground"
+                  : "rounded-sm bg-background text-foreground border-foreground"
+              }`}
+              aria-hidden="true"
+            >
+              {ok ? "✓" : "✗"}
+            </span>
+          )}
+          <span className="sr-only"> — {status}</span>
         </label>
+
         <input
           type="range"
           min={min}
