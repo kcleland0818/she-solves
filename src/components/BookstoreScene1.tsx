@@ -98,7 +98,7 @@ const BookstoreScene1 = ({ onComplete }: Scene1Props) => {
         </p>
         <div className="flex items-end justify-center gap-3 sm:gap-5 flex-wrap">
           <BookCover {...{ emoji: problem.leftEmoji, title: problem.leftTitle, value: problem.leftValue, unitSymbol: problem.unitSymbol, unit: problem.unit }} />
-          <div className="pb-10 text-4xl sm:text-5xl font-extrabold text-bookstore-leather-deep dark:text-bookstore-gold" aria-label={`is ${problem.shownOp === "lt" ? "less than" : problem.shownOp === "gt" ? "greater than" : "equal to"}`}>
+          <div className="text-4xl sm:text-5xl font-extrabold leading-none text-bookstore-leather-deep dark:text-bookstore-gold" aria-label={`is ${problem.shownOp === "lt" ? "less than" : problem.shownOp === "gt" ? "greater than" : "equal to"}`}>
             {SYM[problem.shownOp]}
           </div>
           <BookCover {...{ emoji: problem.rightEmoji, title: problem.rightTitle, value: problem.rightValue, unitSymbol: problem.unitSymbol, unit: problem.unit }} />
