@@ -267,7 +267,7 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
             aria-label={`Pick ${PHRASE[op]}`}
           >
             <span className="text-xl font-bold">{SYM[op]}</span>
-            <span className="text-[10px] text-muted-foreground">{PHRASE[op]}</span>
+            <span className={`text-[10px] ${picked === op ? "opacity-90" : "text-muted-foreground"}`}>{PHRASE[op]}</span>
           </Button>
         ))}
       </div>
