@@ -4,6 +4,7 @@ import TownMap from "@/components/TownMap";
 import ProgressBar from "@/components/ProgressBar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import ReloadDebugButton from "@/components/ReloadDebugButton";
+import SceneErrorBoundary from "@/components/SceneErrorBoundary";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
