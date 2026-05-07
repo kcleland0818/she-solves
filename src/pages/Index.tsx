@@ -212,68 +212,70 @@ const Index = () => {
           </div>
         )}
 
-        <Suspense
-          fallback={
-            <div
-              className="min-h-[40vh] flex items-center justify-center"
-              aria-busy="true"
-              aria-live="polite"
-            >
-              <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                <div
-                  className="w-8 h-8 rounded-full border-2 border-muted border-t-primary animate-spin"
-                  aria-hidden="true"
-                />
-                <span className="text-sm">Loading…</span>
+        <SceneErrorBoundary onBackToMap={goToTown}>
+          <Suspense
+            fallback={
+              <div
+                className="min-h-[40vh] flex items-center justify-center"
+                aria-busy="true"
+                aria-live="polite"
+              >
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <div
+                    className="w-8 h-8 rounded-full border-2 border-muted border-t-primary animate-spin"
+                    aria-hidden="true"
+                  />
+                  <span className="text-sm">Loading…</span>
+                </div>
               </div>
-            </div>
-          }
-        >
-          {shop === "smoothie" && (
-            <>
-              {stage === "welcome" && <WelcomeScreen onStart={() => setStage("scene1")} />}
-              {stage === "scene1" && <Scene1Ratios onComplete={() => setStage("scene2")} />}
-              {stage === "scene2" && <Scene2Percentages onComplete={() => setStage("scene3")} />}
-              {stage === "scene3" && <Scene3Discounts onComplete={() => handleComplete("smoothie")} />}
-              {stage === "complete" && (
-                <CompletionScreen
-                  onRestart={goToTown}
-                  onReplayScene={(s) => setStage(s)}
-                />
-              )}
-            </>
-          )}
+            }
+          >
+            {shop === "smoothie" && (
+              <>
+                {stage === "welcome" && <WelcomeScreen onStart={() => setStage("scene1")} />}
+                {stage === "scene1" && <Scene1Ratios onComplete={() => setStage("scene2")} />}
+                {stage === "scene2" && <Scene2Percentages onComplete={() => setStage("scene3")} />}
+                {stage === "scene3" && <Scene3Discounts onComplete={() => handleComplete("smoothie")} />}
+                {stage === "complete" && (
+                  <CompletionScreen
+                    onRestart={goToTown}
+                    onReplayScene={(s) => setStage(s)}
+                  />
+                )}
+              </>
+            )}
 
-          {shop === "bakery" && (
-            <>
-              {stage === "welcome" && <BakeryWelcome onStart={() => setStage("scene1")} />}
-              {stage === "scene1" && <BakeryScene1 onComplete={() => setStage("scene2")} />}
-              {stage === "scene2" && <BakeryScene2 onComplete={() => setStage("scene3")} />}
-              {stage === "scene3" && <BakeryScene3 onComplete={() => handleComplete("bakery")} />}
-              {stage === "complete" && (
-                <BakeryCompletion
-                  onRestart={goToTown}
-                  onReplayScene={(s) => setStage(s)}
-                />
-              )}
-            </>
-          )}
+            {shop === "bakery" && (
+              <>
+                {stage === "welcome" && <BakeryWelcome onStart={() => setStage("scene1")} />}
+                {stage === "scene1" && <BakeryScene1 onComplete={() => setStage("scene2")} />}
+                {stage === "scene2" && <BakeryScene2 onComplete={() => setStage("scene3")} />}
+                {stage === "scene3" && <BakeryScene3 onComplete={() => handleComplete("bakery")} />}
+                {stage === "complete" && (
+                  <BakeryCompletion
+                    onRestart={goToTown}
+                    onReplayScene={(s) => setStage(s)}
+                  />
+                )}
+              </>
+            )}
 
-          {shop === "bookstore" && (
-            <>
-              {stage === "welcome" && <BookstoreWelcome onStart={() => setStage("scene1")} />}
-              {stage === "scene1" && <BookstoreScene1 onComplete={() => setStage("scene2")} />}
-              {stage === "scene2" && <BookstoreScene2 onComplete={() => setStage("scene3")} />}
-              {stage === "scene3" && <BookstoreScene3 onComplete={() => handleComplete("bookstore")} />}
-              {stage === "complete" && (
-                <BookstoreCompletion
-                  onRestart={goToTown}
-                  onReplayScene={(s) => setStage(s)}
-                />
-              )}
-            </>
-          )}
-        </Suspense>
+            {shop === "bookstore" && (
+              <>
+                {stage === "welcome" && <BookstoreWelcome onStart={() => setStage("scene1")} />}
+                {stage === "scene1" && <BookstoreScene1 onComplete={() => setStage("scene2")} />}
+                {stage === "scene2" && <BookstoreScene2 onComplete={() => setStage("scene3")} />}
+                {stage === "scene3" && <BookstoreScene3 onComplete={() => handleComplete("bookstore")} />}
+                {stage === "complete" && (
+                  <BookstoreCompletion
+                    onRestart={goToTown}
+                    onReplayScene={(s) => setStage(s)}
+                  />
+                )}
+              </>
+            )}
+          </Suspense>
+        </SceneErrorBoundary>
       </main>
       <ThemeSwitcher />
       <ReloadDebugButton />
