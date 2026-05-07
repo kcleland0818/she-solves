@@ -135,9 +135,6 @@ const NumberLine = ({
         >
           <div className={`w-4 h-4 rounded-full border-2 ${op ? "border-bookstore-leather-deep" : "border-foreground/50"} ${closed ? "bg-bookstore-leather-deep" : "bg-background"}`} />
         </div>
-        <div className="absolute top-full mt-1 -translate-x-1/2 text-[11px] font-semibold" style={{ left: `${tPct}%` }} aria-hidden="true">
-          {threshold}
-        </div>
       </div>
       <div className="mt-3">
         <label className="block text-xs text-muted-foreground mb-1 text-center">
