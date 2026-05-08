@@ -162,7 +162,7 @@ const BookstoreScene3 = ({ onComplete }: Scene3Props) => {
                 className="h-auto py-3 px-4 justify-between border-2 border-dashed border-bookstore-leather/40 hover:border-bookstore-leather hover:bg-bookstore-parchment/40"
                 aria-label={`Shelf for ${s.label}`}
               >
-                <span className="text-base font-bold text-foreground">{s.label}</span>
+                <ShelfLabel label={s.label} />
                 <span className="text-xl" aria-hidden="true">📚</span>
               </Button>
             ))}
