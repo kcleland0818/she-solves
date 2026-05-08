@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import AverySpeech from "./AverySpeech";
+import Inequality, { InequalityOp } from "./Inequality";
 
 interface Scene3Props {
   onComplete: () => void;
