@@ -81,7 +81,7 @@ const ROUNDS: Round[] = [
     books: [
       { title: "Tiny Tales", emoji: "📕", value: 48 },
       { title: "Picture Pals", emoji: "📙", value: 22 },
-      { title: "Mystery Hour", emoji: "📗", value: 180 },
+      { title: "Mystery Hour", emoji: "📗", value: 320 },
       { title: "Epic Quest", emoji: "📘", value: 420 },
     ],
     shelves: [
@@ -126,9 +126,9 @@ const ROUNDS: Round[] = [
         id: "premium",
         varName: "price",
         prefix: "$",
-        threshold: 25,
+        threshold: 15,
         correctOp: "gte",
-        hint: "Collector's corner — $25 and up.",
+        hint: "Premium reads — $15 and up.",
       },
     ],
   },
