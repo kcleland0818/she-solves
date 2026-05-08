@@ -50,6 +50,32 @@ const ROUNDS: Round[] = [
   },
 ];
 
+const opMap: Record<string, InequalityOp> = {
+  "<": "lt",
+  ">": "gt",
+  "≤": "lte",
+  "≥": "gte",
+  "=": "eq",
+};
+
+// Parse a shelf label like "pages < 100" or "100 ≤ pages ≤ 300" and
+// render the inequality symbols as tappable <Inequality> pills.
+const ShelfLabel = ({ label }: { label: string }) => {
+  // Split on inequality symbols, keeping the delimiters
+  const parts = label.split(/([<>≤≥=])/);
+  return (
+    <span className="text-base font-bold text-foreground">
+      {parts.map((part, i) => {
+        const op = opMap[part];
+        if (op) {
+          return <Inequality key={i} op={op} />;
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </span>
+  );
+};
+
 const BookstoreScene3 = ({ onComplete }: Scene3Props) => {
   const [roundIdx, setRoundIdx] = useState(0);
   const [bookIdx, setBookIdx] = useState(0);
