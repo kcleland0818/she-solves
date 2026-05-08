@@ -218,7 +218,7 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
   return (
     <section className="flex flex-col gap-3 animate-fade-in max-w-lg mx-auto w-full" aria-labelledby="bookstore-scene2-heading">
       <h2 id="bookstore-scene2-heading" className="text-2xl font-bold text-center">
-        <span aria-hidden="true">✍️ </span>Write & Visualize
+        <span aria-hidden="true">🔖 </span>Read Between the Lines
       </h2>
 
       <AverySpeech text="Pick the symbol that fits the sentence — the number line shades every value that works. Drag the slider to try different numbers and watch the ✓ or ✗." />
