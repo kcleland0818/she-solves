@@ -71,7 +71,7 @@ const SHOP_BG: Record<Shop, string> = {
 const SHOP_PROGRESS_LABELS: Record<Shop, string[]> = {
   smoothie: ["Mix It", "Sales", "Discounts"],
   bakery: ["Slice", "Frost", "Compare"],
-  bookstore: ["Read", "Write", "Compare"],
+  bookstore: ["Read", "Decode", "Compare"],
 };
 
 // Persist the current screen across reloads (incl. Vite HMR full reloads)
