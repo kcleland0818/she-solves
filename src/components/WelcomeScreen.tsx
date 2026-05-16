@@ -6,7 +6,7 @@ interface WelcomeScreenProps {
 }
 
 const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => (
-  <main className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 animate-fade-in">
+  <section aria-label="Welcome" className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 animate-fade-in">
     <div className="text-5xl mb-3" aria-hidden="true">🍓✨🍌</div>
     <h1 className="text-2xl md:text-4xl font-extrabold text-foreground mb-1">
       Berry Bliss Smoothie Shop
@@ -29,7 +29,7 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => (
     <Button size="lg" onClick={onStart} className="text-base px-8 hover-scale shadow-lg">
       Let's Go! <span aria-hidden="true">✨</span>
     </Button>
-  </main>
+  </section>
 );
 
 export default WelcomeScreen;
