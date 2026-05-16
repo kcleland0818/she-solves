@@ -222,3 +222,66 @@ test("a11y audit across every scene", async ({ page }) => {
   await page.waitForTimeout(400);
   await runAxe(page, "13b-bakery-scene3-challenge");
 });
+
+test("a11y audit: bookstore", async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.goto("/");
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForTimeout(1500);
+
+  // 14. Bookstore shop dialog
+  const fbk = await appFrame(page);
+  await fbk.locator('button[aria-label*="Page Turner" i]').first().click();
+  await page.waitForTimeout(600);
+  await runAxe(page, "14-bookstore-shop-dialog");
+
+  // 15. Bookstore welcome
+  await clickByName(page, /^enter shop|^revisit shop/i);
+  await page.waitForTimeout(500);
+  await runAxe(page, "15-bookstore-welcome");
+
+  // 16. Bookstore Scene 1 (Read & Check, true/false)
+  await clickByName(page, /open the shop/i);
+  await page.waitForTimeout(500);
+  await runAxe(page, "16-bookstore-scene1-read");
+
+  for (let i = 0; i < 8; i++) {
+    if (await tryClickByName(page, /^next scene/i)) {
+      await page.waitForTimeout(400);
+      break;
+    }
+    // try true, then false, then next
+    if (!(await tryClickByName(page, /^✓\s*true|^true$/i))) {
+      await tryClickByName(page, /^✗\s*false|^false$/i);
+    }
+    await page.waitForTimeout(250);
+    await tryClickByName(page, /^next/i);
+    await page.waitForTimeout(250);
+  }
+
+  // 17. Bookstore Scene 2 (Read Between the Lines)
+  await page.waitForTimeout(400);
+  await runAxe(page, "17-bookstore-scene2-decode");
+
+  for (let i = 0; i < 8; i++) {
+    if (await tryClickByName(page, /^next scene|^finish/i)) {
+      await page.waitForTimeout(400);
+      break;
+    }
+    const fr = await appFrame(page);
+    const optBtns = fr.locator('button').filter({ hasNotText: /hint|try again|next|check/i });
+    const c = await optBtns.count();
+    if (c > 0) await optBtns.nth(i % c).click().catch(() => {});
+    await page.waitForTimeout(250);
+    await tryClickByName(page, /^next/i);
+    await page.waitForTimeout(250);
+  }
+
+  // 18. Bookstore Scene 3 (Build & Sort the Shelves)
+  await page.waitForTimeout(400);
+  await runAxe(page, "18-bookstore-scene3-shelves");
+
+  await tryClickByName(page, /try the challenge|challenge/i);
+  await page.waitForTimeout(400);
+  await runAxe(page, "18b-bookstore-scene3-challenge");
+});
