@@ -79,7 +79,7 @@ const SHOP_PROGRESS_LABELS: Record<Shop, string[]> = {
 // (not localStorage) — closing the tab still starts fresh at the map.
 const SCREEN_STORAGE_KEY = "shesolves:screen";
 const VALID_STAGES: Stage[] = ["welcome", "scene1", "scene2", "scene3", "complete"];
-const VALID_SHOPS: Shop[] = ["smoothie", "bakery"];
+const VALID_SHOPS: Shop[] = ["smoothie", "bakery", "bookstore"];
 
 const getInitialScreen = (): Screen => {
   if (typeof window === "undefined") return { kind: "town" };
