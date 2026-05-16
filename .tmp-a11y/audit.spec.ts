@@ -295,6 +295,3 @@ test("a11y audit: bookstore - scene 3 (Build & Sort the Shelves)", async ({ page
     await runAxe(page, "18b-bookstore-scene3-challenge");
   }
 });
-
-  await runAxe(page, "18b-bookstore-scene3-challenge");
-});
