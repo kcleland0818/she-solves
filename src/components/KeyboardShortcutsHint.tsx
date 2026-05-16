@@ -59,7 +59,7 @@ const KeyboardShortcutsHint = () => {
           ref={closeBtnRef}
           onClick={dismiss}
           aria-label="Dismiss keyboard tips"
-          className="flex-shrink-0 w-7 h-7 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex-shrink-0 w-7 h-7 rounded-md text-foreground hover:bg-muted flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <X className="w-4 h-4" aria-hidden="true" />
         </button>
