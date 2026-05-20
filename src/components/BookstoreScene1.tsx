@@ -137,20 +137,23 @@ const BookstoreScene1 = ({ onComplete }: Scene1Props) => {
         </p>
       )}
 
-      <div className="flex gap-3 justify-center flex-wrap">
-        {picked && !isCorrect && (
-          <Button variant="outline" onClick={() => setPicked(null)}>Try again</Button>
-        )}
-        {isCorrect && !allDone && (
-          <Button onClick={next} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
-            Next book <span aria-hidden="true">→</span>
-          </Button>
-        )}
-        {allDone && (
-          <Button onClick={onComplete} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
-            On to writing! <span aria-hidden="true">→</span>
-          </Button>
-        )}
+      <div className="flex flex-col items-center gap-3">
+        {allDone && <SkillStamp label="Reading Inequalities" />}
+        <div className="flex gap-3 justify-center flex-wrap">
+          {picked && !isCorrect && (
+            <Button variant="outline" onClick={() => setPicked(null)}>Try again</Button>
+          )}
+          {isCorrect && !allDone && (
+            <Button onClick={next} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
+              Next book <span aria-hidden="true">→</span>
+            </Button>
+          )}
+          {allDone && (
+            <Button onClick={onComplete} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
+              On to writing! <span aria-hidden="true">→</span>
+            </Button>
+          )}
+        </div>
       </div>
     </section>
   );
