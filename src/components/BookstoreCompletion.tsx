@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import AverySpeech from "./AverySpeech";
+import SkillStamp from "./SkillStamp";
 
 type ReplayScene = "scene1" | "scene2" | "scene3";
 
