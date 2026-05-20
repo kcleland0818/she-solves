@@ -1,6 +1,8 @@
 import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import PennySpeech from "./PennySpeech";
+import SkillStamp from "./SkillStamp";
+import { celebratoryOpener, skillBeat } from "@/lib/celebrate";
 import Inequality from "./Inequality";
 import averyAvatar from "@/assets/avery-avatar.png";
 import mayaAvatar from "@/assets/maya-avatar.webp";
@@ -171,13 +173,13 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
     if (correct) {
       if (isTie) {
         setFeedback(
-          `Tied! ${fmt(challenge.a)} and ${fmt(challenge.b)} are the same amount — both customers ordered equal portions.`,
+          `${celebratoryOpener("bakery")} ${fmt(challenge.a)} and ${fmt(challenge.b)} are equal — both customers ordered the same amount. ${skillBeat("comparing fractions")}`,
         );
       } else {
         const w = challenge[winner];
         const l = challenge[winner === "a" ? "b" : "a"];
         setFeedback(
-          `Correct! ${fmt(w)} is bigger than ${fmt(l)}. See how more of the tray is frosted?`,
+          `${celebratoryOpener("bakery")} ${fmt(w)} > ${fmt(l)} — more pink on the tray. ${skillBeat("comparing fractions")}`,
         );
       }
       setPhase("done");
@@ -413,16 +415,19 @@ const BakeryScene3 = ({ onComplete }: Scene3Props) => {
       )}
 
       {phase === "done" && (
-        <div className="flex gap-3 justify-center flex-wrap">
-          <Button variant="outline" onClick={newChallenge}>
-            Next Customer Pair
-          </Button>
-          <Button
-            onClick={onComplete}
-            className="bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground"
-          >
-            Finish Lesson <span aria-hidden="true">→</span>
-          </Button>
+        <div className="flex flex-col items-center gap-3">
+          <SkillStamp label="Comparing Fractions" />
+          <div className="flex gap-3 justify-center flex-wrap">
+            <Button variant="outline" onClick={newChallenge}>
+              Next Customer Pair
+            </Button>
+            <Button
+              onClick={onComplete}
+              className="bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground"
+            >
+              Finish Lesson <span aria-hidden="true">→</span>
+            </Button>
+          </div>
         </div>
       )}
     </section>
