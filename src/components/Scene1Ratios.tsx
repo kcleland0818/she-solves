@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
+import SkillStamp from "./SkillStamp";
+import { celebratoryOpener, skillBeat } from "@/lib/celebrate";
 
 interface Scene1Props {
   onComplete: () => void;
@@ -57,7 +59,7 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
         challenge.ratio === 1
           ? `${strawberry}:${banana} is equal parts — 1:1!`
           : `${strawberry}:${banana} is the same as ${challenge.label} because ${strawberry} ÷ ${banana} = ${(strawberry / banana).toFixed(0)}.`;
-      setFeedback(`Perfect! ${ratioExplain} Same ratio, bigger cup!`);
+      setFeedback(`${celebratoryOpener("smoothie")} ${ratioExplain} Same ratio, bigger cup — ${skillBeat("scaling ratios")}`);
       setPhase("done");
     } else if (total < challenge.minTotal) {
       setFeedback(`Almost! Make the cup bigger — you need at least ${challenge.minTotal} parts total.`);
@@ -195,13 +197,16 @@ const Scene1Ratios = ({ onComplete }: Scene1Props) => {
       )}
 
       {phase === "done" && (
-        <div className="flex gap-3 justify-center">
-          <Button variant="outline" onClick={() => { newChallenge(); setPhase("challenge"); setFeedback(""); setShowHint(false); }}>
-            Try a Different Challenge
-          </Button>
-          <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
-            Next Scene <span aria-hidden="true">→</span>
-          </Button>
+        <div className="flex flex-col items-center gap-3">
+          <SkillStamp label="Scaling Ratios" />
+          <div className="flex gap-3 justify-center">
+            <Button variant="outline" onClick={() => { newChallenge(); setPhase("challenge"); setFeedback(""); setShowHint(false); }}>
+              Try a Different Challenge
+            </Button>
+            <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
+              Next Scene <span aria-hidden="true">→</span>
+            </Button>
+          </div>
         </div>
       )}
     </section>

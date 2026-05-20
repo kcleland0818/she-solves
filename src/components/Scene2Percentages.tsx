@@ -1,6 +1,8 @@
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
+import SkillStamp from "./SkillStamp";
+import { celebratoryOpener, skillBeat } from "@/lib/celebrate";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 interface Scene2Props {
@@ -59,7 +61,7 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
   const checkAnswer = () => {
     const parsed = parseInt(answer);
     if (Math.abs(parsed - targetPercent) <= 1) {
-      setFeedback(`Yes! ${targetData.value} ÷ ${total} = ${(targetData.value / total).toFixed(2)}, and ${(targetData.value / total).toFixed(2)} × 100 = ${targetPercent}%. ${question.label} was about ${targetPercent}% of sales!`);
+      setFeedback(`${celebratoryOpener("smoothie")} ${targetData.value} ÷ ${total} = ${(targetData.value / total).toFixed(2)}, and ${(targetData.value / total).toFixed(2)} × 100 = ${targetPercent}%. ${question.label} was about ${targetPercent}% of sales — ${skillBeat("percentages")}`);
       setPhase("done");
     } else {
       setFeedback(`Not quite — try dividing ${question.label} sales by total sales, then multiply by 100!`);
@@ -197,13 +199,16 @@ const Scene2Percentages = ({ onComplete }: Scene2Props) => {
       )}
 
       {phase === "done" && (
-        <div className="flex gap-3 justify-center">
-          <Button variant="outline" onClick={() => { newQuestion(); setPhase("challenge"); setAnswer(""); setFeedback(""); setShowHint(false); setSelected(null); }}>
-            Try a Different Challenge
-          </Button>
-          <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
-            Next Scene <span aria-hidden="true">→</span>
-          </Button>
+        <div className="flex flex-col items-center gap-3">
+          <SkillStamp label="Percentages" />
+          <div className="flex gap-3 justify-center">
+            <Button variant="outline" onClick={() => { newQuestion(); setPhase("challenge"); setAnswer(""); setFeedback(""); setShowHint(false); setSelected(null); }}>
+              Try a Different Challenge
+            </Button>
+            <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
+              Next Scene <span aria-hidden="true">→</span>
+            </Button>
+          </div>
         </div>
       )}
     </section>

@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import PennySpeech from "./PennySpeech";
+import SkillStamp from "./SkillStamp";
+import { celebratoryOpener, skillBeat } from "@/lib/celebrate";
 
 interface Scene2Props {
   onComplete: () => void;
@@ -96,7 +98,7 @@ const BakeryScene2 = ({ onComplete }: Scene2Props) => {
   const handleCheck = () => {
     if (shaded.size === challenge.target) {
       setFeedback(
-        `Yes! ${challenge.trayLabel} is the same amount as ${challenge.equivLabel}. Same cake — different slicing!`,
+        `${celebratoryOpener("bakery")} ${challenge.trayLabel} = ${challenge.equivLabel} — same cake, different slicing. ${skillBeat("equivalent fractions")}`,
       );
       setPhase("done");
     } else if (shaded.size < challenge.target) {
@@ -238,16 +240,19 @@ const BakeryScene2 = ({ onComplete }: Scene2Props) => {
       )}
 
       {phase === "done" && (
-        <div className="flex gap-3 justify-center flex-wrap">
-          <Button variant="outline" onClick={newChallenge}>
-            Try Another Tray
-          </Button>
-          <Button
-            onClick={onComplete}
-            className="bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground"
-          >
-            Next Scene <span aria-hidden="true">→</span>
-          </Button>
+        <div className="flex flex-col items-center gap-3">
+          <SkillStamp label="Equivalent Fractions" />
+          <div className="flex gap-3 justify-center flex-wrap">
+            <Button variant="outline" onClick={newChallenge}>
+              Try Another Tray
+            </Button>
+            <Button
+              onClick={onComplete}
+              className="bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground"
+            >
+              Next Scene <span aria-hidden="true">→</span>
+            </Button>
+          </div>
         </div>
       )}
     </section>

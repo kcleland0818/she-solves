@@ -1,6 +1,8 @@
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import AverySpeech from "./AverySpeech";
+import SkillStamp from "./SkillStamp";
+import { celebratoryOpener, skillBeat } from "@/lib/celebrate";
 import Inequality, { InequalityOp } from "./Inequality";
 
 interface Scene1Props {
@@ -130,25 +132,28 @@ const BookstoreScene1 = ({ onComplete }: Scene1Props) => {
       {picked && (
         <p className="text-center font-medium text-sm" role="status" aria-live="polite">
           {isCorrect
-            ? `Right! ${problem.unitSymbol}${problem.leftValue} ${SYM[problem.shownOp]} ${problem.unitSymbol}${problem.rightValue} is ${truth ? "true" : "false"}.`
+            ? `${celebratoryOpener("bookstore")} ${problem.unitSymbol}${problem.leftValue} ${SYM[problem.shownOp]} ${problem.unitSymbol}${problem.rightValue} is ${truth ? "true" : "false"}. ${skillBeat("reading inequalities")}`
             : `Not quite — read the numbers again: ${problem.unitSymbol}${problem.leftValue} and ${problem.unitSymbol}${problem.rightValue}.`}
         </p>
       )}
 
-      <div className="flex gap-3 justify-center flex-wrap">
-        {picked && !isCorrect && (
-          <Button variant="outline" onClick={() => setPicked(null)}>Try again</Button>
-        )}
-        {isCorrect && !allDone && (
-          <Button onClick={next} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
-            Next book <span aria-hidden="true">→</span>
-          </Button>
-        )}
-        {allDone && (
-          <Button onClick={onComplete} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
-            On to writing! <span aria-hidden="true">→</span>
-          </Button>
-        )}
+      <div className="flex flex-col items-center gap-3">
+        {allDone && <SkillStamp label="Reading Inequalities" />}
+        <div className="flex gap-3 justify-center flex-wrap">
+          {picked && !isCorrect && (
+            <Button variant="outline" onClick={() => setPicked(null)}>Try again</Button>
+          )}
+          {isCorrect && !allDone && (
+            <Button onClick={next} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
+              Next book <span aria-hidden="true">→</span>
+            </Button>
+          )}
+          {allDone && (
+            <Button onClick={onComplete} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
+              On to writing! <span aria-hidden="true">→</span>
+            </Button>
+          )}
+        </div>
       </div>
     </section>
   );

@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import PennySpeech from "./PennySpeech";
+import SkillStamp from "./SkillStamp";
+import { celebratoryOpener, skillBeat } from "@/lib/celebrate";
 
 interface Scene1Props {
   onComplete: () => void;
@@ -99,7 +101,7 @@ const BakeryScene1 = ({ onComplete }: Scene1Props) => {
   const handleCheck = () => {
     if (shaded.size === numerator) {
       setFeedback(
-        `Perfect! You shaded ${numerator} of ${denominator} slices — that's ${label} of the cake.`,
+        `${celebratoryOpener("bakery")} ${numerator} shaded out of ${denominator} total = ${label}. ${skillBeat("naming fractions")}`,
       );
       setPhase("done");
     } else if (shaded.size < numerator) {
@@ -255,16 +257,19 @@ const BakeryScene1 = ({ onComplete }: Scene1Props) => {
       )}
 
       {phase === "done" && (
-        <div className="flex gap-3 justify-center flex-wrap">
-          <Button variant="outline" onClick={newChallenge}>
-            Try Another Order
-          </Button>
-          <Button
-            onClick={onComplete}
-            className="bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground"
-          >
-            Next Scene <span aria-hidden="true">→</span>
-          </Button>
+        <div className="flex flex-col items-center gap-3">
+          <SkillStamp label="Identifying Fractions" />
+          <div className="flex gap-3 justify-center flex-wrap">
+            <Button variant="outline" onClick={newChallenge}>
+              Try Another Order
+            </Button>
+            <Button
+              onClick={onComplete}
+              className="bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground"
+            >
+              Next Scene <span aria-hidden="true">→</span>
+            </Button>
+          </div>
         </div>
       )}
     </section>

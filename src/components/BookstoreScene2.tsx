@@ -1,6 +1,8 @@
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import AverySpeech from "./AverySpeech";
+import SkillStamp from "./SkillStamp";
+import { celebratoryOpener, skillBeat } from "@/lib/celebrate";
 import { InequalityOp } from "./Inequality";
 
 interface Scene2Props {
@@ -275,28 +277,31 @@ const BookstoreScene2 = ({ onComplete }: Scene2Props) => {
       {picked && (
         <p className="text-center font-medium text-sm" role="status" aria-live="polite">
           {isCorrect
-            ? `Right! "${problem.variable} ${SYM[problem.answer]} ${problem.number}" — values marked ✓ satisfy it, ✗ do not.`
+            ? `${celebratoryOpener("bookstore")} "${problem.variable} ${SYM[problem.answer]} ${problem.number}" — words → symbol. ${skillBeat("writing inequalities")}`
             : `Look at the number line — does the shaded region match what the sentence allows?`}
         </p>
       )}
 
-      <div className="flex gap-2 justify-center flex-wrap">
-        <Button variant="outline" size="sm" onClick={() => setShowHint((v) => !v)} aria-expanded={showHint}>
-          {showHint ? "Hide hint" : "Hint"}
-        </Button>
-        {picked && !isCorrect && (
-          <Button variant="outline" size="sm" onClick={() => setPicked(null)}>Try again</Button>
-        )}
-        {isCorrect && !allDone && (
-          <Button size="sm" onClick={next} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
-            Next sentence <span aria-hidden="true">→</span>
+      <div className="flex flex-col items-center gap-3">
+        {allDone && <SkillStamp label="Writing Inequalities" />}
+        <div className="flex gap-2 justify-center flex-wrap">
+          <Button variant="outline" size="sm" onClick={() => setShowHint((v) => !v)} aria-expanded={showHint}>
+            {showHint ? "Hide hint" : "Hint"}
           </Button>
-        )}
-        {allDone && (
-          <Button size="sm" onClick={onComplete} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
-            On to sorting! <span aria-hidden="true">→</span>
-          </Button>
-        )}
+          {picked && !isCorrect && (
+            <Button variant="outline" size="sm" onClick={() => setPicked(null)}>Try again</Button>
+          )}
+          {isCorrect && !allDone && (
+            <Button size="sm" onClick={next} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
+              Next sentence <span aria-hidden="true">→</span>
+            </Button>
+          )}
+          {allDone && (
+            <Button size="sm" onClick={onComplete} className="bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep text-white">
+              On to sorting! <span aria-hidden="true">→</span>
+            </Button>
+          )}
+        </div>
       </div>
 
       {showHint && (
