@@ -17,6 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import AverySpeech from "./AverySpeech";
+import SkillStamp from "./SkillStamp";
 import Inequality, { InequalityOp } from "./Inequality";
 import { cn } from "@/lib/utils";
 
@@ -646,7 +647,10 @@ const BookstoreScene3 = ({ onComplete }: Scene3Props) => {
           <p className="text-2xl mb-1" aria-hidden="true">
             🎉
           </p>
-          <p className="font-semibold mb-3">Round {roundIdx + 1} sorted!</p>
+          <p className="font-semibold mb-2">Round {roundIdx + 1} sorted!</p>
+          <p className="text-sm text-muted-foreground mb-3">
+            Every book obeys the rule <strong>you wrote</strong> — that's how real catalogs work.
+          </p>
           <ul className="text-sm text-muted-foreground space-y-1 mb-3">
             {round.shelves.map((s) => {
               const op = builtOps[s.id]!;
@@ -663,6 +667,11 @@ const BookstoreScene3 = ({ onComplete }: Scene3Props) => {
               );
             })}
           </ul>
+          {isLastRound && (
+            <div className="mb-3 flex justify-center">
+              <SkillStamp label="Comparing With Inequalities" />
+            </div>
+          )}
           {!isLastRound ? (
             <Button
               onClick={() => setRoundIdx((r) => r + 1)}
