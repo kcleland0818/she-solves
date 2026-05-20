@@ -2,6 +2,8 @@ import { useState, useCallback } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
+import SkillStamp from "./SkillStamp";
+import { celebratoryOpener, skillBeat } from "@/lib/celebrate";
 
 interface Scene3Props {
   onComplete: () => void;
@@ -57,7 +59,7 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
   const handleCheck = () => {
     if (discount === challenge.targetDiscount) {
       const saved = (targetSmoothie.price * challenge.targetDiscount / 100);
-      setFeedback(`YES! ${challenge.targetDiscount}% of $${targetSmoothie.price} = $${targetSmoothie.price} × ${challenge.targetDiscount}/100 = $${saved.toFixed(2)}. So $${targetSmoothie.price} − $${saved.toFixed(2)} = $${challenge.targetPrice.toFixed(2)}! You're a discount pro!`);
+      setFeedback(`${celebratoryOpener("smoothie")} ${challenge.targetDiscount}% of $${targetSmoothie.price} = $${targetSmoothie.price} × ${challenge.targetDiscount}/100 = $${saved.toFixed(2)}. So $${targetSmoothie.price} − $${saved.toFixed(2)} = $${challenge.targetPrice.toFixed(2)} — ${skillBeat("discount math")}`);
       setPhase("done");
     } else {
       const result = discountedPrice(targetSmoothie.price).toFixed(2);
@@ -162,13 +164,16 @@ const Scene3Discounts = ({ onComplete }: Scene3Props) => {
       )}
 
       {phase === "done" && (
-        <div className="flex gap-3 justify-center">
-          <Button variant="outline" onClick={() => { newChallenge(); setPhase("challenge"); setDiscount(0); setFeedback(""); setShowHint(false); }}>
-            Try a Different Challenge
-          </Button>
-          <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
-            See My Results! <span aria-hidden="true">🎉</span>
-          </Button>
+        <div className="flex flex-col items-center gap-3">
+          <SkillStamp label="Discounts" />
+          <div className="flex gap-3 justify-center">
+            <Button variant="outline" onClick={() => { newChallenge(); setPhase("challenge"); setDiscount(0); setFeedback(""); setShowHint(false); }}>
+              Try a Different Challenge
+            </Button>
+            <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
+              See My Results! <span aria-hidden="true">🎉</span>
+            </Button>
+          </div>
         </div>
       )}
     </section>
