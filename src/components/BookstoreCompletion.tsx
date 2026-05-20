@@ -38,7 +38,14 @@ const BookstoreCompletion = ({ onRestart, onReplayScene }: BookstoreCompletionPr
 
     <AverySpeech text="You did it! Inequalities used to look like funny little arrows — now they're tools you can read, write, and use to compare. Look what you picked up:" />
 
+    <div className="flex flex-wrap justify-center gap-2">
+      {skills.map((s) => (
+        <SkillStamp key={s.title} label={s.title} />
+      ))}
+    </div>
+
     <div className="w-full space-y-2" role="list" aria-label="Skills you learned">
+
       {skills.map((item) => (
         <div
           key={item.title}
