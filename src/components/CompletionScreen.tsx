@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
+import SkillStamp from "./SkillStamp";
 
 type ReplayScene = "scene1" | "scene2" | "scene3";
 
@@ -20,6 +21,12 @@ const CompletionScreen = ({ onRestart, onReplayScene }: CompletionScreenProps) =
     <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">You Did It!</h2>
 
     <MayaSpeech text="I'm SO proud of you! You just learned some seriously cool math. Here's what you crushed today:" />
+
+    <div className="flex flex-wrap justify-center gap-2">
+      {skills.map((s) => (
+        <SkillStamp key={s.title} label={s.title} />
+      ))}
+    </div>
 
     <div className="w-full space-y-2" role="list" aria-label="Skills you learned">
       {skills.map((item) => (
