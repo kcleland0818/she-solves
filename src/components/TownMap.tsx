@@ -100,7 +100,7 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
 
       {/* Header */}
       <header className="relative z-10 shrink-0 pt-2 pb-1.5 md:pt-4 md:pb-2 px-3 md:px-4">
-        <div className="text-center leading-tight px-24 md:px-36">
+        <div className="text-center leading-tight">
           <h1 className="text-xl md:text-4xl font-extrabold text-slate-900 dark:text-foreground drop-shadow-sm">
             <span aria-hidden="true">📍 </span>SheSolves City
           </h1>
@@ -108,9 +108,8 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
             Tap a shop to start solving!
           </p>
         </div>
-        <div className="absolute top-2 right-3 md:top-4 md:right-4">
-          <SkillsDashboard />
-        </div>
+        <SkillsDashboard />
+
       </header>
 
 
