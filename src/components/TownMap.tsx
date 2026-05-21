@@ -22,6 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import SkillsDashboard from "./SkillsDashboard";
 
 interface Shop {
   id: string;
