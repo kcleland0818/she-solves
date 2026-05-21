@@ -22,6 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import SkillsDashboard from "./SkillsDashboard";
 
 interface Shop {
   id: string;
@@ -176,9 +177,10 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
         </div>
       </div>
 
-      {/* Reset all shop completion — floating button with confirmation. */}
-      {completedShops.size > 0 && (
-        <div className="fixed bottom-4 right-4 z-50">
+      {/* Floating controls */}
+      <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2">
+        <SkillsDashboard />
+        {completedShops.size > 0 && (
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <button
@@ -210,8 +212,8 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Shop Detail Modal */}
       <Dialog
