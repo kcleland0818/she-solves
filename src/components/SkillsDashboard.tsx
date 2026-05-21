@@ -34,15 +34,24 @@ const SkillsDashboard = () => {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="bg-card text-foreground border border-border rounded-full h-12 px-4 flex items-center gap-2 shadow-lg hover:scale-105 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="
+            fixed z-50
+            top-[calc(33%+44px)] right-0 rounded-l-full rounded-r-none w-8 h-10 border-r-0
+            md:top-auto md:bottom-4 md:right-36 md:rounded-full md:w-12 md:h-12 md:border-r
+            bg-card text-foreground border border-border
+            flex items-center justify-center shadow-lg
+            hover:scale-105 md:hover:scale-110 transition-transform
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+          "
           aria-label={`Open skills dashboard. ${earnedSkills} of ${totalSkills} skills earned.`}
         >
-          <Trophy className="w-5 h-5 text-primary" aria-hidden="true" />
-          <span className="text-sm font-semibold">
-            {earnedSkills}/{totalSkills}
+          <Trophy className="w-4 h-4 md:w-5 md:h-5 text-primary" aria-hidden="true" />
+          <span className="sr-only">
+            {earnedSkills}/{totalSkills} skills
           </span>
         </button>
       </DialogTrigger>
+
       <DialogContent className="sm:max-w-md rounded-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
