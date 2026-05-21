@@ -98,121 +98,59 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
         Skip to shops
       </a>
 
-      {/* Header — light gradient bg in light mode, themed dark bg in dark mode. */}
-      <div className="text-center pt-3 pb-1 md:pt-4 md:pb-2 z-10 relative shrink-0">
-        <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 dark:text-foreground drop-shadow-sm">
-          <span aria-hidden="true">📍 </span>SheSolves City
-        </h1>
-        <p className="text-slate-700 dark:text-muted-foreground text-xs md:text-base mt-0.5">
-          Tap a shop to start solving!
-        </p>
-      </div>
+      {/* Header — title centered, progress controls aligned to the right */}
+      <header className="relative z-10 shrink-0 pt-3 pb-1 md:pt-4 md:pb-2 px-3 md:px-4">
+        <div className="text-center">
+          <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 dark:text-foreground drop-shadow-sm">
+            <span aria-hidden="true">📍 </span>SheSolves City
+          </h1>
+          <p className="text-slate-700 dark:text-muted-foreground text-xs md:text-base mt-0.5">
+            Tap a shop to start solving!
+          </p>
+        </div>
+        <div className="absolute top-2 right-3 md:top-3 md:right-4 flex items-center gap-2">
+          <SkillsDashboard />
+          {completedShops.size > 0 && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button
+                  type="button"
+                  className="bg-card text-foreground border border-border rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  aria-label="Reset all shop progress"
+                >
+                  <RotateCcw className="w-4 h-4 md:w-5 md:h-5" aria-hidden="true" />
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Reset all progress?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will clear every shop you've completed and let you start fresh. This can't be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep my progress</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      resetProgress();
+                      window.location.reload();
+                    }}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Yes, reset everything
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+        </div>
+      </header>
 
       {/* Map fills remaining space */}
       <div className="relative flex-1 min-h-0 w-full flex items-center justify-center p-1 md:p-2">
-        <div
-          className="relative w-full h-full overflow-hidden rounded-xl md:rounded-2xl shadow-xl border-2 md:border-4 border-white/60 bg-center bg-no-repeat bg-cover"
-          style={{ backgroundImage: `url(${townMapBg})` }}
-        >
-          {/* Decorative background description for screen readers (sibling, not ancestor of buttons) */}
-          <span className="sr-only">Town map of SheSolves City with shops to explore.</span>
-          {/* Clickable shop markers */}
-          <nav id="shop-markers" aria-label="Shop locations">
-            {shops.map((shop) => {
-              const isCompleted = completedShops.has(shop.id);
-              return (
-                <button
-                  key={shop.id}
-                  onClick={() => setSelectedShop(shop)}
-                  className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-full ${
-                    shop.unlocked
-                      ? "hover:scale-110 cursor-pointer"
-                      : "cursor-pointer opacity-70"
-                  }`}
-                  style={{ top: getPosition(shop).top, left: getPosition(shop).left }}
-                  aria-label={`${shop.name}${shop.unlocked ? "" : " — locked, coming soon"}${isCompleted ? " — completed" : ""}`}
-                >
-                  <div
-                    className={`relative flex flex-col items-center ${
-                      shop.unlocked ? "animate-[bounce_3s_ease-in-out_infinite]" : ""
-                    }`}
-                  >
-                    <div
-                      className={`relative w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center text-lg md:text-2xl shadow-lg border-2 border-white/80 ${
-                        shop.unlocked
-                          ? "bg-white ring-2 ring-primary/40"
-                          : "bg-muted/80 grayscale"
-                      }`}
-                      aria-hidden="true"
-                    >
-                      {shop.unlocked ? (
-                        shop.emoji
-                      ) : (
-                        <Lock className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
-                      )}
-                      {isCompleted && (
-                        <span
-                          className="absolute -top-1.5 -right-1.5 w-5 h-5 md:w-6 md:h-6 rounded-full bg-[hsl(45,95%,55%)] border-2 border-white shadow-md flex items-center justify-center"
-                          aria-hidden="true"
-                        >
-                          <Check className="w-3 h-3 md:w-3.5 md:h-3.5 text-white" strokeWidth={3} />
-                        </span>
-                      )}
-                    </div>
-                    <span
-                      className={`mt-1 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm ${
-                        shop.unlocked
-                          ? "bg-white/95 text-slate-900"
-                          : "bg-white/70 text-slate-600"
-                      }`}
-                      aria-hidden="true"
-                    >
-                      {shop.name.split(" ").slice(0, 2).join(" ")}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+...
           </nav>
         </div>
-      </div>
-
-      {/* Floating controls — top-right so they don't crowd the theme picker on the right edge */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
-        <SkillsDashboard />
-        {completedShops.size > 0 && (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <button
-                type="button"
-                className="bg-card text-foreground border border-border rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                aria-label="Reset all shop progress"
-              >
-                <RotateCcw className="w-5 h-5" aria-hidden="true" />
-              </button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Reset all progress?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will clear every shop you've completed and let you start fresh. This can't be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Keep my progress</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => {
-                    resetProgress();
-                    window.location.reload();
-                  }}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  Yes, reset everything
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        )}
       </div>
 
       {/* Shop Detail Modal */}
