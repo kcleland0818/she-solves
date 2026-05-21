@@ -212,8 +212,8 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Shop Detail Modal */}
       <Dialog
