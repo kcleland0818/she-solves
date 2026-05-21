@@ -177,8 +177,8 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
         </div>
       </div>
 
-      {/* Floating controls */}
-      <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2">
+      {/* Floating controls — top-right so they don't crowd the theme picker on the right edge */}
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
         <SkillsDashboard />
         {completedShops.size > 0 && (
           <AlertDialog>
