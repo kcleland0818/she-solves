@@ -183,6 +183,42 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
         </div>
       </div>
 
+      {/* Reset progress floating bottom-right */}
+      {completedShops.size > 0 && (
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button
+              type="button"
+              className="fixed bottom-4 right-4 z-20 bg-card text-foreground border border-border rounded-full w-11 h-11 md:w-12 md:h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              aria-label="Reset all shop progress"
+            >
+              <RotateCcw className="w-4 h-4 md:w-5 md:h-5" aria-hidden="true" />
+            </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Reset all progress?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will clear every shop you've completed and let you start fresh. This can't be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Keep my progress</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  resetProgress();
+                  window.location.reload();
+                }}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Yes, reset everything
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
+
+
       {/* Shop Detail Modal */}
       <Dialog
         open={selectedShop !== null}
