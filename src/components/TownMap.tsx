@@ -99,52 +99,50 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
       </a>
 
       {/* Header */}
-      <header className="relative z-10 shrink-1 min-h-0 pt-2 pb-1.5 md:pt-4 md:pb-2 px-3 md:px-4">
-        <div className="flex items-center justify-between gap-2">
-          <div className="min-w-1 leading-tight">
-            <h1 className="text-xl md:text-4xl font-extrabold text-slate-900 dark:text-foreground drop-shadow-sm">
-              <span aria-hidden="true">📍 </span>SheSolves City
-            </h1>
-            <p className="text-slate-700 dark:text-muted-foreground text-[11px] md:text-base mt-0">
-              Tap a shop to start solving!
-            </p>
-          </div>
-          <div className="flex items-center gap-1.5 md:gap-2 shrink-1">
-            <SkillsDashboard />
-            {completedShops.size > 0 && (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <button
-                    type="button"
-                    className="bg-card text-foreground border border-border rounded-full w-9 h-9 md:w-12 md:h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                    aria-label="Reset all shop progress"
+      <header className="relative z-10 shrink-0 pt-2 pb-1.5 md:pt-4 md:pb-2 px-3 md:px-4">
+        <div className="text-center leading-tight px-24 md:px-36">
+          <h1 className="text-xl md:text-4xl font-extrabold text-slate-900 dark:text-foreground drop-shadow-sm">
+            <span aria-hidden="true">📍 </span>SheSolves City
+          </h1>
+          <p className="text-slate-700 dark:text-muted-foreground text-[11px] md:text-base mt-0">
+            Tap a shop to start solving!
+          </p>
+        </div>
+        <div className="absolute top-2 right-3 md:top-4 md:right-4 flex items-center gap-1.5 md:gap-2">
+          <SkillsDashboard />
+          {completedShops.size > 0 && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button
+                  type="button"
+                  className="bg-card text-foreground border border-border rounded-full w-9 h-9 md:w-12 md:h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  aria-label="Reset all shop progress"
+                >
+                  <RotateCcw className="w-4 h-4 md:w-5 md:h-5" aria-hidden="true" />
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Reset all progress?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will clear every shop you've completed and let you start fresh. This can't be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep my progress</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      resetProgress();
+                      window.location.reload();
+                    }}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
-                    <RotateCcw className="w-4 h-4 md:w-5 md:h-5" aria-hidden="true" />
-                  </button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Reset all progress?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This will clear every shop you've completed and let you start fresh. This can't be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Keep my progress</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => {
-                        resetProgress();
-                        window.location.reload();
-                      }}
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                    >
-                      Yes, reset everything
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            )}
-          </div>
+                    Yes, reset everything
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </div>
       </header>
 
