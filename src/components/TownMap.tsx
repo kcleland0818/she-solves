@@ -108,9 +108,8 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
             Tap a shop to start solving!
           </p>
         </div>
-        <div className="absolute top-2 right-3 md:top-4 md:right-4">
-          <SkillsDashboard />
-        </div>
+        <SkillsDashboard />
+
       </header>
 
 
