@@ -98,15 +98,53 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
         Skip to shops
       </a>
 
-      {/* Header — light gradient bg in light mode, themed dark bg in dark mode. */}
-      <div className="text-center pt-3 pb-1 md:pt-4 md:pb-2 z-10 relative shrink-0">
-        <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 dark:text-foreground drop-shadow-sm">
-          <span aria-hidden="true">📍 </span>SheSolves City
-        </h1>
-        <p className="text-slate-700 dark:text-muted-foreground text-xs md:text-base mt-0.5">
-          Tap a shop to start solving!
-        </p>
-      </div>
+      {/* Header — title centered, progress controls aligned to the right */}
+      <header className="relative z-10 shrink-0 pt-3 pb-1 md:pt-4 md:pb-2 px-3 md:px-4">
+        <div className="text-center">
+          <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 dark:text-foreground drop-shadow-sm">
+            <span aria-hidden="true">📍 </span>SheSolves City
+          </h1>
+          <p className="text-slate-700 dark:text-muted-foreground text-xs md:text-base mt-0.5">
+            Tap a shop to start solving!
+          </p>
+        </div>
+        <div className="absolute top-2 right-3 md:top-3 md:right-4 flex items-center gap-2">
+          <SkillsDashboard />
+          {completedShops.size > 0 && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button
+                  type="button"
+                  className="bg-card text-foreground border border-border rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  aria-label="Reset all shop progress"
+                >
+                  <RotateCcw className="w-4 h-4 md:w-5 md:h-5" aria-hidden="true" />
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Reset all progress?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will clear every shop you've completed and let you start fresh. This can't be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep my progress</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      resetProgress();
+                      window.location.reload();
+                    }}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Yes, reset everything
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+        </div>
+      </header>
 
       {/* Map fills remaining space */}
       <div className="relative flex-1 min-h-0 w-full flex items-center justify-center p-1 md:p-2">
@@ -175,44 +213,6 @@ const TownMap = ({ onEnterShop }: TownMapProps) => {
             })}
           </nav>
         </div>
-      </div>
-
-      {/* Floating controls — top-right so they don't crowd the theme picker on the right edge */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
-        <SkillsDashboard />
-        {completedShops.size > 0 && (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <button
-                type="button"
-                className="bg-card text-foreground border border-border rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                aria-label="Reset all shop progress"
-              >
-                <RotateCcw className="w-5 h-5" aria-hidden="true" />
-              </button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Reset all progress?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will clear every shop you've completed and let you start fresh. This can't be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Keep my progress</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => {
-                    resetProgress();
-                    window.location.reload();
-                  }}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  Yes, reset everything
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        )}
       </div>
 
       {/* Shop Detail Modal */}
