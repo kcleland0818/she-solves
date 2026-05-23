@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 const axeSource = fs.readFileSync(
-  path.resolve("node_modules/axe-core/axe.min.js"),
+  path.resolve(__dirname, "../node_modules/axe-core/axe.min.js"),
   "utf8"
 );
 
