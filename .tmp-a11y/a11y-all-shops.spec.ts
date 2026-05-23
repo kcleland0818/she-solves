@@ -1,4 +1,4 @@
-import { test } from "../playwright-fixture";
+import { test } from "./fixture";
 import * as fs from "fs";
 import * as path from "path";
 
