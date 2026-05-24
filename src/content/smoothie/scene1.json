@@ -1,0 +1,11 @@
+{
+  "skillLabel": "Scaling Ratios",
+  "ingredientA": { "name": "Strawberry", "emoji": "🍓", "colorVar": "--smoothie-strawberry" },
+  "ingredientB": { "name": "Banana", "emoji": "🍌", "colorVar": "--smoothie-banana" },
+  "challenges": [
+    { "ratio": 2, "label": "2:1", "minTotal": 6, "desc": "Keep the 2:1 ratio but make at least 6 parts total!" },
+    { "ratio": 3, "label": "3:1", "minTotal": 8, "desc": "Keep a 3:1 ratio with at least 8 parts total!" },
+    { "ratio": 1, "label": "1:1", "minTotal": 6, "desc": "Make an equal mix (1:1) with at least 6 parts total!" },
+    { "ratio": 2, "label": "2:1", "minTotal": 9, "desc": "Same 2:1 taste but in a HUGE cup — at least 9 parts!" }
+  ]
+}
