@@ -1,0 +1,12 @@
+{
+  "skillLabel": "Reading Inequalities",
+  "heading": "📖 Read & Check",
+  "problems": [
+    { "leftTitle": "Tiny Tales", "leftEmoji": "📕", "leftValue": 24, "rightTitle": "Epic Quest", "rightEmoji": "📗", "rightValue": 410, "unit": "pages", "unitSymbol": "", "shownOp": "lt" },
+    { "leftTitle": "Bake Book", "leftEmoji": "📙", "leftValue": 22, "rightTitle": "Travel Log", "rightEmoji": "📘", "rightValue": 14, "unit": "dollars", "unitSymbol": "$", "shownOp": "lt" },
+    { "leftTitle": "Mystery", "leftEmoji": "📕", "leftValue": 248, "rightTitle": "Sci-Fi", "rightEmoji": "📗", "rightValue": 248, "unit": "pages", "unitSymbol": "", "shownOp": "eq" },
+    { "leftTitle": "Comic", "leftEmoji": "📙", "leftValue": 9, "rightTitle": "Atlas", "rightEmoji": "📘", "rightValue": 35, "unit": "dollars", "unitSymbol": "$", "shownOp": "gt" },
+    { "leftTitle": "Cookbook", "leftEmoji": "📕", "leftValue": 180, "rightTitle": "Poems", "rightEmoji": "📗", "rightValue": 96, "unit": "pages", "unitSymbol": "", "shownOp": "gt" },
+    { "leftTitle": "Used", "leftEmoji": "📙", "leftValue": 12, "rightTitle": "New", "rightEmoji": "📘", "rightValue": 18, "unit": "dollars", "unitSymbol": "$", "shownOp": "lt" }
+  ]
+}
