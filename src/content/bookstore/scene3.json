@@ -1,0 +1,65 @@
+{
+  "skillLabel": "Comparing With Inequalities",
+  "heading": "📚 Build & Sort the Shelves",
+  "shopTheme": "bookstore",
+  "rounds": [
+    {
+      "prompt": "First, build each shelf's rule. Then drag tonight's returns onto the shelf they belong on.",
+      "varName": "pages",
+      "suffix": " pages",
+      "books": [
+        { "title": "Tiny Tales", "emoji": "📕", "value": 48 },
+        { "title": "Picture Pals", "emoji": "📙", "value": 22 },
+        { "title": "Mystery Hour", "emoji": "📗", "value": 320 },
+        { "title": "Epic Quest", "emoji": "📘", "value": 420 }
+      ],
+      "shelves": [
+        {
+          "id": "short",
+          "varName": "pages",
+          "suffix": " pages",
+          "threshold": 100,
+          "correctOp": "lt",
+          "hint": "Short reads — fewer than 100 pages."
+        },
+        {
+          "id": "long",
+          "varName": "pages",
+          "suffix": " pages",
+          "threshold": 300,
+          "correctOp": "gt",
+          "hint": "Doorstoppers — more than 300 pages."
+        }
+      ]
+    },
+    {
+      "prompt": "New shipment! Build the price rules, then sort each book.",
+      "varName": "price",
+      "prefix": "$",
+      "books": [
+        { "title": "Pocket Poems", "emoji": "📕", "value": 5 },
+        { "title": "Used Mystery", "emoji": "📙", "value": 8 },
+        { "title": "Cookbook", "emoji": "📗", "value": 18 },
+        { "title": "Rare Atlas", "emoji": "📘", "value": 28 }
+      ],
+      "shelves": [
+        {
+          "id": "cheap",
+          "varName": "price",
+          "prefix": "$",
+          "threshold": 10,
+          "correctOp": "lte",
+          "hint": "Bargain bin — $10 or less."
+        },
+        {
+          "id": "premium",
+          "varName": "price",
+          "prefix": "$",
+          "threshold": 15,
+          "correctOp": "gte",
+          "hint": "Premium reads — $15 and up."
+        }
+      ]
+    }
+  ]
+}

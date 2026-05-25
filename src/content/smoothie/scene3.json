@@ -1,0 +1,20 @@
+{
+  "skillLabel": "Discounts",
+  "heading": "🏷️ Discount Day!",
+  "currency": "$",
+  "sliderMin": 0,
+  "sliderMax": 75,
+  "sliderStep": 5,
+  "items": [
+    { "name": "Strawberry Blast", "emoji": "🍓", "price": 6 },
+    { "name": "Mango Sunrise", "emoji": "🥭", "price": 7 },
+    { "name": "Blueberry Chill", "emoji": "💜", "price": 8 }
+  ],
+  "challenges": [
+    { "itemIdx": 2, "targetPrice": 6, "targetDiscount": 25, "hint": "You need to take $2 off an $8 smoothie. What percentage is $2 of $8? Think: 2 ÷ 8 = ?" },
+    { "itemIdx": 0, "targetPrice": 3, "targetDiscount": 50, "hint": "You need to cut a $6 smoothie in half. What percentage takes away half?" },
+    { "itemIdx": 1, "targetPrice": 3.5, "targetDiscount": 50, "hint": "Half of $7 is $3.50. What discount gives you half off?" },
+    { "itemIdx": 2, "targetPrice": 4, "targetDiscount": 50, "hint": "Half of $8 is $4. What's the discount for half price?" },
+    { "itemIdx": 0, "targetPrice": 4.5, "targetDiscount": 25, "hint": "You need $1.50 off a $6 smoothie. $1.50 is what fraction of $6?" }
+  ]
+}
