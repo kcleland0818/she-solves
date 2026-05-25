@@ -1,4 +1,4 @@
-import BuildAndSort, { type Round } from "./templates/BuildAndSort";
+import BuildAndSort, { type Round, type ShopTheme } from "./templates/BuildAndSort";
 import sceneData from "@/content/bookstore/scene3.json";
 
 interface Scene3Props {
@@ -10,7 +10,7 @@ const BookstoreScene3 = ({ onComplete }: Scene3Props) => (
     rounds={sceneData.rounds as Round[]}
     skillLabel={sceneData.skillLabel}
     heading={sceneData.heading}
-    shopTheme={sceneData.shopTheme}
+    shopTheme={sceneData.shopTheme as ShopTheme}
     onComplete={onComplete}
   />
 );
