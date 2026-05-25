@@ -1,0 +1,52 @@
+{
+  "skillLabel": "Writing Inequalities",
+  "heading": "🔖 Read Between the Lines",
+  "nextLabel": "On to sorting!",
+  "problems": [
+    {
+      "sentence": "Readers must be at least 12 years old to buy this book.",
+      "variable": "age",
+      "number": 12,
+      "answer": "gte",
+      "hint": "“at least 12” means 12 is okay, and anything bigger is okay.",
+      "range": [8, 18],
+      "samples": [10, 12, 15]
+    },
+    {
+      "sentence": "Picture books have fewer than 50 pages.",
+      "variable": "pages",
+      "number": 50,
+      "answer": "lt",
+      "hint": "“fewer than 50” doesn't include 50 itself.",
+      "range": [0, 100],
+      "samples": [30, 50, 80]
+    },
+    {
+      "sentence": "You can spend no more than 20 dollars on the gift card.",
+      "variable": "spend",
+      "number": 20,
+      "answer": "lte",
+      "hint": "“no more than 20” means 20 is okay, but nothing higher.",
+      "range": [0, 40],
+      "samples": [10, 20, 30]
+    },
+    {
+      "sentence": "The book club needs more than 6 members to meet.",
+      "variable": "members",
+      "number": 6,
+      "answer": "gt",
+      "hint": "“more than 6” doesn't include 6 itself.",
+      "range": [0, 14],
+      "samples": [4, 6, 9]
+    },
+    {
+      "sentence": "The reading challenge requires at most 30 books per year.",
+      "variable": "books",
+      "number": 30,
+      "answer": "lte",
+      "hint": "“at most 30” means 30 is okay, nothing higher.",
+      "range": [0, 60],
+      "samples": [15, 30, 45]
+    }
+  ]
+}
