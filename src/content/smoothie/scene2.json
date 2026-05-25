@@ -1,0 +1,11 @@
+{
+  "skillLabel": "Percentages",
+  "heading": "📊 Today's Sales",
+  "unit": "smoothies",
+  "slices": [
+    { "name": "Strawberry", "value": 12, "emoji": "🍓", "color": "hsl(350, 80%, 60%)" },
+    { "name": "Mango", "value": 8, "emoji": "🥭", "color": "hsl(35, 90%, 55%)" },
+    { "name": "Blueberry", "value": 5, "emoji": "💜", "color": "hsl(240, 60%, 55%)" },
+    { "name": "Banana", "value": 5, "emoji": "🍌", "color": "hsl(45, 90%, 65%)" }
+  ]
+}
