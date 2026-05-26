@@ -30,7 +30,7 @@ const BookstoreWelcome = ({ onStart }: BookstoreWelcomeProps) => (
         </div>
         <span className="font-semibold text-card-foreground">Avery, your bookstore buddy</span>
       </div>
-      <p className="text-sm text-muted-foreground leading-relaxed">
+      <p className="text-sm text-foreground leading-relaxed">
         "Hey, so glad you're here! Inequalities sound fancy, but they're just little symbols that say which side is bigger, smaller, or equal. We use them all the time in here — to find books for the right age, the right length, the right price. Let's read a few together!"
       </p>
     </div>

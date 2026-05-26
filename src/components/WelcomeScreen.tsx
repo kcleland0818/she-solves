@@ -21,7 +21,7 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => (
         </div>
         <span className="font-semibold text-card-foreground">Maya, your mentor</span>
       </div>
-      <p className="text-sm text-muted-foreground leading-relaxed">
+      <p className="text-sm text-foreground leading-relaxed">
         "Hey! I'm Maya. I'll walk you through everything — ratios, percentages, and discounts.
         No stress, just smoothies. Ready?"
       </p>
