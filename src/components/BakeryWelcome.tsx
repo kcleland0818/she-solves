@@ -30,7 +30,7 @@ const BakeryWelcome = ({ onStart }: BakeryWelcomeProps) => (
         </div>
         <span className="font-semibold text-card-foreground">Penny, your baking buddy</span>
       </div>
-      <p className="text-sm text-muted-foreground leading-relaxed">
+      <p className="text-sm text-foreground leading-relaxed">
         "Hi, I'm Penny! I'm so glad you're here — running a bakery is way more fun with a partner. Don't worry if fractions feel tricky at first; I've got your back, and we'll figure it out one slice at a time. You've got this!"
       </p>
     </div>
