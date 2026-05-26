@@ -1,10 +1,23 @@
-import { createLovableConfig } from "lovable-agent-playwright-config/config";
+import { defineConfig } from "@playwright/test";
 
-export default createLovableConfig({
-  // Add your custom playwright configuration overrides here
-  // Example:
-  // timeout: 60000,
-  // use: {
-  //   baseURL: 'http://localhost:3000',
-  // },
+export default defineConfig({
+  testDir: "tests",
+  timeout: 180_000,
+  reporter: "line",
+  use: {
+    baseURL:
+      process.env.BASE_URL ||
+      "https://id-preview--9a8541b2-62cb-4417-8870-2485831e6b18.lovable.app",
+  },
+  projects: [
+    {
+      name: "chromium",
+      use: {
+        channel: undefined,
+        launchOptions: {
+          executablePath: process.env.CHROMIUM_BIN,
+        },
+      },
+    },
+  ],
 });
