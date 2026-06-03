@@ -1,0 +1,20 @@
+{
+  "skillLabel": "Equivalent Fractions",
+  "exploreTrays": [
+    { "rows": 1, "cols": 3, "label": "1×3 (thirds)" },
+    { "rows": 2, "cols": 3, "label": "2×3 (sixths)" },
+    { "rows": 2, "cols": 4, "label": "2×4 (eighths)" },
+    { "rows": 3, "cols": 4, "label": "3×4 (twelfths)" }
+  ],
+  "exploreStartIdx": 1,
+  "challenges": [
+    { "rows": 2, "cols": 3, "target": 2, "equivLabel": "1/3", "trayLabel": "2/6" },
+    { "rows": 2, "cols": 4, "target": 6, "equivLabel": "3/4", "trayLabel": "6/8" },
+    { "rows": 3, "cols": 4, "target": 4, "equivLabel": "1/3", "trayLabel": "4/12" },
+    { "rows": 2, "cols": 4, "target": 2, "equivLabel": "1/4", "trayLabel": "2/8" },
+    { "rows": 2, "cols": 3, "target": 3, "equivLabel": "1/2", "trayLabel": "3/6" },
+    { "rows": 3, "cols": 4, "target": 9, "equivLabel": "3/4", "trayLabel": "9/12" },
+    { "rows": 2, "cols": 4, "target": 4, "equivLabel": "1/2", "trayLabel": "4/8" },
+    { "rows": 3, "cols": 4, "target": 8, "equivLabel": "2/3", "trayLabel": "8/12" }
+  ]
+}
