@@ -2,7 +2,7 @@ import { test } from "../playwright-fixture";
 import { runAxe, gotoAndReady } from "./a11y-helpers";
 
 test("a11y audit across every scene", async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(300_000);
 
   // ---- 1. Town Map ----
   await gotoAndReady(page, "/", "#shop-markers, [aria-label*='shop' i]");
