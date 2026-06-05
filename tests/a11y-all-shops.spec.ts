@@ -18,8 +18,8 @@ async function auditShop(page: any, shopName: string, slug: string) {
   await page.waitForTimeout(300);
   await runAxe(page, `${slug}-2-welcome`);
 
-  // Scene 1
-  await page.getByRole("button", { name: /let.s go|start|begin/i }).first().click();
+  // Scene 1 (welcome CTA varies per shop: "Let's go", "Start", "Open the Shop!", ...)
+  await page.getByRole("button", { name: /let.s go|start|begin|open the shop|read/i }).first().click();
   await page.waitForTimeout(300);
   await runAxe(page, `${slug}-3-scene1`);
 
@@ -31,9 +31,13 @@ async function auditShop(page: any, shopName: string, slug: string) {
     await runAxe(page, `${slug}-3b-scene1-challenge`);
   }
 
+  // Next-button regex covers: "Next Scene", "Next book", "Next sentence",
+  // "Next round", "On to sorting!", "Continue", "Finish ..."
+  const nextRe = /next (scene|book|sentence|round|→)|next →|continue|on to|finish/i;
+
   // Try to advance to scene 2 (best-effort)
   for (let i = 0; i < 6; i++) {
-    const next = page.getByRole("button", { name: /next scene|next →|continue/i }).first();
+    const next = page.getByRole("button", { name: nextRe }).first();
     if (await next.count() && await next.isVisible().catch(() => false)) {
       await next.click().catch(() => {});
       await page.waitForTimeout(300);
@@ -51,7 +55,7 @@ async function auditShop(page: any, shopName: string, slug: string) {
 
   // Advance to scene 3
   for (let i = 0; i < 8; i++) {
-    const next = page.getByRole("button", { name: /next scene|next →/i }).first();
+    const next = page.getByRole("button", { name: nextRe }).first();
     if (await next.count() && await next.isVisible().catch(() => false)) {
       await next.click().catch(() => {});
       await page.waitForTimeout(300);
@@ -72,6 +76,7 @@ async function auditShop(page: any, shopName: string, slug: string) {
   }
   await runAxe(page, `${slug}-5-scene3`);
 }
+
 
 test("a11y audit: smoothie shop", async ({ page }) => {
   test.setTimeout(180_000);
