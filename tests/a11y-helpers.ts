@@ -49,9 +49,13 @@ export async function runAxe(page: any, label: string) {
       impact: v.impact,
       help: v.help,
       nodeCount: v.nodes.length,
-      sample: v.nodes[0]?.html?.slice(0, 220),
-      target: v.nodes[0]?.target,
+      nodes: v.nodes.map((n: any) => ({
+        html: n.html?.slice(0, 200),
+        target: n.target,
+        data: n.any?.[0]?.data,
+      })),
     })),
   };
   console.log("AXE_RESULT::" + JSON.stringify(summary));
 }
+
