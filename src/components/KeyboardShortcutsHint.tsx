@@ -38,17 +38,17 @@ const KeyboardShortcutsHint = () => {
       role="dialog"
       aria-labelledby="kbd-hint-title"
       aria-describedby="kbd-hint-body"
-      className="fixed bottom-4 left-4 z-50 max-w-xs bg-card border-2 border-primary/40 rounded-2xl shadow-xl p-4 animate-fade-in"
+      className="fixed bottom-4 left-4 z-50 max-w-xs bg-card text-card-foreground border-2 border-primary/40 rounded-2xl shadow-xl p-4 animate-fade-in"
     >
       <div className="flex items-start gap-3">
         <div className="flex-shrink-0 w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
           <Keyboard className="w-5 h-5" aria-hidden="true" />
         </div>
         <div className="flex-1 min-w-0">
-          <h2 id="kbd-hint-title" className="font-semibold text-sm text-foreground mb-1">
+          <h2 id="kbd-hint-title" className="font-semibold text-sm text-card-foreground mb-1">
             Keyboard tips
           </h2>
-          <ul id="kbd-hint-body" className="text-xs text-foreground space-y-1 leading-relaxed">
+          <ul id="kbd-hint-body" className="text-xs text-card-foreground space-y-1 leading-relaxed">
             <li><kbd className="font-mono bg-secondary text-secondary-foreground border border-border px-1 rounded">Tab</kbd> to move between controls</li>
             <li><kbd className="font-mono bg-secondary text-secondary-foreground border border-border px-1 rounded">←</kbd> <kbd className="font-mono bg-secondary text-secondary-foreground border border-border px-1 rounded">→</kbd> to adjust sliders</li>
             <li><kbd className="font-mono bg-secondary text-secondary-foreground border border-border px-1 rounded">Enter</kbd> or <kbd className="font-mono bg-secondary text-secondary-foreground border border-border px-1 rounded">Space</kbd> to activate buttons</li>
@@ -59,7 +59,7 @@ const KeyboardShortcutsHint = () => {
           ref={closeBtnRef}
           onClick={dismiss}
           aria-label="Dismiss keyboard tips"
-          className="flex-shrink-0 w-7 h-7 rounded-md text-foreground hover:bg-muted flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex-shrink-0 w-7 h-7 rounded-md text-card-foreground hover:bg-muted flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <X className="w-4 h-4" aria-hidden="true" />
         </button>
