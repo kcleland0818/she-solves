@@ -95,7 +95,12 @@ test("a11y audit across every scene", async ({ page }) => {
     await runAxe(page, "7-calculator-open");
   }
 
-  // ---- 8. Keyboard shortcuts hint ----
+});
+
+test("a11y audit: keyboard shortcuts hint", async ({ page }) => {
+  test.setTimeout(120_000);
+
+  await page.goto("/");
   await page.evaluate(() => {
     try { localStorage.removeItem("berry-bliss:kbd-hint-dismissed"); } catch {}
   });
@@ -109,3 +114,4 @@ test("a11y audit across every scene", async ({ page }) => {
   await page.waitForTimeout(900);
   await runAxe(page, "8-with-keyboard-hint");
 });
+
