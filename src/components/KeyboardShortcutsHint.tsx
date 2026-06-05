@@ -38,7 +38,7 @@ const KeyboardShortcutsHint = () => {
       role="dialog"
       aria-labelledby="kbd-hint-title"
       aria-describedby="kbd-hint-body"
-      className="fixed bottom-4 left-4 z-50 max-w-xs bg-card text-card-foreground border-2 border-primary/40 rounded-2xl shadow-xl p-4 animate-fade-in"
+      className="fixed bottom-4 left-4 z-50 max-w-xs bg-card text-card-foreground border-2 border-primary/40 rounded-2xl shadow-xl p-4"
     >
       <div className="flex items-start gap-3">
         <div className="flex-shrink-0 w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
