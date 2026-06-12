@@ -1,0 +1,13 @@
+{
+  "id": "bookstore",
+  "shopName": "Page Turner Bookstore",
+  "bgClass": "bg-gradient-to-br from-[hsl(38,55%,94%)] via-[hsl(28,40%,90%)] to-[hsl(220,30%,90%)] dark:from-background dark:via-background dark:to-background",
+  "progressLabels": ["Read", "Decode", "Compare"],
+  "welcome": "BookstoreWelcome",
+  "completion": "BookstoreCompletion",
+  "activities": [
+    { "id": "scene1", "component": "BookstoreScene1" },
+    { "id": "scene2", "component": "BookstoreScene2" },
+    { "id": "scene3", "component": "BookstoreScene3" }
+  ]
+}

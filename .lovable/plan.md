@@ -1,61 +1,108 @@
-# Finish the bakery extraction
+# Step 4: Lesson Runner
 
-Last two scene components still carrying their own state and JSX. After this, every shop scene in the app is a thin wrapper over a template in `src/components/templates/` driven by JSON in `src/content/<shop>/`.
+Not done yet. Today `src/pages/Index.tsx` hardcodes three near-identical shop branches — each manually lists welcome → scene1 → scene2 → scene3 → completion and wires `onComplete` to the next stage. Adding a 4th bakery scene means editing the `Stage` union, `stageIndex`, `VALID_STAGES`, `SHOP_PROGRESS_LABELS`, and the bakery JSX branch. That's exactly the seam the lesson runner removes.
 
-## 1. BakeryScene2 → `FrostingTray` template
+## Goal
 
-The scene teaches equivalent fractions on a grid of cupcakes: explore phase lets the learner pick a tray shape and shade cells freely (with a live simplified-fraction readout), challenge phase asks them to shade a specific equivalent like `1/3` on a 2×3 tray.
+One `LessonRunner` component takes a `lessonId`, loads a lesson JSON describing the activity sequence, walks the activities, tracks per-activity completion, and hands off to the next — replacing the per-shop branches in `Index.tsx`.
 
-**Create `src/components/templates/FrostingTray.tsx`**
-- Props: `content`, `onComplete`, `SpeechComponent` (defaults to `PennySpeech`), optional theme override (defaults to `bakery`).
-- Owns all phase/shaded/feedback/hint state currently in `BakeryScene2`.
-- Keeps the `gcd`/`simplify` helpers and the live "same as n/d" readout in explore.
-- Preserves every ARIA attribute already on the scene: `aria-labelledby` heading, `role="grid"` + descriptive label on the tray, per-cell `aria-pressed`/`aria-label`, `aria-live` sr-only counter, `role="status"` feedback, `aria-expanded` hint toggle.
-- Themed via the same `THEME` map pattern used in `BuildAndSort` (bakery: `bakery-frosting`, `bakery-cream`, `bakery-chocolate`, `bakery-tray`, `bakery-frosting-deep`, `bakery-crust`). Future shops can drop in their own palette.
+## Lesson JSON shape
 
-**Create `src/content/bakery/scene2.json`**
-- `heading`, `headingEmoji`
-- `exploreTrays[]` — `{ rows, cols, label }`
-- `challenges[]` — `{ rows, cols, target, equivLabel, trayLabel }`
-- `speech` — `explore` / `challenge` / `done` templates with `{shaded}`, `{total}`, `{simplified}`, `{equivLabel}`, `{trayLabel}` slots
-- `buttons` — labels for "Try a Customer Order!", "Check the Tray", "Try Another Tray", "Next Scene"
-- `skill` — "Equivalent Fractions"
-- `theme` — "bakery"
+New folder `src/content/lessons/` with one file per shop:
 
-**Update `src/components/BakeryScene2.tsx`** — thin wrapper passing the JSON content + `onComplete` into `FrostingTray`.
+```
+src/content/lessons/smoothie.json
+src/content/lessons/bakery.json
+src/content/lessons/bookstore.json
+```
 
-## 2. BakeryScene3 → `FractionCompare` template
+Each file:
 
-The scene compares two fractions side-by-side as filled pastry trays. Explore lets the learner pick two fractions from a list and see the comparison + LCD proof; challenge presents preset pairs (including a tie) and the learner picks which is bigger or "they're equal".
+```json
+{
+  "id": "bakery",
+  "shopName": "Sweet Crumbs Bakery",
+  "progressLabels": ["Slice", "Frost", "Compare"],
+  "welcome": "BakeryWelcome",
+  "completion": "BakeryCompletion",
+  "activities": [
+    { "id": "scene1", "component": "BakeryScene1" },
+    { "id": "scene2", "component": "BakeryScene2" },
+    { "id": "scene3", "component": "BakeryScene3" }
+  ]
+}
+```
 
-**Create `src/components/templates/FractionCompare.tsx`**
-- Props: `content`, `onComplete`, `SpeechComponent` (defaults to `PennySpeech`), `customerAvatars` (so the avatars stay shop-specific via import in the wrapper).
-- Lifts the inline `FractionPastry` sub-component in here.
-- Owns phase/explore selection/challenge index/selected/feedback/hint state.
-- Computes `winner`, `isTie`, and `exploreCompare` exactly as today; uses `Inequality` for the explore LCD proof.
-- Preserves: `aria-labelledby` heading, per-tray `aria-label`, `aria-pressed` on "They're equal!", `aria-live` polite explore readout, `role="status"` feedback, `aria-expanded` hint toggle, hidden customer-name span for screen readers.
+Adding a 4th bakery activity becomes: append one entry to `activities` + one label to `progressLabels`. No `Index.tsx` edits, no `Stage` union edits.
 
-**Create `src/content/bakery/scene3.json`**
-- `heading`, `headingEmoji`
-- `exploreOptions[]` — `[{ num, den }, ...]`
-- `challenges[]` — `[{ a: {num,den}, b: {num,den} }, ...]` (including the existing 4/6 vs 2/3 tie)
-- `speech` — `explore` / `challenge` / `done` templates (explore template needs to support the structured LCD proof with `<Inequality>`, so it stays a render function in the template, fed by content strings)
-- `customerNames` — `{ a: "Maya", b: "Avery" }`
-- `buttons` — "Take Real Orders!", "They're equal!", "Next Customer Pair", "Finish Lesson"
-- `skill` — "Comparing Fractions"
-- `theme` — "bakery"
+## Component registry
 
-**Update `src/components/BakeryScene3.tsx`** — thin wrapper that imports `mayaAvatar` + `averyAvatar` and the JSON, passes everything into `FractionCompare`.
+`src/content/lessons/registry.ts` — single map from string id → lazy component, so JSON stays string-typed but loading stays code-split:
 
-## 3. Verify
+```ts
+export const COMPONENTS = {
+  BakeryWelcome: lazy(() => import("@/components/BakeryWelcome")),
+  BakeryScene1:  lazy(() => import("@/components/BakeryScene1")),
+  // … all welcomes, scenes, completions
+} as const;
+export type ComponentId = keyof typeof COMPONENTS;
+```
 
-- Vitest run (the existing suite touches the bakery scenes).
-- Manual smoke in the preview: walk both bakery scenes through explore → challenge → done; confirm the equivalent-fraction simplify readout, the tie case in scene 3, and the LCD proof in explore still behave identically.
-- Re-run `tests/a11y-audit.spec.ts` against the bakery flow to confirm zero new axe violations.
+Every scene/welcome/completion already exposes the same prop shape (`onComplete` / `onStart` / `onRestart` + `onReplayScene`), so the runner can call them generically.
+
+## LessonRunner component
+
+`src/components/LessonRunner.tsx`:
+
+- Props: `lesson` (typed lesson JSON), `onExit` (back to town), `initialStage?` (for session restore).
+- Internal state: `stage: "welcome" | { activityIdx: number } | "complete"`.
+- Renders the shared chrome currently in `Index.tsx`: skip-link, `<main>`, Map alert dialog, `ProgressBar`, `SceneErrorBoundary` + `Suspense`, `MiniCalculator`, `KeyboardShortcutsHint`.
+- Looks up components via the registry; renders welcome → activities[i] → activities[i+1] → completion.
+- `onComplete` of the last activity → `markShopCompleted(lesson.id)` then advance to completion stage.
+- `onReplayScene(id)` on the completion screen → look up `activities.findIndex(a => a.id === id)` and jump back.
+- Persists `{ lessonId, stage }` to sessionStorage (replaces today's `SCREEN_STORAGE_KEY` schema, migrated transparently — unknown shapes fall back to town).
+
+## Index.tsx after the refactor
+
+Becomes ~40 lines:
+
+```tsx
+const LESSONS = { smoothie, bakery, bookstore }; // imported JSON
+// town view unchanged
+// shop view: <LessonRunner lesson={LESSONS[shop]} onExit={goToTown} />
+```
+
+All three per-shop JSX blocks, the `Stage` union, `stageIndex`, `VALID_STAGES`, and `SHOP_PROGRESS_LABELS` move into / are derived from the lesson JSON.
+
+## Per-activity completion tracking
+
+Today `progress.ts` tracks shop-level completion only (`markShopCompleted`). The runner already knows `(lessonId, activityId)` at the moment of completion, so we add:
+
+```ts
+markActivityCompleted(lessonId, activityId)
+isActivityCompleted(lessonId, activityId)
+getCompletedActivities(lessonId): string[]
+```
+
+Stored under a new `shesolves:activities` localStorage key (a `Record<lessonId, string[]>`). Not yet surfaced in UI — this is just the data foundation so a future "resume where you left off" or per-skill dashboard is trivial.
+
+## Verification
+
+- Vitest run.
+- Manual smoke: walk each of the 3 shops welcome → 3 scenes → completion → Revisit a scene → Back to town. Confirm the Map alert, progress bar labels, calculator, and keyboard hints still appear.
+- Reload mid-scene; confirm session restore lands on the same activity.
+- Run `tests/a11y-all-shops.spec.ts` — no new violations (chrome is the same, just rendered by the runner).
 
 ## Technical notes
 
-- Speech with mixed text + components (`<Inequality>` in scene 3 explore): the template renders the JSX directly with values from `content` — the JSON holds copy fragments and the template assembles them. Pure-string speech (scene 2) uses simple `{slot}` interpolation.
-- `THEME` map lives at the top of each template (same pattern as `BuildAndSort`) so no Tailwind classes need to be dynamic-string-built.
-- No business-logic changes: same challenge lists, same skill labels, same celebration copy via `celebratoryOpener("bakery")` + `skillBeat(...)`.
-- After this, `src/components/Bakery*.tsx` mirrors the smoothie + bookstore shape: every scene file is a ~10-line wrapper.
+- Lesson JSON is fully static and tree-shakeable; no dynamic `import()` of JSON, just `import bakery from "@/content/lessons/bakery.json"`.
+- Type the JSON with `import type { Lesson } from "./types"` + a `satisfies Lesson` at the import site for compile-time validation without runtime cost.
+- The registry pattern keeps string-typed JSON but gives a `ComponentId` union for the lesson type, so a typo in `"BakeryScene4"` before the registry entry exists fails typecheck.
+- No changes to scene components, templates, or content JSON — this step is purely the orchestration layer.
+
+## Out of scope
+
+- Per-activity progress UI (data only, no display).
+- Schema validation (zod). Type narrowing at import time is enough for now.
+- Authoring UI / DB-backed lessons.
+- Cross-lesson navigation (the town map still owns shop selection).

@@ -1,85 +1,44 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import { Map } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
 import TownMap from "@/components/TownMap";
-import ProgressBar from "@/components/ProgressBar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import ReloadDebugButton from "@/components/ReloadDebugButton";
-import SceneErrorBoundary from "@/components/SceneErrorBoundary";
-import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { isShopCompleted, markShopCompleted } from "@/lib/progress";
-
-const WelcomeScreen = lazy(() => import("@/components/WelcomeScreen"));
-const Scene1Ratios = lazy(() => import("@/components/Scene1Ratios"));
-const Scene2Percentages = lazy(() => import("@/components/Scene2Percentages"));
-const Scene3Discounts = lazy(() => import("@/components/Scene3Discounts"));
-const CompletionScreen = lazy(() => import("@/components/CompletionScreen"));
-const BakeryWelcome = lazy(() => import("@/components/BakeryWelcome"));
-const BakeryScene1 = lazy(() => import("@/components/BakeryScene1"));
-const BakeryScene2 = lazy(() => import("@/components/BakeryScene2"));
-const BakeryScene3 = lazy(() => import("@/components/BakeryScene3"));
-const BakeryCompletion = lazy(() => import("@/components/BakeryCompletion"));
-const BookstoreWelcome = lazy(() => import("@/components/BookstoreWelcome"));
-const BookstoreScene1 = lazy(() => import("@/components/BookstoreScene1"));
-const BookstoreScene2 = lazy(() => import("@/components/BookstoreScene2"));
-const BookstoreScene3 = lazy(() => import("@/components/BookstoreScene3"));
-const BookstoreCompletion = lazy(() => import("@/components/BookstoreCompletion"));
-const MiniCalculator = lazy(() => import("@/components/MiniCalculator"));
-const KeyboardShortcutsHint = lazy(() => import("@/components/KeyboardShortcutsHint"));
+import LessonRunner, { type RunnerStage } from "@/components/LessonRunner";
+import smoothieLesson from "@/content/lessons/smoothie.json";
+import bakeryLesson from "@/content/lessons/bakery.json";
+import bookstoreLesson from "@/content/lessons/bookstore.json";
+import type { Lesson } from "@/content/lessons/types";
+import { isShopCompleted } from "@/lib/progress";
 
 type Shop = "smoothie" | "bakery" | "bookstore";
-type Stage = "welcome" | "scene1" | "scene2" | "scene3" | "complete";
+
+const LESSONS = {
+  smoothie: smoothieLesson as Lesson,
+  bakery: bakeryLesson as Lesson,
+  bookstore: bookstoreLesson as Lesson,
+};
+
+const SHOP_BY_ID: Record<string, Shop> = {
+  [LESSONS.smoothie.id]: "smoothie",
+  [LESSONS.bakery.id]: "bakery",
+  [LESSONS.bookstore.id]: "bookstore",
+};
+
 type Screen =
   | { kind: "town" }
-  | { kind: "shop"; shop: Shop; stage: Stage };
+  | { kind: "shop"; shop: Shop; stage: RunnerStage };
 
-const stageIndex: Record<Stage, number> = {
-  welcome: -1,
-  scene1: 0,
-  scene2: 1,
-  scene3: 2,
-  complete: 3,
-};
-
-const SHOP_IDS: Record<Shop, string> = {
-  smoothie: "smoothie-shop",
-  bakery: "bakery",
-  bookstore: "bookstore",
-};
-
-// Light gradients for the welcome screen. In dark mode we fall back to the
-// themed background so text stays readable.
-const SHOP_BG: Record<Shop, string> = {
-  smoothie:
-    "bg-gradient-to-br from-[hsl(280,60%,92%)] via-[hsl(320,50%,93%)] to-[hsl(340,60%,92%)] dark:from-background dark:via-background dark:to-background",
-  bakery:
-    "bg-gradient-to-br from-[hsl(35,65%,94%)] via-[hsl(20,55%,93%)] to-[hsl(340,55%,93%)] dark:from-background dark:via-background dark:to-background",
-  bookstore:
-    "bg-gradient-to-br from-[hsl(38,55%,94%)] via-[hsl(28,40%,90%)] to-[hsl(220,30%,90%)] dark:from-background dark:via-background dark:to-background",
-};
-
-const SHOP_PROGRESS_LABELS: Record<Shop, string[]> = {
-  smoothie: ["Mix It", "Sales", "Discounts"],
-  bakery: ["Slice", "Frost", "Compare"],
-  bookstore: ["Read", "Decode", "Compare"],
-};
-
-// Persist the current screen across reloads (incl. Vite HMR full reloads)
-// so a learner mid-activity isn't bounced back to the map. sessionStorage
-// (not localStorage) — closing the tab still starts fresh at the map.
 const SCREEN_STORAGE_KEY = "shesolves:screen";
-const VALID_STAGES: Stage[] = ["welcome", "scene1", "scene2", "scene3", "complete"];
-const VALID_SHOPS: Shop[] = ["smoothie", "bakery", "bookstore"];
+
+const isValidStage = (s: unknown): s is RunnerStage => {
+  if (!s || typeof s !== "object") return false;
+  const k = (s as { kind?: unknown }).kind;
+  if (k === "welcome" || k === "complete") return true;
+  if (k === "activity") {
+    const idx = (s as { idx?: unknown }).idx;
+    return typeof idx === "number" && idx >= 0;
+  }
+  return false;
+};
 
 const getInitialScreen = (): Screen => {
   if (typeof window === "undefined") return { kind: "town" };
@@ -90,10 +49,14 @@ const getInitialScreen = (): Screen => {
     if (parsed?.kind === "town") return { kind: "town" };
     if (
       parsed?.kind === "shop" &&
-      VALID_SHOPS.includes(parsed.shop) &&
-      VALID_STAGES.includes(parsed.stage)
+      (parsed.shop === "smoothie" || parsed.shop === "bakery" || parsed.shop === "bookstore") &&
+      isValidStage(parsed.stage)
     ) {
-      return { kind: "shop", shop: parsed.shop, stage: parsed.stage };
+      const lesson = LESSONS[parsed.shop as Shop];
+      if (parsed.stage.kind === "activity" && parsed.stage.idx >= lesson.activities.length) {
+        return { kind: "town" };
+      }
+      return { kind: "shop", shop: parsed.shop as Shop, stage: parsed.stage as RunnerStage };
     }
   } catch {
     // ignore
@@ -118,30 +81,19 @@ const Index = () => {
   }, [screen]);
 
   const enterShop = (shopId: string) => {
-    const shop: Shop | null =
-      shopId === SHOP_IDS.smoothie
-        ? "smoothie"
-        : shopId === SHOP_IDS.bakery
-        ? "bakery"
-        : shopId === SHOP_IDS.bookstore
-        ? "bookstore"
-        : null;
+    const shop = SHOP_BY_ID[shopId];
     if (!shop) return;
-    // Returning learners (already completed) skip the intro.
-    const stage: Stage = isShopCompleted(SHOP_IDS[shop]) ? "scene1" : "welcome";
+    const stage: RunnerStage = isShopCompleted(LESSONS[shop].id)
+      ? { kind: "activity", idx: 0 }
+      : { kind: "welcome" };
     setScreen({ kind: "shop", shop, stage });
   };
 
-  const setStage = (stage: Stage) => {
-    setScreen((s) => (s.kind === "shop" ? { ...s, stage } : s));
-  };
-
-  const handleComplete = (shop: Shop) => {
-    markShopCompleted(SHOP_IDS[shop]);
-    setScreen({ kind: "shop", shop, stage: "complete" });
-  };
-
   const goToTown = () => setScreen({ kind: "town" });
+
+  const handleStageChange = useCallback((stage: RunnerStage) => {
+    setScreen((s) => (s.kind === "shop" ? { ...s, stage } : s));
+  }, []);
 
   if (screen.kind === "town") {
     return (
@@ -153,139 +105,18 @@ const Index = () => {
     );
   }
 
-  const { shop, stage } = screen;
-  const isWelcome = stage === "welcome";
-  const showProgress = stage !== "welcome" && stage !== "complete";
-  const bg = isWelcome ? SHOP_BG[shop] : "bg-background";
-
-  const shopName =
-    shop === "smoothie"
-      ? "Berry Bliss Smoothies"
-      : shop === "bakery"
-      ? "Sweet Crumbs Bakery"
-      : "Page Turner Bookstore";
-
   return (
-    <div className={`min-h-screen flex flex-col px-4 py-5 md:py-6 ${bg}`}>
-      <a href="#main-content" className="skip-link">Skip to main content</a>
-      <main id="main-content" className="w-full max-w-2xl mx-auto flex-1 flex flex-col justify-center" aria-label={`${shopName} activity`}>
-        <h1 className="sr-only">{shopName}</h1>
-        {showProgress && (
-          <div className="mb-4 flex items-center gap-3">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="shrink-0 text-xs h-8 px-2 gap-1"
-                  aria-label="Leave shop and return to town map"
-                >
-                  <Map className="w-4 h-4" aria-hidden="true" />
-                  <span className="hidden sm:inline">Map</span>
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Leave this shop?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Your progress on this scene won't be saved. You can come back and start the shop again anytime.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Keep going</AlertDialogCancel>
-                  <AlertDialogAction onClick={goToTown}>
-                    Back to map
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-            <div className="flex-1">
-              <ProgressBar
-                currentScene={stageIndex[stage]}
-                totalScenes={3}
-                labels={SHOP_PROGRESS_LABELS[shop]}
-              />
-            </div>
-            {/* Spacer to keep ProgressBar visually centered */}
-            <div className="shrink-0 w-8 sm:w-[60px]" aria-hidden="true" />
-          </div>
-        )}
-
-        <SceneErrorBoundary onBackToMap={goToTown}>
-          <Suspense
-            fallback={
-              <div
-                className="min-h-[40vh] flex items-center justify-center"
-                aria-busy="true"
-                aria-live="polite"
-              >
-                <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                  <div
-                    className="w-8 h-8 rounded-full border-2 border-muted border-t-primary animate-spin"
-                    aria-hidden="true"
-                  />
-                  <span className="text-sm">Loading…</span>
-                </div>
-              </div>
-            }
-          >
-            {shop === "smoothie" && (
-              <>
-                {stage === "welcome" && <WelcomeScreen onStart={() => setStage("scene1")} />}
-                {stage === "scene1" && <Scene1Ratios onComplete={() => setStage("scene2")} />}
-                {stage === "scene2" && <Scene2Percentages onComplete={() => setStage("scene3")} />}
-                {stage === "scene3" && <Scene3Discounts onComplete={() => handleComplete("smoothie")} />}
-                {stage === "complete" && (
-                  <CompletionScreen
-                    onRestart={goToTown}
-                    onReplayScene={(s) => setStage(s)}
-                  />
-                )}
-              </>
-            )}
-
-            {shop === "bakery" && (
-              <>
-                {stage === "welcome" && <BakeryWelcome onStart={() => setStage("scene1")} />}
-                {stage === "scene1" && <BakeryScene1 onComplete={() => setStage("scene2")} />}
-                {stage === "scene2" && <BakeryScene2 onComplete={() => setStage("scene3")} />}
-                {stage === "scene3" && <BakeryScene3 onComplete={() => handleComplete("bakery")} />}
-                {stage === "complete" && (
-                  <BakeryCompletion
-                    onRestart={goToTown}
-                    onReplayScene={(s) => setStage(s)}
-                  />
-                )}
-              </>
-            )}
-
-            {shop === "bookstore" && (
-              <>
-                {stage === "welcome" && <BookstoreWelcome onStart={() => setStage("scene1")} />}
-                {stage === "scene1" && <BookstoreScene1 onComplete={() => setStage("scene2")} />}
-                {stage === "scene2" && <BookstoreScene2 onComplete={() => setStage("scene3")} />}
-                {stage === "scene3" && <BookstoreScene3 onComplete={() => handleComplete("bookstore")} />}
-                {stage === "complete" && (
-                  <BookstoreCompletion
-                    onRestart={goToTown}
-                    onReplayScene={(s) => setStage(s)}
-                  />
-                )}
-              </>
-            )}
-          </Suspense>
-        </SceneErrorBoundary>
-      </main>
+    <>
+      <LessonRunner
+        key={screen.shop}
+        lesson={LESSONS[screen.shop]}
+        initialStage={screen.stage}
+        onStageChange={handleStageChange}
+        onExit={goToTown}
+      />
       <ThemeSwitcher />
       <ReloadDebugButton />
-      {showProgress && (
-        <Suspense fallback={null}>
-          <MiniCalculator />
-          <KeyboardShortcutsHint />
-        </Suspense>
-      )}
-    </div>
+    </>
   );
 };
 

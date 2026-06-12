@@ -1,0 +1,13 @@
+{
+  "id": "smoothie-shop",
+  "shopName": "Berry Bliss Smoothies",
+  "bgClass": "bg-gradient-to-br from-[hsl(280,60%,92%)] via-[hsl(320,50%,93%)] to-[hsl(340,60%,92%)] dark:from-background dark:via-background dark:to-background",
+  "progressLabels": ["Mix It", "Sales", "Discounts"],
+  "welcome": "WelcomeScreen",
+  "completion": "CompletionScreen",
+  "activities": [
+    { "id": "scene1", "component": "Scene1Ratios" },
+    { "id": "scene2", "component": "Scene2Percentages" },
+    { "id": "scene3", "component": "Scene3Discounts" }
+  ]
+}
