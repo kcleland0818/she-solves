@@ -144,7 +144,7 @@ const ThemeSwitcher = () => {
           id="theme-switcher-panel"
           role="dialog"
           aria-label="Color theme"
-          className="fixed top-1/3 right-10 md:top-auto md:bottom-20 md:right-4 z-50 w-72 max-w-[calc(100vw-3rem)] bg-card border border-border rounded-2xl shadow-xl p-3 animate-fade-in"
+          className="fixed top-1/3 right-2 md:top-auto md:bottom-20 md:right-4 z-50 w-72 max-w-[calc(100vw-1rem)] bg-card border border-border rounded-2xl shadow-xl p-3 animate-fade-in"
         >
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs font-semibold text-muted-foreground inline-flex items-center gap-1.5">
