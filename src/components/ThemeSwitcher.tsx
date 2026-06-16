@@ -123,7 +123,7 @@ const ThemeSwitcher = () => {
         onClick={() => setOpen((o) => !o)}
         className="
           fixed z-50
-          top-1/3 right-0 rounded-l-full rounded-r-none w-8 h-10 border-r-0
+          top-1/3 right-0 rounded-l-full rounded-r-none w-11 h-11 border-r-0
           md:top-auto md:bottom-4 md:right-20 md:rounded-full md:rounded-l-full md:w-12 md:h-12 md:border-r
           bg-card text-foreground border border-border
           flex items-center justify-center shadow-lg
