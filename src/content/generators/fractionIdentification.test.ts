@@ -38,10 +38,8 @@ describe("generateFractionLesson", () => {
       expect(c.label).toBe(`${c.numerator}/${c.denominator}`);
 
       // Unique reduced form across the lesson
-      const g = ((a: number, b: number): number => (b === 0 ? a : g(b, a % b)))(
-        c.numerator,
-        c.denominator,
-      );
+      const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+      const g = gcd(c.numerator, c.denominator);
       const key = `${c.numerator / g}/${c.denominator / g}`;
       expect(reducedKeys.has(key)).toBe(false);
       reducedKeys.add(key);
