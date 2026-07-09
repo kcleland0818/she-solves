@@ -15,6 +15,7 @@ export const COMPONENTS = {
   BakeryScene1: lazy(() => import("@/components/BakeryScene1")),
   BakeryScene2: lazy(() => import("@/components/BakeryScene2")),
   BakeryScene3: lazy(() => import("@/components/BakeryScene3")),
+  BakeryPractice: lazy(() => import("@/components/BakeryPractice")),
   BakeryCompletion: lazy(() => import("@/components/BakeryCompletion")),
 
   // Bookstore
