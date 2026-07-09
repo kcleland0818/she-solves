@@ -83,6 +83,11 @@ const LessonRunner = ({ lesson, onExit, initialStage, onStageChange }: LessonRun
     }
     if (stage.kind === "activity") {
       const activity = lesson.activities[stage.idx];
+      if (!activity) {
+        // Stale session (e.g., activity removed) — reset to welcome.
+        setStage({ kind: "welcome" });
+        return null;
+      }
       const Activity = COMPONENTS[activity.component];
       return createElement(Activity as any, { onComplete: handleActivityComplete });
     }
