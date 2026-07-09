@@ -2,13 +2,12 @@
   "id": "bakery",
   "shopName": "Sweet Crumbs Bakery",
   "bgClass": "bg-gradient-to-br from-[hsl(35,65%,94%)] via-[hsl(20,55%,93%)] to-[hsl(340,55%,93%)] dark:from-background dark:via-background dark:to-background",
-  "progressLabels": ["Slice", "Frost", "Compare", "Practice"],
+  "progressLabels": ["Slice", "Frost", "Compare"],
   "welcome": "BakeryWelcome",
   "completion": "BakeryCompletion",
   "activities": [
     { "id": "scene1", "component": "BakeryScene1" },
     { "id": "scene2", "component": "BakeryScene2" },
-    { "id": "scene3", "component": "BakeryScene3" },
-    { "id": "practice", "component": "BakeryPractice" }
+    { "id": "scene3", "component": "BakeryScene3" }
   ]
 }

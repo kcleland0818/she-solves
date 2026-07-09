@@ -1,22 +1,31 @@
+import { useMemo } from "react";
 import SlicePicker from "./templates/SlicePicker";
-import sceneData from "@/content/bakery/scene1.json";
+import { generateFractionLesson } from "@/content/generators/fractionIdentification";
 
 interface Scene1Props {
   onComplete: () => void;
 }
 
 /**
- * Thin wrapper: BakeryScene1 is now just data + the SlicePicker template.
- * To add a new fraction-identification activity, edit
- * src/content/bakery/scene1.json — no TSX changes needed.
+ * Scene 1 challenges are now produced by the fraction generator with a pinned
+ * seed — deterministic across deploys, no hand-authored JSON needed.
  */
-const BakeryScene1 = ({ onComplete }: Scene1Props) => (
-  <SlicePicker
-    exploreSizes={sceneData.exploreSizes}
-    challenges={sceneData.challenges}
-    skillLabel={sceneData.skillLabel}
-    onComplete={onComplete}
-  />
-);
+const SCENE1_SEED = 42;
+
+const BakeryScene1 = ({ onComplete }: Scene1Props) => {
+  const lesson = useMemo(
+    () => generateFractionLesson({ seed: SCENE1_SEED }),
+    [],
+  );
+
+  return (
+    <SlicePicker
+      exploreSizes={lesson.exploreSizes}
+      challenges={lesson.challenges}
+      skillLabel={lesson.skillLabel}
+      onComplete={onComplete}
+    />
+  );
+};
 
 export default BakeryScene1;
