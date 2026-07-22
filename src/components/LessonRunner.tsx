@@ -72,12 +72,68 @@ const MissingStageFallback = ({
   </div>
 );
 
+const InvalidLessonView = ({
+  lessonName,
+  issues,
+  onExit,
+}: {
+  lessonName?: string;
+  issues: LessonValidationIssue[];
+  onExit: () => void;
+}) => (
+  <div className="min-h-screen flex items-center justify-center px-4 py-6 bg-background">
+    <div
+      role="alert"
+      aria-live="assertive"
+      className="max-w-md w-full bg-card border border-border rounded-2xl p-6 shadow-sm text-center flex flex-col gap-3"
+    >
+      <div className="text-4xl" aria-hidden="true">🧩</div>
+      <h2 className="text-xl font-bold">This shop needs a fix</h2>
+      <p className="text-sm text-muted-foreground">
+        {lessonName ? `"${lessonName}"` : "This lesson"} can't be loaded because its setup is incomplete.
+      </p>
+      <ul className="text-left text-xs bg-muted/50 rounded-md p-3 list-disc pl-5 space-y-1 max-h-40 overflow-auto">
+        {issues.map((issue, i) => (
+          <li key={i}>
+            <span className="font-mono">{issue.path}</span>: {issue.message}
+          </li>
+        ))}
+      </ul>
+      <div className="pt-1">
+        <Button type="button" onClick={onExit}>Back to map</Button>
+      </div>
+    </div>
+  </div>
+);
+
 const LessonRunner = ({ lesson, onExit, initialStage, onStageChange }: LessonRunnerProps) => {
+  const validation = useMemo(() => validateLesson(lesson), [lesson]);
+
   const [stage, setStage] = useState<RunnerStage>(initialStage ?? { kind: "welcome" });
 
   useEffect(() => {
     onStageChange?.(stage);
   }, [stage, onStageChange]);
+
+  useEffect(() => {
+    if (!validation.valid) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `[LessonRunner] Invalid lesson "${lesson?.id ?? "?"}":`,
+        validation.issues,
+      );
+    }
+  }, [validation, lesson?.id]);
+
+  if (!validation.valid) {
+    return (
+      <InvalidLessonView
+        lessonName={lesson?.shopName}
+        issues={validation.issues}
+        onExit={onExit}
+      />
+    );
+  }
 
   const isWelcome = stage.kind === "welcome";
   const showProgress = stage.kind === "activity";
