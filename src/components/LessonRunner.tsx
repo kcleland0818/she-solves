@@ -41,6 +41,36 @@ const Fallback = () => (
   </div>
 );
 
+interface MissingStageFallbackProps {
+  title?: string;
+  description?: string;
+  onRetry: () => void;
+  onExit: () => void;
+}
+
+const MissingStageFallback = ({
+  title = "This scene isn't available",
+  description = "We couldn't find the next step for this shop. You can restart the shop or head back to the map.",
+  onRetry,
+  onExit,
+}: MissingStageFallbackProps) => (
+  <div
+    className="min-h-[40vh] flex items-center justify-center animate-fade-in"
+    role="alert"
+    aria-live="polite"
+  >
+    <div className="max-w-md w-full bg-card border border-border rounded-2xl p-6 shadow-sm text-center flex flex-col gap-3">
+      <div className="text-4xl" aria-hidden="true">🗺️</div>
+      <h2 className="text-xl font-bold">{title}</h2>
+      <p className="text-sm text-muted-foreground">{description}</p>
+      <div className="flex gap-2 justify-center flex-wrap pt-1">
+        <Button type="button" onClick={onRetry}>Restart shop</Button>
+        <Button type="button" variant="outline" onClick={onExit}>Back to map</Button>
+      </div>
+    </div>
+  </div>
+);
+
 const LessonRunner = ({ lesson, onExit, initialStage, onStageChange }: LessonRunnerProps) => {
   const [stage, setStage] = useState<RunnerStage>(initialStage ?? { kind: "welcome" });
 
