@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState, createElement } from "react";
+import { Suspense, useEffect, useMemo, useState, createElement } from "react";
 import { Map } from "lucide-react";
 import ProgressBar from "@/components/ProgressBar";
 import SceneErrorBoundary from "@/components/SceneErrorBoundary";
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { COMPONENTS } from "@/content/lessons/registry";
 import type { Lesson } from "@/content/lessons/types";
+import { validateLesson, type LessonValidationIssue } from "@/content/lessons/validate";
 import { markShopCompleted, markActivityCompleted } from "@/lib/progress";
 
 export type RunnerStage =
