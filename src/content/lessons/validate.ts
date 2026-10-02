@@ -48,6 +48,14 @@ export const validateLesson = (lesson: unknown): LessonValidationResult => {
     push("completion", `Unknown component "${l.completion}".`);
   }
 
+  if (l.practice !== undefined) {
+    if (!isNonEmptyString(l.practice)) {
+      push("practice", "Practice component id must be a non-empty string.");
+    } else if (!isKnownComponent(l.practice)) {
+      push("practice", `Unknown component "${l.practice}".`);
+    }
+  }
+
   if (!Array.isArray(l.activities) || l.activities.length === 0) {
     push("activities", "Lesson must have at least one activity.");
   } else {
