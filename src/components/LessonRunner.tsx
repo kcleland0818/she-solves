@@ -24,7 +24,8 @@ import { markShopCompleted, markActivityCompleted } from "@/lib/progress";
 export type RunnerStage =
   | { kind: "welcome" }
   | { kind: "activity"; idx: number }
-  | { kind: "complete" };
+  | { kind: "complete" }
+  | { kind: "practice" };
 
 interface LessonRunnerProps {
   lesson: Lesson;
@@ -204,6 +205,22 @@ const LessonRunner = ({ lesson, onExit, initialStage, onStageChange }: LessonRun
       }
       return createElement(Activity as any, { onComplete: handleActivityComplete });
     }
+    if (stage.kind === "practice") {
+      const Practice = lesson.practice ? COMPONENTS[lesson.practice] : undefined;
+      if (!Practice) {
+        return (
+          <MissingStageFallback
+            title="Practice isn't available"
+            description="This shop doesn't have a practice mode yet. Head back to the wrap-up or the map."
+            onRetry={() => setStage({ kind: "complete" })}
+            onExit={onExit}
+          />
+        );
+      }
+      return createElement(Practice as any, {
+        onExitPractice: () => setStage({ kind: "complete" }),
+      });
+    }
     const Completion = COMPONENTS[lesson.completion];
     if (!Completion) {
       return (
@@ -218,6 +235,7 @@ const LessonRunner = ({ lesson, onExit, initialStage, onStageChange }: LessonRun
     return createElement(Completion as any, {
       onRestart: onExit,
       onReplayScene: replayScene,
+      onPractice: lesson.practice ? () => setStage({ kind: "practice" }) : undefined,
     });
   };
 

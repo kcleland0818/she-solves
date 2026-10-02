@@ -5,6 +5,7 @@
   "progressLabels": ["Slice", "Frost", "Compare"],
   "welcome": "BakeryWelcome",
   "completion": "BakeryCompletion",
+  "practice": "BakeryPractice",
   "activities": [
     { "id": "scene1", "component": "BakeryScene1" },
     { "id": "scene2", "component": "BakeryScene2" },

@@ -23,6 +23,12 @@ export interface SlicePickerProps {
   heading?: string;
   /** Theme prefix for CSS tokens (e.g. "bakery" → hsl(var(--bakery-frosting))). */
   theme?: "bakery";
+  /** Which phase to start in. Practice mode uses "challenge" to skip free-explore. */
+  startPhase?: "explore" | "challenge";
+  /** Label for the done-phase advance button. Defaults to "Next Scene". */
+  completeLabel?: string;
+  /** Called each time a challenge is answered correctly (practice stats). */
+  onSolved?: () => void;
 }
 
 const pickRandom = <T,>(arr: T[], excludeIdx: number | null): { item: T; idx: number } => {
@@ -52,8 +58,11 @@ const SlicePicker = ({
   onComplete,
   heading = "🍰 Slice the Cake",
   theme = "bakery",
+  startPhase = "explore",
+  completeLabel = "Next Scene",
+  onSolved,
 }: SlicePickerProps) => {
-  const [phase, setPhase] = useState<"explore" | "challenge" | "done">("explore");
+  const [phase, setPhase] = useState<"explore" | "challenge" | "done">(startPhase);
   const [exploreDen, setExploreDen] = useState(exploreSizes[1] ?? exploreSizes[0] ?? 6);
   const [challengeIdx, setChallengeIdx] = useState(0);
   const [lastChallengeIdx, setLastChallengeIdx] = useState<number | null>(null);
@@ -115,6 +124,7 @@ const SlicePicker = ({
         `${celebratoryOpener(theme)} ${numerator} shaded out of ${denominator} total = ${label}. ${skillBeat("naming fractions")}`,
       );
       setPhase("done");
+      onSolved?.();
     } else if (shaded.size < numerator) {
       setFeedback(
         `Almost! You need ${numerator - shaded.size} more shaded slice${numerator - shaded.size === 1 ? "" : "s"} to make ${label}.`,
@@ -291,7 +301,7 @@ const SlicePicker = ({
               onClick={onComplete}
               className="bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground"
             >
-              Next Scene <span aria-hidden="true">→</span>
+              {completeLabel} <span aria-hidden="true">→</span>
             </Button>
           </div>
         </div>

@@ -32,7 +32,7 @@ const SCREEN_STORAGE_KEY = "shesolves:screen";
 const isValidStage = (s: unknown): s is RunnerStage => {
   if (!s || typeof s !== "object") return false;
   const k = (s as { kind?: unknown }).kind;
-  if (k === "welcome" || k === "complete") return true;
+  if (k === "welcome" || k === "complete" || k === "practice") return true;
   if (k === "activity") {
     const idx = (s as { idx?: unknown }).idx;
     return typeof idx === "number" && idx >= 0;

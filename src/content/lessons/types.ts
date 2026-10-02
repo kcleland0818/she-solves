@@ -12,5 +12,7 @@ export interface Lesson {
   progressLabels: string[];
   welcome: ComponentId;
   completion: ComponentId;
+  /** Optional endless-practice component, entered from the completion screen. */
+  practice?: ComponentId;
   activities: LessonActivity[];
 }

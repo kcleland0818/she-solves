@@ -2,6 +2,7 @@
 
 const COMPLETION_KEY = "shesolves:completedShops";
 const ACTIVITIES_KEY = "shesolves:activities";
+const PRACTICE_KEY = "shesolves:practice";
 
 const readSet = (): Set<string> => {
   if (typeof window === "undefined") return new Set();
@@ -82,11 +83,48 @@ export const markActivityCompleted = (lessonId: string, activityId: string): voi
   }
 };
 
+// Practice-mode stats. Stored as Record<lessonId, number> = rounds solved.
+type PracticeMap = Record<string, number>;
+
+const readPractice = (): PracticeMap => {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(PRACTICE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      const out: PracticeMap = {};
+      for (const [k, v] of Object.entries(parsed)) {
+        if (typeof v === "number" && Number.isFinite(v) && v >= 0) out[k] = v;
+      }
+      return out;
+    }
+    return {};
+  } catch {
+    return {};
+  }
+};
+
+export const getPracticeRounds = (lessonId: string): number =>
+  readPractice()[lessonId] ?? 0;
+
+export const markPracticeRound = (lessonId: string): void => {
+  if (typeof window === "undefined") return;
+  const map = readPractice();
+  map[lessonId] = (map[lessonId] ?? 0) + 1;
+  try {
+    window.localStorage.setItem(PRACTICE_KEY, JSON.stringify(map));
+  } catch {
+    // ignore
+  }
+};
+
 export const resetProgress = (): void => {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.removeItem(COMPLETION_KEY);
     window.localStorage.removeItem(ACTIVITIES_KEY);
+    window.localStorage.removeItem(PRACTICE_KEY);
   } catch {
     // Storage unavailable; fail silently.
   }
