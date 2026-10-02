@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import PennySpeech from "./PennySpeech";
 import SkillStamp from "./SkillStamp";
+import { getPracticeRounds } from "@/lib/progress";
 
 type ReplayScene = "scene1" | "scene2" | "scene3";
 
 interface BakeryCompletionProps {
   onRestart: () => void;
   onReplayScene?: (scene: ReplayScene) => void;
+  onPractice?: () => void;
 }
 
 const skills: { emoji: string; title: string; desc: string; scene: ReplayScene }[] = [
@@ -30,7 +32,10 @@ const skills: { emoji: string; title: string; desc: string; scene: ReplayScene }
   },
 ];
 
-const BakeryCompletion = ({ onRestart, onReplayScene }: BakeryCompletionProps) => (
+const BakeryCompletion = ({ onRestart, onReplayScene, onPractice }: BakeryCompletionProps) => {
+  const practiceRounds = getPracticeRounds("bakery");
+
+  return (
   <main className="flex flex-col items-center gap-3 animate-fade-in max-w-lg mx-auto text-center">
     <div className="text-5xl" aria-hidden="true">🎉🧁🏆🥐🎉</div>
     <h2 className="text-3xl font-bold bg-gradient-to-r from-bakery-frosting-deep to-accent bg-clip-text text-transparent">
@@ -77,10 +82,27 @@ const BakeryCompletion = ({ onRestart, onReplayScene }: BakeryCompletionProps) =
       Fractions show up everywhere — recipes, time, money. You've got the tools now!
     </p>
 
+    {onPractice && (
+      <div className="flex flex-col items-center gap-1">
+        <Button
+          onClick={onPractice}
+          className="bg-gradient-to-r from-bakery-frosting-deep to-accent text-accent-foreground hover-scale"
+        >
+          Practice Fractions <span aria-hidden="true">🔁</span>
+        </Button>
+        {practiceRounds > 0 && (
+          <p className="text-xs text-muted-foreground">
+            You've solved {practiceRounds} practice order{practiceRounds === 1 ? "" : "s"} so far — keep it up!
+          </p>
+        )}
+      </div>
+    )}
+
     <Button onClick={onRestart} variant="outline" className="hover-scale">
       Back to Town <span aria-hidden="true">🗺️</span>
     </Button>
   </main>
-);
+  );
+};
 
 export default BakeryCompletion;
