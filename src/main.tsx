@@ -1,6 +1,13 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
+import "@fontsource/nunito/400.css";
+import "@fontsource/nunito/600.css";
+import "@fontsource/nunito/700.css";
+import "@fontsource/nunito/800.css";
 import "./index.css";
+import { registerOfflineSupport } from "./lib/registerSW";
+
+registerOfflineSupport();
 import townMapBg from "./assets/town-map-bg.jpg";
 import { applyTheme, getInitialTheme } from "./lib/theme";
 import { applyMotionPref, getStoredMotion } from "./lib/motion";
