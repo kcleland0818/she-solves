@@ -1,0 +1,2 @@
+- Offline support uses vite-plugin-pwa (generateSW) registered only from `src/lib/registerSW.ts`, which refuses dev/iframe/preview hosts — keeps stale service workers out of the editor preview.
+- Fonts are self-hosted via @fontsource so the app renders offline.
