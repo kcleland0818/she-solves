@@ -16,7 +16,7 @@ const OfflineIndicator = () => {
   }, []);
 
   return (
-    <div role="status" aria-live="polite" className="fixed top-3 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+    <div role="status" aria-live="polite" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
       {!online && (
         <div className="flex items-center gap-2 rounded-full bg-card text-card-foreground border border-border shadow-md px-3 py-1.5 text-xs font-semibold">
           <WifiOff className="w-4 h-4" aria-hidden="true" />
