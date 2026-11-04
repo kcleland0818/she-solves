@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import TownMap from "@/components/TownMap";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import OfflineIndicator from "@/components/OfflineIndicator";
 import ReloadDebugButton from "@/components/ReloadDebugButton";
 import LessonRunner, { type RunnerStage } from "@/components/LessonRunner";
 import smoothieLesson from "@/content/lessons/smoothie.json";
@@ -100,6 +101,7 @@ const Index = () => {
       <>
         <TownMap onEnterShop={enterShop} />
         <ThemeSwitcher />
+        <OfflineIndicator />
         <ReloadDebugButton />
       </>
     );
@@ -115,6 +117,7 @@ const Index = () => {
         onExit={goToTown}
       />
       <ThemeSwitcher />
+      <OfflineIndicator />
       <ReloadDebugButton />
     </>
   );
