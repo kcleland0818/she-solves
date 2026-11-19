@@ -5,6 +5,7 @@
   "progressLabels": ["Read", "Decode", "Compare"],
   "welcome": "BookstoreWelcome",
   "completion": "BookstoreCompletion",
+  "practice": "BookstorePractice",
   "activities": [
     { "id": "scene1", "component": "BookstoreScene1" },
     { "id": "scene2", "component": "BookstoreScene2" },

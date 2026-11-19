@@ -1,0 +1,3 @@
+- [x] Add offline-ready generated ratio and inequality practice with fresh-challenge controls.
+- [x] Connect both wrap-up screens and count solved practice challenges.
+- [x] Verify generation, answer counting, and both practice flows.

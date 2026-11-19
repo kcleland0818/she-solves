@@ -5,6 +5,7 @@
   "progressLabels": ["Mix It", "Sales", "Discounts"],
   "welcome": "WelcomeScreen",
   "completion": "CompletionScreen",
+  "practice": "SmoothiePractice",
   "activities": [
     { "id": "scene1", "component": "Scene1Ratios" },
     { "id": "scene2", "component": "Scene2Percentages" },

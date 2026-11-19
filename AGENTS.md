@@ -1,2 +1,3 @@
 - Offline support uses vite-plugin-pwa (generateSW) registered only from `src/lib/registerSW.ts`, which refuses dev/iframe/preview hosts — keeps stale service workers out of the editor preview.
 - Fonts are self-hosted via @fontsource so the app renders offline.
+- Shop practice reuses interaction templates with local seeded generators and per-answer callbacks; this keeps fresh challenges offline-ready without changing story progress.

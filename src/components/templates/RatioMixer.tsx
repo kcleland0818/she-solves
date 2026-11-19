@@ -26,6 +26,9 @@ export interface RatioMixerProps {
   challenges: RatioChallenge[];
   skillLabel: string;
   onComplete: () => void;
+  onSolved?: () => void;
+  startPhase?: "explore" | "challenge";
+  completeLabel?: string;
   heading?: string;
   /** Theme key passed to celebratoryOpener. */
   theme?: "smoothie";
@@ -48,12 +51,15 @@ const RatioMixer = ({
   challenges,
   skillLabel,
   onComplete,
+  onSolved,
+  startPhase = "explore",
+  completeLabel = "Next Scene",
   heading = "🍹 Mix the Perfect Smoothie",
   theme = "smoothie",
 }: RatioMixerProps) => {
   const [a, setA] = useState(2);
   const [b, setB] = useState(1);
-  const [phase, setPhase] = useState<"explore" | "challenge" | "done">("explore");
+  const [phase, setPhase] = useState<"explore" | "challenge" | "done">(startPhase);
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [lastChallengeIdx, setLastChallengeIdx] = useState<number | null>(null);
@@ -81,7 +87,9 @@ const RatioMixer = ({
   const isCorrectRatio = b > 0 && Math.abs(a / b - challenge.ratio) < 0.1;
 
   const handleCheck = () => {
+    if (phase !== "challenge") return;
     if (total >= challenge.minTotal && isCorrectRatio) {
+      onSolved?.();
       const ratioExplain =
         challenge.ratio === 1
           ? `${a}:${b} is equal parts — 1:1!`
@@ -224,12 +232,12 @@ const RatioMixer = ({
       {phase === "done" && (
         <div className="flex flex-col items-center gap-3">
           <SkillStamp label={skillLabel} />
-          <div className="flex gap-3 justify-center">
+          <div className="flex gap-3 justify-center flex-wrap">
             <Button variant="outline" onClick={() => { newChallenge(); setPhase("challenge"); setFeedback(""); setShowHint(false); }}>
               Try a Different Challenge
             </Button>
             <Button onClick={onComplete} className="bg-gradient-to-r from-primary to-accent text-accent-foreground">
-              Next Scene <span aria-hidden="true">→</span>
+              {completeLabel} <span aria-hidden="true">→</span>
             </Button>
           </div>
         </div>

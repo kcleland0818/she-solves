@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import AverySpeech from "./AverySpeech";
 import SkillStamp from "./SkillStamp";
+import { getPracticeRounds } from "@/lib/progress";
 
 type ReplayScene = "scene1" | "scene2" | "scene3";
 
 interface BookstoreCompletionProps {
   onRestart: () => void;
   onReplayScene?: (scene: ReplayScene) => void;
+  onPractice?: () => void;
 }
 
 const skills: { emoji: string; title: string; desc: string; scene: ReplayScene }[] = [
@@ -30,7 +32,7 @@ const skills: { emoji: string; title: string; desc: string; scene: ReplayScene }
   },
 ];
 
-const BookstoreCompletion = ({ onRestart, onReplayScene }: BookstoreCompletionProps) => (
+const BookstoreCompletion = ({ onRestart, onReplayScene, onPractice }: BookstoreCompletionProps) => (
   <main className="flex flex-col items-center gap-3 animate-fade-in max-w-lg mx-auto text-center">
     <div className="text-5xl" aria-hidden="true">🎉📚🏆📖🎉</div>
     <h2 className="text-3xl font-bold bg-gradient-to-r from-bookstore-leather to-bookstore-leather-deep bg-clip-text text-transparent">
@@ -77,6 +79,14 @@ const BookstoreCompletion = ({ onRestart, onReplayScene }: BookstoreCompletionPr
       Inequalities show up everywhere — speed limits, age ratings, sale prices. You're ready!
     </p>
 
+    {onPractice && (
+      <div className="flex flex-col items-center gap-1">
+        <Button onClick={onPractice} className="min-h-11">Practice Inequalities <span aria-hidden="true">🔁</span></Button>
+        {getPracticeRounds("bookstore") > 0 && (
+          <p className="text-xs text-muted-foreground">You've solved {getPracticeRounds("bookstore")} practice sentences so far — keep it up!</p>
+        )}
+      </div>
+    )}
     <Button onClick={onRestart} variant="outline" className="hover-scale">
       Back to Town <span aria-hidden="true">🗺️</span>
     </Button>

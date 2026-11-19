@@ -9,6 +9,7 @@ export const COMPONENTS = {
   Scene2Percentages: lazy(() => import("@/components/Scene2Percentages")),
   Scene3Discounts: lazy(() => import("@/components/Scene3Discounts")),
   CompletionScreen: lazy(() => import("@/components/CompletionScreen")),
+  SmoothiePractice: lazy(() => import("@/components/SmoothiePractice")),
 
   // Bakery
   BakeryWelcome: lazy(() => import("@/components/BakeryWelcome")),
@@ -24,6 +25,7 @@ export const COMPONENTS = {
   BookstoreScene2: lazy(() => import("@/components/BookstoreScene2")),
   BookstoreScene3: lazy(() => import("@/components/BookstoreScene3")),
   BookstoreCompletion: lazy(() => import("@/components/BookstoreCompletion")),
+  BookstorePractice: lazy(() => import("@/components/BookstorePractice")),
 } as const satisfies Record<string, LazyExoticComponent<ComponentType<any>>>;
 
 export type ComponentId = keyof typeof COMPONENTS;

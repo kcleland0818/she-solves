@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import MayaSpeech from "./MayaSpeech";
 import SkillStamp from "./SkillStamp";
+import { getPracticeRounds } from "@/lib/progress";
 
 type ReplayScene = "scene1" | "scene2" | "scene3";
 
 interface CompletionScreenProps {
   onRestart: () => void;
   onReplayScene?: (scene: ReplayScene) => void;
+  onPractice?: () => void;
 }
 
 const skills: { emoji: string; title: string; desc: string; scene: ReplayScene }[] = [
@@ -15,7 +17,7 @@ const skills: { emoji: string; title: string; desc: string; scene: ReplayScene }
   { emoji: "🏷️", title: "Discounts", desc: "You can calculate sale prices using percentages — real-world math!", scene: "scene3" },
 ];
 
-const CompletionScreen = ({ onRestart, onReplayScene }: CompletionScreenProps) => (
+const CompletionScreen = ({ onRestart, onReplayScene, onPractice }: CompletionScreenProps) => (
   <main className="flex flex-col items-center gap-3 animate-fade-in max-w-lg mx-auto text-center">
     <div className="text-5xl" aria-hidden="true">🎉🍓🏆✨🎉</div>
     <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">You Did It!</h2>
@@ -55,6 +57,14 @@ const CompletionScreen = ({ onRestart, onReplayScene }: CompletionScreenProps) =
       Remember: math is just a tool to figure cool things out. You've got this!
     </p>
 
+    {onPractice && (
+      <div className="flex flex-col items-center gap-1">
+        <Button onClick={onPractice} className="min-h-11">Practice Ratios <span aria-hidden="true">🔁</span></Button>
+        {getPracticeRounds("smoothie-shop") > 0 && (
+          <p className="text-xs text-muted-foreground">You've solved {getPracticeRounds("smoothie-shop")} practice orders so far — keep it up!</p>
+        )}
+      </div>
+    )}
     <Button onClick={onRestart} variant="outline" className="hover-scale">
       Back to Town <span aria-hidden="true">🗺️</span>
     </Button>

@@ -25,6 +25,7 @@ interface SentenceToInequalityProps {
   nextLabel?: string;
   shopTheme?: ShopTheme;
   onComplete: () => void;
+  onSolved?: () => void;
 }
 
 const SYM: Record<InequalityOp, string> = { lt: "<", gt: ">", eq: "=", lte: "≤", gte: "≥" };
@@ -175,6 +176,7 @@ const SentenceToInequality = ({
   nextLabel = "Continue",
   shopTheme = "bookstore",
   onComplete,
+  onSolved,
 }: SentenceToInequalityProps) => {
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<InequalityOp | null>(null);
@@ -190,7 +192,8 @@ const SentenceToInequality = ({
 
   const submit = (op: InequalityOp) => {
     setPicked(op);
-    if (op === problem.answer) {
+    if (op === problem.answer && !solved.has(idx)) {
+      onSolved?.();
       setSolved((s) => new Set(s).add(idx));
     }
   };
