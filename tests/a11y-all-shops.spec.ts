@@ -92,3 +92,8 @@ test("a11y audit: bookstore", async ({ page }) => {
   test.setTimeout(180_000);
   await auditShop(page, "Page Turner", "bookstore");
 });
+
+test("a11y audit: arcade", async ({ page }) => {
+  test.setTimeout(180_000);
+  await auditShop(page, "Lucky Stars", "arcade");
+});

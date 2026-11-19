@@ -1,0 +1,9 @@
+{
+  "heading": "🕹️ Claw Machine Forecast",
+  "intro": "The claw grabs one plushie at random each play, and we restock it right away. Can you predict how many we'll win?",
+  "skillLabel": "Predicting With Probability",
+  "machines": [
+    { "items": [{ "emoji": "🦄", "name": "unicorn", "count": 1 }, { "emoji": "🐻", "name": "bear", "count": 3 }], "target": "unicorn", "plays": 20, "seed": 11 },
+    { "items": [{ "emoji": "🐙", "name": "octopus", "count": 2 }, { "emoji": "🐸", "name": "frog", "count": 5 }, { "emoji": "🐱", "name": "cat", "count": 3 }], "target": "octopus", "plays": 30, "seed": 23 }
+  ]
+}

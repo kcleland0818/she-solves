@@ -7,21 +7,24 @@ import LessonRunner, { type RunnerStage } from "@/components/LessonRunner";
 import smoothieLesson from "@/content/lessons/smoothie.json";
 import bakeryLesson from "@/content/lessons/bakery.json";
 import bookstoreLesson from "@/content/lessons/bookstore.json";
+import arcadeLesson from "@/content/lessons/arcade.json";
 import type { Lesson } from "@/content/lessons/types";
 import { isShopCompleted } from "@/lib/progress";
 
-type Shop = "smoothie" | "bakery" | "bookstore";
+type Shop = "smoothie" | "bakery" | "bookstore" | "arcade";
 
 const LESSONS = {
   smoothie: smoothieLesson as Lesson,
   bakery: bakeryLesson as Lesson,
   bookstore: bookstoreLesson as Lesson,
+  arcade: arcadeLesson as Lesson,
 };
 
 const SHOP_BY_ID: Record<string, Shop> = {
   [LESSONS.smoothie.id]: "smoothie",
   [LESSONS.bakery.id]: "bakery",
   [LESSONS.bookstore.id]: "bookstore",
+  [LESSONS.arcade.id]: "arcade",
 };
 
 type Screen =
@@ -50,7 +53,7 @@ const getInitialScreen = (): Screen => {
     if (parsed?.kind === "town") return { kind: "town" };
     if (
       parsed?.kind === "shop" &&
-      (parsed.shop === "smoothie" || parsed.shop === "bakery" || parsed.shop === "bookstore") &&
+      (parsed.shop in LESSONS) &&
       isValidStage(parsed.stage)
     ) {
       const lesson = LESSONS[parsed.shop as Shop];

@@ -68,6 +68,17 @@ const shops: Shop[] = [
     position: { top: "52%", left: "32%" },
     positionMd: { top: "55%", left: "42%" },
   },
+  {
+    id: "arcade",
+    name: "Lucky Stars Arcade",
+    emoji: "🎡",
+    description:
+      "Run the prize booth at the arcade! Spin wheels, pick prize bags, and forecast the claw machine — all while learning probability.",
+    learningTopics: ["Probability as a Fraction", "Comparing Likelihood", "Predicting Outcomes"],
+    unlocked: true,
+    position: { top: "46%", left: "66%" },
+    positionMd: { top: "47%", left: "56%" },
+  },
 ];
 
 interface TownMapProps {

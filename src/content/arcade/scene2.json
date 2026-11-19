@@ -1,0 +1,16 @@
+{
+  "heading": "👜 Prize Bags",
+  "intro": "Some things are sure to happen, some never will, and most are somewhere in between. Where does each one go on the chance scale?",
+  "skillLabel": "Comparing Likelihood",
+  "events": [
+    { "text": "A bag has 6 gold tokens and nothing else. You pull out a gold token.", "answer": "certain", "hint": "Every token in the bag is gold — could you ever miss?" },
+    { "text": "A bag has 1 star token and 9 plain tokens. You pull out the star.", "answer": "unlikely", "hint": "Only 1 out of 10 is a star. That can happen, but not often." },
+    { "text": "A coin lands on heads.", "answer": "even", "hint": "A coin has two sides, each just as likely." },
+    { "text": "A bag has only red tokens. You pull out a blue one.", "answer": "impossible", "hint": "Are there any blue tokens in there at all?" },
+    { "text": "A bag has 8 prize tokens and 2 plain ones. You pull a prize.", "answer": "likely", "hint": "8 out of 10 is most of the bag — but not all of it." }
+  ],
+  "bags": [
+    { "prizeName": "golden tickets", "bags": [{ "label": "Bag A", "prizes": 3, "total": 4 }, { "label": "Bag B", "prizes": 5, "total": 10 }], "answer": 0 },
+    { "prizeName": "star tokens", "bags": [{ "label": "Bag A", "prizes": 4, "total": 12 }, { "label": "Bag B", "prizes": 2, "total": 4 }], "answer": 1 }
+  ]
+}

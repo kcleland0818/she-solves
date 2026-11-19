@@ -64,6 +64,12 @@
     --bookstore-leather-deep: 15 55% 28%;
     --bookstore-gold: 42 75% 52%;
     --bookstore-shelf: 25 35% 28%;
+    --arcade-neon: 174 75% 26%;
+    --arcade-deep: 200 60% 22%;
+    --arcade-gold: 44 90% 52%;
+    --arcade-red: 0 72% 55%;
+    --arcade-blue: 212 80% 52%;
+    --arcade-green: 142 55% 42%;
   }
 
   .dark {

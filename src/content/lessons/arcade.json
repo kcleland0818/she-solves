@@ -1,0 +1,14 @@
+{
+  "id": "arcade",
+  "shopName": "Lucky Stars Arcade",
+  "bgClass": "bg-gradient-to-br from-[hsl(174,45%,92%)] via-[hsl(44,70%,93%)] to-[hsl(200,45%,92%)] dark:from-background dark:via-background dark:to-background",
+  "progressLabels": ["Spin", "Bags", "Claw"],
+  "welcome": "ArcadeWelcome",
+  "completion": "ArcadeCompletion",
+  "practice": "ArcadePractice",
+  "activities": [
+    { "id": "scene1", "component": "ArcadeScene1" },
+    { "id": "scene2", "component": "ArcadeScene2" },
+    { "id": "scene3", "component": "ArcadeScene3" }
+  ]
+}

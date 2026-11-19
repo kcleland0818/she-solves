@@ -22,6 +22,7 @@ const SHOPS: ShopSkills[] = [
   { id: "smoothie-shop", emoji: "🍓", name: "Berry Bliss Smoothies", skills: ["Ratios", "Percentages", "Discounts"] },
   { id: "bakery", emoji: "🧁", name: "Sweet Crumbs Bakery", skills: ["Identifying Fractions", "Equivalent Fractions", "Comparing Fractions"] },
   { id: "bookstore", emoji: "📚", name: "Page Turner Bookstore", skills: ["Reading Inequalities", "Writing Inequalities", "Comparing With Inequalities"] },
+  { id: "arcade", emoji: "🎡", name: "Lucky Stars Arcade", skills: ["Probability of a Single Event", "Comparing Likelihood", "Predicting With Probability"] },
 ];
 
 const SkillsDashboard = () => {

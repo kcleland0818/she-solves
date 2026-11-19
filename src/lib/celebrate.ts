@@ -2,15 +2,16 @@
 // across all three shops. Used inside scene `setFeedback(...)` for the
 // CORRECT path only — wrong-answer copy stays gentle and stays put.
 
-type Shop = "smoothie" | "bakery" | "bookstore";
+type Shop = "smoothie" | "bakery" | "bookstore" | "arcade";
 
 const OPENERS: Record<Shop, string[]> = {
   smoothie: ["YES!", "Boom —", "Nailed it!", "There it is!", "Locked in!"],
   bakery: ["Yes, chef!", "Sweet!", "Nailed it!", "Boom —", "Fresh out the oven!"],
   bookstore: ["Yes!", "Page-turner!", "There it is!", "Locked in!", "Right on the shelf!"],
+  arcade: ["Jackpot!", "Winner!", "Ding ding ding!", "Bullseye!", "High score!"],
 };
 
-let lastIdx: Record<Shop, number> = { smoothie: -1, bakery: -1, bookstore: -1 };
+let lastIdx: Record<Shop, number> = { smoothie: -1, bakery: -1, bookstore: -1, arcade: -1 };
 
 export const celebratoryOpener = (shop: Shop): string => {
   const opts = OPENERS[shop];

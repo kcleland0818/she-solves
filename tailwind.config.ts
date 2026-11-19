@@ -79,6 +79,14 @@ export default {
           gold: "hsl(var(--bookstore-gold))",
           shelf: "hsl(var(--bookstore-shelf))",
         },
+        arcade: {
+          neon: "hsl(var(--arcade-neon))",
+          deep: "hsl(var(--arcade-deep))",
+          gold: "hsl(var(--arcade-gold))",
+          red: "hsl(var(--arcade-red))",
+          blue: "hsl(var(--arcade-blue))",
+          green: "hsl(var(--arcade-green))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
