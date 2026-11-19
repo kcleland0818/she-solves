@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import lucyAvatar from "@/assets/lucy-avatar.webp";
 
 const ArcadeWelcome = ({ onStart }: { onStart: () => void }) => (
   <section aria-label="Welcome" className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 animate-fade-in">
@@ -9,7 +10,18 @@ const ArcadeWelcome = ({ onStart }: { onStart: () => void }) => (
     </p>
     <div className="bg-card border border-arcade-neon/30 rounded-2xl p-4 mb-5 max-w-sm shadow-md">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-14 h-14 rounded-full bg-arcade-gold/30 border-2 border-arcade-neon/60 flex items-center justify-center text-3xl animate-[bounce_3s_ease-in-out_infinite]" aria-hidden="true">🎟️</div>
+        <div className="w-14 h-14 rounded-full bg-arcade-gold/30 border-2 border-arcade-neon/60 overflow-hidden shadow-md animate-[bounce_3s_ease-in-out_infinite]">
+          <img
+            src={lucyAvatar}
+            alt="Lucy, the arcade owner"
+            width={56}
+            height={56}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            className="w-full h-full object-cover"
+          />
+        </div>
         <span className="font-semibold text-card-foreground">Lucy, the arcade owner</span>
       </div>
       <p className="text-sm text-foreground leading-relaxed">
