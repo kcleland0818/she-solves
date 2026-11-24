@@ -1,10 +1,5 @@
 {
   "heading": "🎡 Spin the Wheel",
   "intro": "Every section on this wheel is the same size. Give it a spin, then tell me the chance of landing on the color I ask for — as a fraction!",
-  "skillLabel": "Probability of a Single Event",
-  "problems": [
-    { "sections": ["gold", "red", "blue", "red"], "target": "gold" },
-    { "sections": ["gold", "blue", "red", "gold", "green", "blue", "red", "blue"], "target": "gold" },
-    { "sections": ["green", "red", "green", "blue", "green", "red"], "target": "green" }
-  ]
+  "skillLabel": "Probability of a Single Event"
 }
