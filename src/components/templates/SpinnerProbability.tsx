@@ -6,27 +6,59 @@ import SkillStamp from "@/components/SkillStamp";
 import { celebratoryOpener, skillBeat } from "@/lib/celebrate";
 import { countOf, simplify, type SpinnerProblem, type PrizeColor } from "@/content/generators/probability";
 
-const COLOR_VAR: Record<PrizeColor, string> = {
-  gold: "var(--arcade-gold)", red: "var(--arcade-red)", blue: "var(--arcade-blue)", green: "var(--arcade-green)",
-};
+const PRIZE_ORDER: PrizeColor[] = ["gold", "red", "blue", "green"];
+
+const SYMBOL: Record<PrizeColor, string> = { gold: "★", red: "●", blue: "▲", green: "■" };
 
 export const Wheel = ({ sections, landed }: { sections: PrizeColor[]; landed: number | null }) => {
   const n = sections.length;
-  const stops = sections.map((c, i) => `hsl(${COLOR_VAR[c]}) ${(i * 360) / n}deg ${((i + 1) * 360) / n - 1.5}deg, hsl(var(--arcade-deep)) ${((i + 1) * 360) / n - 1.5}deg ${((i + 1) * 360) / n}deg`).join(", ");
+  const R = 100, C = 110;
+  const pt = (deg: number, r: number) => {
+    const a = ((deg - 90) * Math.PI) / 180;
+    return [C + r * Math.cos(a), C + r * Math.sin(a)];
+  };
   const rotation = landed === null ? 0 : 1080 - ((landed + 0.5) * 360) / n;
   const counts = sections.reduce<Record<string, number>>((m, c) => ((m[c] = (m[c] ?? 0) + 1), m), {});
+  const used = PRIZE_ORDER.filter((c) => counts[c]);
   return (
     <figure className="flex flex-col items-center gap-2">
-      <div className="relative w-44 h-44">
-        <div className="absolute left-1/2 -top-2 -translate-x-1/2 z-10 text-2xl" aria-hidden="true">🔻</div>
-        <div
+      <div className="relative w-52 h-52">
+        <svg viewBox="0 0 220 220" aria-hidden="true" className="absolute left-1/2 -top-3 -translate-x-1/2 z-10 w-8 h-8 overflow-visible">
+          <polygon points="80,20 140,20 110,75" fill="hsl(var(--arcade-deep))" stroke="hsl(var(--card))" strokeWidth="10" strokeLinejoin="round" />
+        </svg>
+        <svg
+          viewBox="0 0 220 220"
           role="img"
-          aria-label={`Prize wheel with ${n} equal sections: ${Object.entries(counts).map(([c, k]) => `${k} ${c}`).join(", ")}.`}
-          className="w-full h-full rounded-full border-4 border-arcade-deep shadow-lg transition-transform duration-1000 ease-out"
-          style={{ background: `conic-gradient(${stops})`, transform: `rotate(${rotation}deg)` }}
-        />
+          aria-label={`Prize wheel with ${n} equal sections: ${Object.entries(counts).map(([c, k]) => `${k} ${c}`).join(", ")}.${landed !== null ? ` Landed on ${sections[landed]}.` : ""}`}
+          className="w-full h-full drop-shadow-lg transition-transform duration-1000 ease-out motion-reduce:transition-none"
+          style={{ transform: `rotate(${rotation}deg)` }}
+        >
+          <circle cx={C} cy={C} r={R + 6} fill="hsl(var(--arcade-deep))" />
+          {sections.map((c, i) => {
+            const a0 = (i * 360) / n, a1 = ((i + 1) * 360) / n;
+            const [x0, y0] = pt(a0, R), [x1, y1] = pt(a1, R);
+            const [lx, ly] = pt((a0 + a1) / 2, R * 0.66);
+            return (
+              <g key={i}>
+                <path d={`M${C},${C} L${x0},${y0} A${R},${R} 0 0 1 ${x1},${y1} Z`} fill={`hsl(var(--arcade-${c}))`}
+                  stroke="hsl(var(--card))" strokeWidth="4" strokeLinejoin="round" />
+                <circle cx={lx} cy={ly} r="11" fill="hsl(var(--card))" stroke="hsl(var(--arcade-deep))" strokeWidth="1.5" />
+                <text x={lx} y={ly} textAnchor="middle" dominantBaseline="central" fontSize="13" fill="hsl(var(--arcade-deep))">{SYMBOL[c]}</text>
+              </g>
+            );
+          })}
+          <circle cx={C} cy={C} r="12" fill="hsl(var(--card))" stroke="hsl(var(--arcade-deep))" strokeWidth="3" />
+        </svg>
       </div>
-      <figcaption className="text-xs text-muted-foreground">{n} equal sections</figcaption>
+      <figcaption className="text-sm text-foreground flex flex-wrap justify-center gap-x-3 gap-y-1">
+        <span className="text-muted-foreground">{n} equal sections:</span>
+        {used.map((c) => (
+          <span key={c} className="inline-flex items-center gap-1">
+            <span aria-hidden="true" className="inline-flex w-5 h-5 items-center justify-center rounded-full border-2 border-card text-xs text-arcade-deep" style={{ background: `hsl(var(--arcade-${c}))` }}>{SYMBOL[c]}</span>
+            {c} ({counts[c]})
+          </span>
+        ))}
+      </figcaption>
     </figure>
   );
 };
