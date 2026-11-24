@@ -10,14 +10,13 @@ const PRIZE_ORDER: PrizeColor[] = ["gold", "red", "blue", "green"];
 
 const SYMBOL: Record<PrizeColor, string> = { gold: "★", red: "●", blue: "▲", green: "■" };
 
-export const Wheel = ({ sections, landed }: { sections: PrizeColor[]; landed: number | null }) => {
+export const Wheel = ({ sections, landed, rotation }: { sections: PrizeColor[]; landed: number | null; rotation: number }) => {
   const n = sections.length;
   const R = 100, C = 110;
   const pt = (deg: number, r: number) => {
     const a = ((deg - 90) * Math.PI) / 180;
     return [C + r * Math.cos(a), C + r * Math.sin(a)];
   };
-  const rotation = landed === null ? 0 : 1080 - ((landed + 0.5) * 360) / n;
   const counts = sections.reduce<Record<string, number>>((m, c) => ((m[c] = (m[c] ?? 0) + 1), m), {});
   const used = PRIZE_ORDER.filter((c) => counts[c]);
   return (
@@ -76,6 +75,7 @@ interface Props {
 const SpinnerProbability = ({ problems, heading, intro, skillLabel, nextLabel = "Next Scene →", onComplete, onSolved }: Props) => {
   const [idx, setIdx] = useState(0);
   const [landed, setLanded] = useState<number | null>(null);
+  const [rotation, setRotation] = useState(0);
   const [spinLog, setSpinLog] = useState<string[]>([]);
   const [step, setStep] = useState<"fraction" | "simplify" | "done">("fraction");
   const [num, setNum] = useState("");
@@ -91,6 +91,13 @@ const SpinnerProbability = ({ problems, heading, intro, skillLabel, nextLabel = 
     const i = Math.floor(Math.random() * total);
     setLanded(i);
     setSpinLog((l) => [...l.slice(-4), p.sections[i]]);
+    // Accumulate rotation so every spin visibly turns the wheel forward,
+    // even when it lands on the same section twice in a row.
+    const target = ((-((i + 0.5) * 360) / total) % 360 + 360) % 360;
+    setRotation((r) => {
+      const current = ((r % 360) + 360) % 360;
+      return r + 1080 + ((target - current + 360) % 360);
+    });
   };
 
   const check = () => {
@@ -129,7 +136,7 @@ const SpinnerProbability = ({ problems, heading, intro, skillLabel, nextLabel = 
     <section className="flex flex-col gap-4 max-w-lg mx-auto w-full" aria-label={heading}>
       <h2 className="text-2xl font-bold text-foreground text-center">{heading}</h2>
       <p className="text-center text-xs text-muted-foreground">Wheel {idx + 1} of {problems.length}</p>
-      <Wheel sections={p.sections} landed={landed} />
+      <Wheel sections={p.sections} landed={landed} rotation={rotation} />
       <div className="flex flex-col items-center gap-1">
         <Button variant="outline" className="min-h-11" onClick={spin}>Spin <span aria-hidden="true">🎡</span></Button>
         {spinLog.length > 0 && (
