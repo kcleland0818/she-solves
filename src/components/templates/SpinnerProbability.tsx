@@ -77,7 +77,7 @@ const SpinnerProbability = ({ problems, heading, intro, skillLabel, nextLabel = 
   const [landed, setLanded] = useState<number | null>(null);
   const [rotation, setRotation] = useState(0);
   const [spinLog, setSpinLog] = useState<string[]>([]);
-  const [step, setStep] = useState<"fraction" | "simplify" | "done">("fraction");
+  const [step, setStep] = useState<"fraction" | "done">("fraction");
   const [num, setNum] = useState("");
   const [den, setDen] = useState("");
   const [feedback, setFeedback] = useState(intro);
@@ -102,29 +102,17 @@ const SpinnerProbability = ({ problems, heading, intro, skillLabel, nextLabel = 
 
   const check = () => {
     const n = Number(num), d = Number(den);
-    if (step === "fraction") {
-      // Accept any equivalent fraction (e.g. 2/8 or 1/4) — cross-multiply to compare.
-      const equivalent = d > 0 && n * total === count * d;
-      if (equivalent && n === count && d === total && sn !== count) {
-        setStep("simplify"); setNum(""); setDen("");
-        setFeedback(`${celebratoryOpener("arcade")} ${count} of ${total} sections are ${p.target}, so it's ${count}/${total}. Can you simplify it?`);
-      } else if (equivalent) {
-        setStep("done"); onSolved?.();
-        setFeedback(n === sn && d === sd
-          ? `${celebratoryOpener("arcade")} ${sn}/${sd} is already as simple as it gets. ${skillBeat(skillLabel)}`
-          : `${celebratoryOpener("arcade")} ${n}/${d} is the same chance as ${count}/${total}. ${skillBeat(skillLabel)}`);
-      } else if (d !== total) {
-        setFeedback(`Close! The bottom number is how many equal sections there are in total. Count them all.`);
-      } else {
-        setFeedback(`Almost — the top number is how many sections are ${p.target}. Count just those.`);
-      }
-    } else if (step === "simplify") {
-      if (n === sn && d === sd) {
-        setStep("done"); onSolved?.();
-        setFeedback(`${celebratoryOpener("arcade")} ${count}/${total} = ${sn}/${sd}. ${skillBeat(skillLabel)}`);
-      } else {
-        setFeedback(`Try dividing the top and bottom by the same number. What number goes into both ${count} and ${total}?`);
-      }
+    // Accept any equivalent fraction (e.g. 2/8 or 1/4) — cross-multiply to compare.
+    const equivalent = d > 0 && n * total === count * d;
+    if (equivalent) {
+      setStep("done"); onSolved?.();
+      setFeedback(n === sn && d === sd
+        ? `${celebratoryOpener("arcade")} ${sn}/${sd} is exactly right. ${skillBeat(skillLabel)}`
+        : `${celebratoryOpener("arcade")} ${n}/${d} is the same chance as ${sn}/${sd}. ${skillBeat(skillLabel)}`);
+    } else if (d !== total) {
+      setFeedback(`Close! The bottom number is how many equal sections there are in total. Count them all.`);
+    } else {
+      setFeedback(`Almost — the top number is how many sections are ${p.target}. Count just those.`);
     }
   };
 
@@ -149,7 +137,7 @@ const SpinnerProbability = ({ problems, heading, intro, skillLabel, nextLabel = 
       {step !== "done" ? (
         <form className="bg-card border border-border rounded-xl p-4 flex flex-col items-center gap-3" onSubmit={(e) => { e.preventDefault(); check(); }}>
           <p className="text-sm font-medium text-card-foreground text-center">
-            {step === "fraction" ? `What's the chance of landing on ${p.target}?` : `Write ${count}/${total} in simplest form.`}
+            {`What's the chance of landing on ${p.target}?`}
           </p>
           <div className="flex items-center gap-2">
             <Input aria-label="Top number" inputMode="numeric" className="w-20 text-center min-h-11" value={num} onChange={(e) => setNum(e.target.value)} />
