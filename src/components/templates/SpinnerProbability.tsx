@@ -23,8 +23,8 @@ export const Wheel = ({ sections, landed }: { sections: PrizeColor[]; landed: nu
   return (
     <figure className="flex flex-col items-center gap-2">
       <div className="relative w-52 h-52">
-        <svg viewBox="0 0 220 220" aria-hidden="true" className="absolute left-1/2 -top-3 -translate-x-1/2 z-10 w-8 h-8 overflow-visible">
-          <polygon points="80,20 140,20 110,75" fill="hsl(var(--arcade-deep))" stroke="hsl(var(--card))" strokeWidth="10" strokeLinejoin="round" />
+        <svg viewBox="0 0 220 220" aria-hidden="true" className="absolute left-1/2 -top-5 -translate-x-1/2 z-10 w-14 h-14 overflow-visible drop-shadow-md">
+          <polygon points="70,10 150,10 110,85" fill="hsl(var(--arcade-gold))" stroke="hsl(var(--card))" strokeWidth="12" strokeLinejoin="round" />
         </svg>
         <svg
           viewBox="0 0 220 220"
@@ -42,8 +42,8 @@ export const Wheel = ({ sections, landed }: { sections: PrizeColor[]; landed: nu
               <g key={i}>
                 <path d={`M${C},${C} L${x0},${y0} A${R},${R} 0 0 1 ${x1},${y1} Z`} fill={`hsl(var(--arcade-${c}))`}
                   stroke="hsl(var(--card))" strokeWidth="4" strokeLinejoin="round" />
-                <circle cx={lx} cy={ly} r="11" fill="hsl(var(--card))" stroke="hsl(var(--arcade-deep))" strokeWidth="1.5" />
-                <text x={lx} y={ly} textAnchor="middle" dominantBaseline="central" fontSize="13" fill="hsl(var(--arcade-deep))">{SYMBOL[c]}</text>
+                <circle cx={lx} cy={ly} r="12" fill="hsl(0 0% 100%)" stroke={`hsl(var(--arcade-${c}))`} strokeWidth="3" />
+                <text x={lx} y={ly} textAnchor="middle" dominantBaseline="central" fontSize="14" fontWeight="bold" fill="hsl(var(--arcade-deep))">{SYMBOL[c]}</text>
               </g>
             );
           })}
@@ -54,7 +54,7 @@ export const Wheel = ({ sections, landed }: { sections: PrizeColor[]; landed: nu
         <span className="text-muted-foreground">{n} equal sections:</span>
         {used.map((c) => (
           <span key={c} className="inline-flex items-center gap-1">
-            <span aria-hidden="true" className="inline-flex w-5 h-5 items-center justify-center rounded-full border-2 border-card text-xs text-arcade-deep" style={{ background: `hsl(var(--arcade-${c}))` }}>{SYMBOL[c]}</span>
+            <span aria-hidden="true" className="inline-flex w-5 h-5 items-center justify-center rounded-full border-2 bg-white text-xs font-bold text-arcade-deep" style={{ borderColor: `hsl(var(--arcade-${c}))` }}>{SYMBOL[c]}</span>
             {c} ({counts[c]})
           </span>
         ))}
