@@ -103,14 +103,16 @@ const SpinnerProbability = ({ problems, heading, intro, skillLabel, nextLabel = 
   const check = () => {
     const n = Number(num), d = Number(den);
     if (step === "fraction") {
-      if (n === count && d === total) {
-        if (sn !== count) {
-          setStep("simplify"); setNum(""); setDen("");
-          setFeedback(`${celebratoryOpener("arcade")} ${count} of ${total} sections are ${p.target}, so it's ${count}/${total}. Can you simplify it?`);
-        } else {
-          setStep("done"); onSolved?.();
-          setFeedback(`${celebratoryOpener("arcade")} ${count}/${total} is already as simple as it gets. ${skillBeat(skillLabel)}`);
-        }
+      // Accept any equivalent fraction (e.g. 2/8 or 1/4) — cross-multiply to compare.
+      const equivalent = d > 0 && n * total === count * d;
+      if (equivalent && n === count && d === total && sn !== count) {
+        setStep("simplify"); setNum(""); setDen("");
+        setFeedback(`${celebratoryOpener("arcade")} ${count} of ${total} sections are ${p.target}, so it's ${count}/${total}. Can you simplify it?`);
+      } else if (equivalent) {
+        setStep("done"); onSolved?.();
+        setFeedback(n === sn && d === sd
+          ? `${celebratoryOpener("arcade")} ${sn}/${sd} is already as simple as it gets. ${skillBeat(skillLabel)}`
+          : `${celebratoryOpener("arcade")} ${n}/${d} is the same chance as ${count}/${total}. ${skillBeat(skillLabel)}`);
       } else if (d !== total) {
         setFeedback(`Close! The bottom number is how many equal sections there are in total. Count them all.`);
       } else {
