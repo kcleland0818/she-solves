@@ -30,18 +30,6 @@ export async function gotoAndReady(
   await page.waitForSelector(selector, { state: "attached", timeout });
 }
 
-/**
- * Print which screen is actually on screen when an axe pass runs. Without this
- * a stuck walk-through silently audits the same scene three times and still
- * "passes".
- */
-export async function logStage(page: any, label: string) {
-  const h2 = await page.locator("h2").first().innerText().catch(() => "");
-  const h1 = await page.locator("h1").first().innerText().catch(() => "");
-  const heading = (h2 || h1 || "(none)").replace(/\s+/g, " ").trim();
-  console.log(`STAGE::${label}::${heading}`);
-}
-
 export async function runAxe(page: any, label: string) {
   await page.evaluate(axeSource);
   const result = await page.evaluate(async () => {
