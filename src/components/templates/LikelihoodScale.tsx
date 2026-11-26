@@ -73,6 +73,7 @@ const LikelihoodScale = ({ events = [], bags, heading, intro, skillLabel, nextLa
     <section className="flex flex-col gap-4 max-w-lg mx-auto w-full" aria-label={heading}>
       <h2 className="text-2xl font-bold text-foreground text-center">{heading}</h2>
       <p className="text-center text-xs text-muted-foreground">Question {idx + 1} of {items.length}</p>
+      <LucySpeech text={feedback} />
       <div className="bg-card border border-border rounded-xl p-4 flex flex-col gap-3">
         {item.kind === "event" ? (
           <>
@@ -105,7 +106,6 @@ const LikelihoodScale = ({ events = [], bags, heading, intro, skillLabel, nextLa
           </>
         )}
       </div>
-      <LucySpeech text={feedback} />
       {solved && (
         <div className="flex flex-col items-center gap-3">
           {last && <SkillStamp label={skillLabel} />}

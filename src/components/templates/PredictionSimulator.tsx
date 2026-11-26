@@ -74,6 +74,7 @@ const PredictionSimulator = ({ machines, heading, intro, skillLabel, nextLabel =
     <section className="flex flex-col gap-4 max-w-lg mx-auto w-full" aria-label={heading}>
       <h2 className="text-2xl font-bold text-foreground text-center">{heading}</h2>
       <p className="text-center text-xs text-muted-foreground">Machine {idx + 1} of {machines.length}</p>
+      <LucySpeech text={feedback} />
       <div className="bg-card border-4 border-arcade-deep rounded-2xl p-4">
         <p className="text-sm font-semibold text-card-foreground text-center mb-2">Inside the claw machine ({total} plushies)</p>
         <ul className="flex flex-wrap justify-center gap-3" aria-label="Plushies in the machine">
@@ -85,7 +86,6 @@ const PredictionSimulator = ({ machines, heading, intro, skillLabel, nextLabel =
           ))}
         </ul>
       </div>
-      <LucySpeech text={feedback} />
       {!predicted ? (
         <form className="bg-card border border-border rounded-xl p-4 flex flex-col items-center gap-3" onSubmit={(e) => { e.preventDefault(); check(); }}>
           <label htmlFor="forecast" className="text-sm font-medium text-card-foreground text-center">

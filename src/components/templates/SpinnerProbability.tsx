@@ -20,7 +20,7 @@ export const Wheel = ({ sections, landed, rotation }: { sections: PrizeColor[]; 
   const counts = sections.reduce<Record<string, number>>((m, c) => ((m[c] = (m[c] ?? 0) + 1), m), {});
   const used = PRIZE_ORDER.filter((c) => counts[c]);
   return (
-    <figure className="flex flex-col items-center gap-2">
+    <figure className="flex flex-col items-center gap-2 pt-6">
       <div className="relative w-52 h-52">
         <svg viewBox="0 0 220 220" aria-hidden="true" className="absolute left-1/2 -top-5 -translate-x-1/2 z-10 w-14 h-14 overflow-visible drop-shadow-md">
           <polygon points="70,10 150,10 110,85" fill="hsl(var(--arcade-gold))" stroke="hsl(var(--card))" strokeWidth="12" strokeLinejoin="round" />
@@ -126,6 +126,7 @@ const SpinnerProbability = ({ problems, heading, intro, skillLabel, nextLabel = 
     <section className="flex flex-col gap-4 max-w-lg mx-auto w-full" aria-label={heading}>
       <h2 className="text-2xl font-bold text-foreground text-center">{heading}</h2>
       <p className="text-center text-xs text-muted-foreground">Wheel {idx + 1} of {problems.length}</p>
+      <LucySpeech text={feedback} />
       <Wheel sections={p.sections} landed={landed} rotation={rotation} />
       <div className="flex flex-col items-center gap-1">
         <Button variant="outline" className="min-h-11" onClick={spin}>Spin <span aria-hidden="true">🎡</span></Button>
@@ -133,7 +134,6 @@ const SpinnerProbability = ({ problems, heading, intro, skillLabel, nextLabel = 
           <p className="text-xs text-muted-foreground" aria-live="polite">Last spins: {spinLog.join(", ")}</p>
         )}
       </div>
-      <LucySpeech text={feedback} />
       {step !== "done" ? (
         <form className="bg-card border border-border rounded-xl p-4 flex flex-col items-center gap-3" onSubmit={(e) => { e.preventDefault(); check(); }}>
           <p className="text-sm font-medium text-card-foreground text-center">
